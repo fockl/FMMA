@@ -4,7 +4,7 @@
 #include<array>
 #include<functional>
 #include<cmath>
-#include"../include/fmma.hpp"
+#include"../include/fmma/fmma.hpp"
 
 namespace fmma {
 

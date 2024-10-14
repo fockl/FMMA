@@ -1,4 +1,4 @@
-#include"../../../include/fmma.hpp"
+#include"../../../include/fmma/fmma.hpp"
 #include"../test_common.hpp"
 #include<cstdlib>
 #include<cstdio>
@@ -112,6 +112,7 @@ bool test_solve_1_r2(int ssize, int tsize, TYPE tol){
     return false;
   }
 }
+//}}}
 
 int main(void){
   srand(0);
