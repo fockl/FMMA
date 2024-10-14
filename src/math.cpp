@@ -89,6 +89,8 @@ void solve_gcr(const std::vector<TYPE>& A, std::vector<TYPE>& x, const std::vect
 
   std::vector<TYPE> r = b;
   std::vector<TYPE> Ax;
+  x.resize(N);
+  for(std::size_t i=0; i<N; ++i) x[i] = ((TYPE)rand()/RAND_MAX-0.5)/N;
   matvec(A, x, Ax);
   for(std::size_t i=0; i<N; ++i) r[i] -= Ax[i];
   std::vector<TYPE> p_new = r;
@@ -99,9 +101,17 @@ void solve_gcr(const std::vector<TYPE>& A, std::vector<TYPE>& x, const std::vect
 
   ITR = std::min(ITR, N);
 
+  {
+    TYPE resid = dot(r, r);
+    fprintf(stderr, "resid = %lf\n", resid);
+    if(resid < 1.0e-6){
+      return;
+    }
+  }
+
   for(std::size_t itr=0; itr<ITR; ++itr){
     fprintf(stderr, "itr : %zu\n", itr);
-    std::vector<double> Ap_new;
+    std::vector<TYPE> Ap_new;
     matvec(A, p_new, Ap_new);
     p.push_back(p_new);
     Ap.push_back(Ap_new);
@@ -112,6 +122,12 @@ void solve_gcr(const std::vector<TYPE>& A, std::vector<TYPE>& x, const std::vect
     axpy(alpha, p_new, x);
     axpy(-alpha, Ap_new, r);
 
+    TYPE resid = dot(r, r);
+    fprintf(stderr, "resid = %lf   (alpha = %lf)\n", resid, alpha);
+    if(resid < 1.0e-6){
+      break;
+    }
+
     std::vector<TYPE> Ar_new;
     matvec(A, r, Ar_new);
     std::vector<TYPE> beta(itr+1);
@@ -121,13 +137,6 @@ void solve_gcr(const std::vector<TYPE>& A, std::vector<TYPE>& x, const std::vect
     for(std::size_t i=0; i<=itr; ++i){
       beta[i] = -dot(Ar_new, Ap[i])/Ap_dot[i];
       axpy(beta[i], p[i], p_new);
-    }
-
-    TYPE resid = dot(r, r);
-    fprintf(stderr, "resid = %lf\n", resid);
-
-    if(resid < 1.0e-6){
-      break;
     }
   }
 

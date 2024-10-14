@@ -12,8 +12,8 @@ namespace fmma {
 template<typename TYPE, std::size_t DIM>
 class FMMA{
   public:
-    std::function<TYPE(std::array<TYPE, DIM>& source, std::array<TYPE, DIM>& target)> fn = 
-      [](std::array<TYPE, DIM>& source, std::array<TYPE, DIM>& target){
+    std::function<TYPE(const std::array<TYPE, DIM>& source, const std::array<TYPE, DIM>& target)> fn = 
+      [](const std::array<TYPE, DIM>& source, const std::array<TYPE, DIM>& target){
         double len = 0.0;
         for(std::size_t dim=0; dim<DIM; ++dim){
           double diff = source[dim]-target[dim];
@@ -27,8 +27,8 @@ class FMMA{
   public:
     FMMA(void);
     ~FMMA(void);
-    void solve(std::vector<std::array<TYPE, DIM>>& source, std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
-    void exact(std::vector<std::array<TYPE, DIM>>& source, std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
+    void solve(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
+    void exact(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
 };
 
 } // namespace fmma
