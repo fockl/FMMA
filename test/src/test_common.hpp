@@ -4,8 +4,8 @@
 #include<cstdio>
 #include<cstring>
 
-#define RED_STRING(string) "\x1b[31m" string "\1b[0m"
-#define GREEN_STRING(string) "\x1b[32m" string "\1b[0m"
+#define RED_STRING(string) "\x1b[31m" string "\x1b[0m"
+#define GREEN_STRING(string) "\x1b[32m" string "\x1b[0m"
 
 void pass(const char *filename, const char *funcname, const std::string &comment) {
   std::string str_file(filename), str_func(funcname);
