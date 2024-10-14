@@ -1,0 +1,17 @@
+function(set_common_properties FMMA_TARGET)
+  target_compile_options(${FMMA_TARGET} PUBLIC -g -O3 -Wall -fPIC)
+
+  find_package(OpenMP)
+  if(OpenMP_CXX_FOUND)
+    add_definitions(-DOPENMP_FOUND)
+    message(STATUS "Found OpenMP")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    target_compile_options(${FMMA_TARGET} PUBLIC -fopenmp)
+    target_link_libraries(${FMMA_TARGET} PUBLIC OpenMP::OpenMP_CXX)
+  else()
+    message(STATUS "Not Found OpenMP")
+  endif()
+
+endfunction()
