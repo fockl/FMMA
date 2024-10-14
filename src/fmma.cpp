@@ -4,7 +4,7 @@
 #include<array>
 #include<functional>
 #include<cmath>
-#include"../include/fmma.hpp"
+#include"../include/fmma/fmma.hpp"
 
 namespace fmma {
 
@@ -23,7 +23,7 @@ FMMA<TYPE, DIM>::~FMMA(void){
 template FMMA<double, 1>::~FMMA(void);
 
 template<typename TYPE, std::size_t DIM>
-void FMMA<TYPE, DIM>::exact(std::vector<std::array<TYPE, DIM>>& source, std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans){
+void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans){
   if(ans.size() != target.size()){
     fprintf(stderr, "%s:%d ERROR : target size %zu != ans size %zu\n", __FILE__, __LINE__, target.size(), ans.size());
     exit(EXIT_FAILURE);
@@ -37,10 +37,10 @@ void FMMA<TYPE, DIM>::exact(std::vector<std::array<TYPE, DIM>>& source, std::vec
   return;
 };
 
-template void FMMA<double, 1>::exact(std::vector<std::array<double, 1>>& source, std::vector<std::array<double, 1>>& target, std::vector<double>& ans);
+template void FMMA<double, 1>::exact(const std::vector<std::array<double, 1>>& source, const std::vector<std::array<double, 1>>& target, std::vector<double>& ans);
 
 template<typename TYPE, std::size_t DIM>
-void FMMA<TYPE, DIM>::solve(std::vector<std::array<TYPE, DIM>>& source, std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans){
+void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans){
   if(this->solve_type == "exact"){
     exact(source, target, ans);
   }else{
@@ -50,6 +50,6 @@ void FMMA<TYPE, DIM>::solve(std::vector<std::array<TYPE, DIM>>& source, std::vec
   return;
 };
 
-template void FMMA<double, 1>::solve(std::vector<std::array<double, 1>>& source, std::vector<std::array<double, 1>>& target, std::vector<double>& ans);
+template void FMMA<double, 1>::solve(const std::vector<std::array<double, 1>>& source, const std::vector<std::array<double, 1>>& target, std::vector<double>& ans);
 
 } // namespace fmma

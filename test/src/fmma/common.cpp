@@ -1,4 +1,4 @@
-#include"../../../include/fmma.hpp"
+#include"../../../include/fmma/fmma.hpp"
 #include"../test_common.hpp"
 #include<cstdlib>
 #include<cstdio>
@@ -73,7 +73,7 @@ bool test_solve_1_r2(int ssize, int tsize, TYPE tol){
 
   fmma::FMMA<TYPE, DIM> fmma;
   std::vector<TYPE> ans(tsize);
-  auto fn = [](std::array<TYPE, DIM>& source, std::array<TYPE, DIM>& target){
+  auto fn = [](const std::array<TYPE, DIM>& source, const std::array<TYPE, DIM>& target){
     TYPE len2 = 0.0;
     for(std::size_t dim=0; dim<DIM; ++dim){
       TYPE diff = source[dim]-target[dim];
@@ -112,6 +112,7 @@ bool test_solve_1_r2(int ssize, int tsize, TYPE tol){
     return false;
   }
 }
+//}}}
 
 int main(void){
   srand(0);
