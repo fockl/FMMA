@@ -35,7 +35,7 @@ bool test_Chebyshev(int n, int size, TYPE tol){
     pass(__FILE__, __func__);
     return true;
   }else{
-    fprintf(stderr, "diff = %e > rol = %e\n", diff, tol);
+    fprintf(stderr, "diff = %e > tol = %e\n", diff, tol);
     failed(__FILE__, __func__);
     return false;
   }
@@ -69,7 +69,7 @@ bool test_axpy(int n, TYPE tol){
     pass(__FILE__, __func__);
     return true;
   }else{
-    fprintf(stderr, "diff = %e > rol = %e\n", diff, tol);
+    fprintf(stderr, "diff = %e > tol = %e\n", diff, tol);
     failed(__FILE__, __func__);
     return false;
   }
@@ -97,7 +97,7 @@ bool test_dot(int n, TYPE tol){
     pass(__FILE__, __func__);
     return true;
   }else{
-    fprintf(stderr, "diff = %e > rol = %e\n", diff, tol);
+    fprintf(stderr, "diff = %e > tol = %e\n", diff, tol);
     failed(__FILE__, __func__);
     return false;
   }
@@ -136,7 +136,7 @@ bool test_matvec(int n, int m, TYPE tol){
     pass(__FILE__, __func__);
     return true;
   }else{
-    fprintf(stderr, "diff = %e > rol = %e\n", diff, tol);
+    fprintf(stderr, "diff = %e > tol = %e\n", diff, tol);
     std::string comment = "(" + std::to_string(n) + "," + std::to_string(m) + ")";
     failed(__FILE__, __func__, comment);
     return false;
@@ -171,7 +171,7 @@ bool test_solve_gcr(int n, TYPE tol){
     pass(__FILE__, __func__);
     return true;
   }else{
-    fprintf(stderr, "diff = %e > rol = %e\n", diff, tol);
+    fprintf(stderr, "diff = %e > tol = %e\n", diff, tol);
     failed(__FILE__, __func__);
     return false;
   }

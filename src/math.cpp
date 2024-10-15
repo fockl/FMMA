@@ -25,6 +25,29 @@ TYPE Chebyshev(int n, TYPE x){
 template double Chebyshev(int n, double x);
 
 template<typename TYPE>
+TYPE SChebyshev(int n, TYPE x, TYPE y){
+  if(x < -1.0 || 1.0 < x){
+    fprintf(stderr, "%s:%d ERROR : SChebyshev input should be in [-1.0, 1.0] by %lf\n", __FILE__, __LINE__, x);
+    exit(EXIT_FAILURE);
+  }
+  if(y < -1.0 || 1.0 < y){
+    fprintf(stderr, "%s:%d ERROR : SChebyshev input should be in [-1.0, 1.0] by %lf\n", __FILE__, __LINE__, y);
+    exit(EXIT_FAILURE);
+  }
+  if(n <= 0){
+    fprintf(stderr, "%s:%d ERROR : SChebyshev dim should be > 0 but %d\n", __FILE__, __LINE__, n);
+    exit(EXIT_FAILURE);
+  }
+  TYPE ans = (TYPE)1.0/n;
+  for(int k=1; k<n; ++k){
+    ans += (TYPE)2.0/n*Chebyshev(k, x)*Chebyshev(k, y);
+  }
+  return ans;
+}
+
+template double SChebyshev(int n, double x, double y);
+
+template<typename TYPE>
 void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<TYPE>& ans){
   // matrix-vector multiplication (ans = Ax)
   std::size_t N = x.size();
