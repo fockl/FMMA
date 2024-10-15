@@ -11,7 +11,7 @@ namespace fmma {
 template<typename TYPE>
 TYPE Chebyshev(int n, TYPE x){
   if(x < -1.0 || 1.0 < x){
-    fprintf(stderr, "%s:%d ERROR : Chebyshev input should be in [-1.0, 1.0] by %lf\n", __FILE__, __LINE__, x);
+    fprintf(stderr, "%s:%d ERROR : Chebyshev input should be in [-1.0, 1.0] but %lf\n", __FILE__, __LINE__, x);
     exit(EXIT_FAILURE);
   }
   if(n < 0){
@@ -27,11 +27,11 @@ template double Chebyshev(int n, double x);
 template<typename TYPE>
 TYPE SChebyshev(int n, TYPE x, TYPE y){
   if(x < -1.0 || 1.0 < x){
-    fprintf(stderr, "%s:%d ERROR : SChebyshev input should be in [-1.0, 1.0] by %lf\n", __FILE__, __LINE__, x);
+    fprintf(stderr, "%s:%d ERROR : SChebyshev input x should be in [-1.0, 1.0] but %lf\n", __FILE__, __LINE__, x);
     exit(EXIT_FAILURE);
   }
   if(y < -1.0 || 1.0 < y){
-    fprintf(stderr, "%s:%d ERROR : SChebyshev input should be in [-1.0, 1.0] by %lf\n", __FILE__, __LINE__, y);
+    fprintf(stderr, "%s:%d ERROR : SChebyshev input y should be in [-1.0, 1.0] but %lf\n", __FILE__, __LINE__, y);
     exit(EXIT_FAILURE);
   }
   if(n <= 0){

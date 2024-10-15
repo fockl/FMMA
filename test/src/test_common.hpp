@@ -54,3 +54,8 @@ void failed(const char *filename, const char *funcname){
   failed(filename, funcname, tmp);
   return;
 }
+
+template<typename TYPE>
+std::string get_type(void) { return typeid(TYPE).name(); }
+template <> std::string get_type<double>(void) { return "double"; }
+template <> std::string get_type<float>(void) { return "float"; }
