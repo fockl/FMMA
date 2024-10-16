@@ -24,11 +24,15 @@ class FMMA{
 
     std::string solve_type = "exact";
 
+    int nrn_N = -1; // 1辺辺りの分割数 nrnで使用
+    int poly_ord = 1;
+
   public:
     FMMA(void);
     ~FMMA(void);
     void solve(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
     void exact(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
+    void nrnmm(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
 };
 
 } // namespace fmma
