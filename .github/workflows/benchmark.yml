@@ -1,0 +1,41 @@
+name: benchmark
+on: [push]
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: gcc
+          cmake: true
+          make: true
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: build
+        run: |
+          cmake -Bbuild
+          cmake --build build
+
+      - name: benchmark
+        run: |
+          cd benchmark
+          cmake -Bbuild
+          cmake --build build
+          bash run_benchmark.sh
+          mkdir benchmark
+          mv *.csv benchmark/
+
+      - name: Upload benchmark Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: benchmark results
+          path: benchmark/*.csv
+
+      - name: Download Artifacts
+        uses: actions/download-artifacts@v2
+        with:
+          path: artifacts

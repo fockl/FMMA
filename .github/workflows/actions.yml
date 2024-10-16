@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Steup Cpp
+      - name: Setup Cpp
         uses: aminya/setup-cpp@v1
         with:
           compiler: gcc
