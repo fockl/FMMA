@@ -25,3 +25,4 @@ jobs:
           cd test
           cmake -Bbuild
           cmake --build build
+          bash run_test.sh
