@@ -1,5 +1,5 @@
 
-![GitHub License](https://img.shields.io/github/license/:fockl/:FMMA)
+![GitHub License](https://img.shields.io/github/license/fockl/FMMA)
 
 # FMMA
 
