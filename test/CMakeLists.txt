@@ -11,7 +11,8 @@ function(set_test_properties TEST_TARGET)
   find_path(FMMA_INCLUDE_PATH
     NAMES fmma.hpp
     HINTS
-    ${PROJECT_SOURCE_DIR}/../include
+    ${PROJECT_SOURCE_DIR}/../include/fmma
+    REQUIRED
     )
   target_include_directories(${TEST_TARGET} PRIVATE ${FMMA_INCLUDE_PATH})
 
@@ -41,6 +42,4 @@ foreach(test_source ${test_sources})
   set_common_properties(${TARGET_NAME})
   set_test_properties(${TARGET_NAME})
   target_compile_options(${TARGET_NAME} PRIVATE -g -O3 -Wall)
-  target_include_directories(${TARGET_NAME} PRIVATE ${FMMA_INCLUDE_PATH})
-  target_link_libraries(${TARGET_NAME} PRIVATE ${FMMA_LIBRARIES})
 endforeach()

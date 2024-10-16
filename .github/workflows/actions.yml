@@ -1,0 +1,28 @@
+name: github-actions
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Steup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: gcc
+          cmake: true
+          make: true
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: build
+        run: |
+          cmake -Bbuild
+          cmake --build build
+
+      - name: test
+        run: |
+          cd test
+          cmake -Bbuild
+          cmake --build build
+          bash run_test.sh

@@ -6,6 +6,7 @@
 #include<array>
 #include<functional>
 #include<cmath>
+#include<string>
 
 namespace fmma {
 
