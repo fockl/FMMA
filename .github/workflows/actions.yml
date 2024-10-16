@@ -1,4 +1,4 @@
-name: github-actions
+name: test
 on: [push]
 jobs:
   test:
@@ -13,7 +13,7 @@ jobs:
           make: true
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: build
         run: |
