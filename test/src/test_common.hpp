@@ -2,7 +2,7 @@
 
 #include<cstdlib>
 #include<cstdio>
-#include<cstring>
+#include<string>
 
 #define RED_STRING(string) "\x1b[31m" string "\x1b[0m"
 #define GREEN_STRING(string) "\x1b[32m" string "\x1b[0m"
