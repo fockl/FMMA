@@ -12,6 +12,9 @@ jobs:
           cmake: true
           make: true
 
+      - name: ls
+        run: ls
+
       - name: build
         run: |
           ls
