@@ -12,6 +12,9 @@ jobs:
           cmake: true
           make: true
 
+      - name: hello world
+        run: echo Hello World!!
+
       - name: ls
         run: ls
 
