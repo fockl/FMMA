@@ -1,9 +1,11 @@
 #!/bin/bash
 
-for name in ./*
+for name in ./build/*
 do
-  if [[ "$name" =~ ./*.out$ ]]
+  echo $name
+  if [[ "$name" == *".out" ]]
   then
+    echo $name
     printf "\e[34;1m ${name} \e[m\n"
     $name
     ret_code=$?
