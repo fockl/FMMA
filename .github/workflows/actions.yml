@@ -21,6 +21,12 @@ jobs:
       - name: ls
         run: ls
 
+      - name: check
+        run: |
+          cd ..
+          pwd
+          ls
+
       - name: build
         run: |
           ls
