@@ -65,6 +65,15 @@ jobs:
           mv *.png results/
           cd ..
 
+      - name: Auto-update files
+        run: |
+          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git add .
+          git commit -m "update benchmark"
+          git push origin HEAD:${GITHUB_REF}
+
       - name: Upload Benchmark
         uses: actions/upload-artifact@v4
         with:
@@ -76,15 +85,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-
-      - name: Auto-update files
-        run: |
-          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git add .
-          git commit -m "update benchmark"
-          git push origin HEAD:${GITHUB_REF}
 
         env:
           GITUB_TOKEN: ${{ steps.generate-token.outputs.token }}
