@@ -39,6 +39,7 @@ int main(void){
     fmma.fn = fn;
 
     start = std::chrono::system_clock::now();
+    fprintf(stderr, "exact calculation\n");
     fmma.exact(source, target, ans_exact);
     end = std::chrono::system_clock::now();
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
