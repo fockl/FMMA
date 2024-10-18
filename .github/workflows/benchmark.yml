@@ -2,8 +2,8 @@ name: benchmark
 on:
   push:
     paths:
-      - '*.cpp'
-      - '*.hpp'
+      - '**.cpp'
+      - '**.hpp'
 
 jobs:
   benchmark:
