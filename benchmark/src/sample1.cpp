@@ -21,6 +21,7 @@ int main(void){
   std::vector<double> exact_time(REPEAT);
   std::vector<int> size(REPEAT);
   std::vector<std::vector<double>> nrnmm_time(REPEAT, std::vector<double>(ORDER));
+  std::vector<std::vector<double>> nrnmm_error(REPEAT, std::vector<double>(ORDER));
 
   std::chrono::system_clock::time_point start, end;
 
