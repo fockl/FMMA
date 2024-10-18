@@ -9,7 +9,7 @@
 int main(void){
 
   int N = 1024;
-  int REPEAT = 5;
+  int REPEAT = 4;
   int ORDER = 3;
 
   auto fn = [](const std::array<double, 1>& source, const std::array<double, 1>& target){
