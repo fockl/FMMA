@@ -38,8 +38,7 @@ jobs:
 
       - name: Pip python
         run: |
-          pip install pandas
-          pip install matplotlib
+          pip install -r requirements.txt
 
       - name: benchmark image
         run: |
