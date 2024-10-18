@@ -85,5 +85,24 @@ int main(void){
     fclose(fp);
   }
 
+  {
+    FILE *fp;
+    fp = fopen("error.csv", "w");
+    fprintf(fp, "N, ");
+    for(int order=1; order<=ORDER; ++order){
+      fprintf(fp, ", nrnmm(%d)", order);
+    }
+    fprintf(fp, "\n");
+
+    for(int repeat=0; repeat<REPEAT; ++repeat){
+      fprintf(fp, "%d", size[repeat]);
+      for(int order=1; order<=ORDER; ++order){
+        fprintf(fp, ", %e", nrnmm_error[repeat][order-1]);
+      }
+      fprintf(fp, "\n");
+    }
+    fclose(fp);
+  }
+
   return 0;
 }
