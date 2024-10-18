@@ -7,7 +7,6 @@ on:
 
 jobs:
   benchmark:
-    if: github.repository == '<owner>/<repo>'
     runs-on: ubuntu-latest
 
     steps:

@@ -45,6 +45,7 @@ int main(void){
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
     exact_time[repeat] = elapsed;
 
+    fprintf(stderr, "nrnmm calculation\n");
     for(int order=1; order<=ORDER; ++order){
       std::vector<double> ans_nrnmm(N);
 
