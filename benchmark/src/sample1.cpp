@@ -31,7 +31,7 @@ int main(void){
     size[repeat] = N;
     fmma::FMMA<double, 1> fmma;
     std::vector<std::array<double, 1>> source(N), target(N);
-    for(int i=0; i<N; ++i){
+    for(int n=0; n<N; ++n){
       source[i][0] = (double)rand()/RAND_MAX;
       target[i][0] = (double)rand()/RAND_MAX;
     }
