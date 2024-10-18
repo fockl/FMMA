@@ -32,8 +32,8 @@ int main(void){
     fmma::FMMA<double, 1> fmma;
     std::vector<std::array<double, 1>> source(N), target(N);
     for(int n=0; n<N; ++n){
-      source[i][0] = (double)rand()/RAND_MAX;
-      target[i][0] = (double)rand()/RAND_MAX;
+      source[n][0] = (double)rand()/RAND_MAX;
+      target[n][0] = (double)rand()/RAND_MAX;
     }
     std::vector<double> ans_exact(N);
     fmma.fn = fn;
