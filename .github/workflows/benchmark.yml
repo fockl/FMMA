@@ -30,6 +30,18 @@ jobs:
           mv *.csv benchmark/
           cd ..
 
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version '3.12'
+
+      - name: benchmark image
+        run: |
+          cd benchmark
+          python3 plot_time.py
+          mv *.png benchmark/
+          cd ..
+
       - name: Upload Benchmark
         uses: actions/upload-artifact@v4
         with:
