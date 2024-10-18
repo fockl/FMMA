@@ -19,6 +19,7 @@ int main(void){
   };
 
   std::vector<double> exact_time(REPEAT);
+  std::vector<int> size(REPEAT);
   std::vector<std::vector<double>> nrnmm_time(REPEAT, std::vector<double>(ORDER));
 
   std::chrono::system_clock::time_point start, end;
@@ -26,6 +27,7 @@ int main(void){
   for(int repeat=0; repeat<REPEAT; ++repeat){
     N *= 2;
 
+    size[repeat] = N;
     fmma::FMMA<double, 1> fmma;
     std::vector<std::array<double, 1>> source(N), target(N);
     for(int i=0; i<N; ++i){
@@ -56,6 +58,7 @@ int main(void){
   {
     FILE *fp;
     fp = fopen("time.csv", "w");
+    fprintf(fp, "N, ");
     fprintf(fp, "exact");
     for(int order=1; order<=ORDER; ++order){
       fprintf(fp, ", nrnmm(%d)", order);
@@ -63,7 +66,8 @@ int main(void){
     fprintf(fp, "\n");
 
     for(int repeat=0; repeat<REPEAT; ++repeat){
-      fprintf(fp, "%lf", exact_time[repeat]);
+      fprintf(fp, "%d", size[repeat]);
+      fprintf(fp, ", %lf", exact_time[repeat]);
       for(int order=1; order<=ORDER; ++order){
         fprintf(fp, ", %lf", nrnmm_time[repeat][order-1]);
       }
