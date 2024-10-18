@@ -4,6 +4,7 @@ on:
     paths:
       - '**.cpp'
       - '**.hpp'
+      - '**.yml'
 
 jobs:
   benchmark:
@@ -21,7 +22,7 @@ jobs:
         uses: actions/create-github-app-token@v1
         id: app-token
         with:
-          app-id: ${{ secrets.APP_ID }}
+          app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
           repositories: <target-repo>
 
