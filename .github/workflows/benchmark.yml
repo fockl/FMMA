@@ -18,18 +18,15 @@ jobs:
           cmake: true
           make: true
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup Github Actions
         uses: actions/create-github-app-token@v1
-        id: app-token
+        id: generate-token
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
-          repositories: <target-repo>
-
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
 
       - name: build
         run: |
