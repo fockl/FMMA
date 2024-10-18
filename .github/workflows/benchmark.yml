@@ -55,6 +55,7 @@ jobs:
         run: |
           cd benchmark
           python3 plot_time.py
+          python3 plot_error.py
           cd ..
 
       - name: move benchmark results
