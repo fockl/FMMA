@@ -39,8 +39,6 @@ jobs:
           cmake -Bbuild
           cmake --build build
           bash run_benchmark.sh
-          mkdir results
-          mv *.csv results/
           cd ..
 
       - name: Setup python
@@ -57,8 +55,13 @@ jobs:
         run: |
           cd benchmark
           python3 plot_time.py
-          mv *.png results/
           cd ..
+
+      - name: move benchmark results
+        run: |
+          mkdir results
+          mv *.csv results/
+          mv *.png results/
 
       - name: Upload Benchmark
         uses: actions/upload-artifact@v4
