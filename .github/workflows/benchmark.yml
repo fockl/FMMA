@@ -60,7 +60,7 @@ jobs:
       - name: move benchmark results
         run: |
           cd benchmark
-          mkdir results
+          mkdir -p results
           mv *.csv results/
           mv *.png results/
           cd ..
