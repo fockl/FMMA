@@ -59,9 +59,11 @@ jobs:
 
       - name: move benchmark results
         run: |
+          cd benchmark
           mkdir results
           mv *.csv results/
           mv *.png results/
+          cd ..
 
       - name: Upload Benchmark
         uses: actions/upload-artifact@v4
