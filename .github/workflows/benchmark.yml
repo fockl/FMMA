@@ -91,7 +91,7 @@ jobs:
 
       - name: gh comment
         run:
-          gh issue comment 12 --body "Hello World!!"
+          gh issue comment 12 --body "Hello World!!!"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
