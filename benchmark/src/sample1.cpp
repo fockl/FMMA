@@ -53,6 +53,14 @@ int main(void){
       end = std::chrono::system_clock::now();
       elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
       nrnmm_time[repeat][order-1] = elapsed;
+
+      double diff = 0.0;
+      for(int n=0; n<N; ++n){
+        double tmp = (ans_exact[n]-ans_nrnmm[n])/ans_exact[n];
+        diff += tmp*tmp;
+      }
+      diff = sqrt(diff/N);
+      nrnmm_error[repeat][order-1] = diff;
     }
   } 
 
