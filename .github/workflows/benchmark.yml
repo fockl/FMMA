@@ -91,9 +91,20 @@ jobs:
         env:
           GITUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
-      - name: gh comment
+      - name: create comment
+        run: |
+          {
+            echo "GH_SAMPLE_COMMENT<EOF"
+            echo "This"
+            echo "is"
+            echo "multiline"
+            echo "comment"
+            echo EOF
+          } >> "$GITHUB_ENV"
+
+      - name: gh comment to pull request
         run:
-          gh issue comment ${NUMBER} --body "Hello World!!!!!"
+          gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
