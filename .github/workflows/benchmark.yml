@@ -93,9 +93,8 @@ jobs:
 
       - name: gh comment
         run:
-          gh issue comment "$NUMBER" --body "Hello World!!!!!"
+          gh issue comment 13 --body "Hello World!!!!!"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
-          NUMBER: ${{ github.event.issue.number }}
 
