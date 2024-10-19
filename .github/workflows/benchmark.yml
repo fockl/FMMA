@@ -9,8 +9,7 @@ on:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
+    permissions: write-all
 
     steps:
       - name: Setup Cpp
@@ -106,7 +105,5 @@ jobs:
         run:
           gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}"
         env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          GH_REPO: ${{ github.repository }}
-          NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ github.token }}
 
