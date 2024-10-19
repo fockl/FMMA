@@ -94,4 +94,5 @@ jobs:
           gh issue comment 12 --body "Hello World!!!!!"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GH_REPO: ${{ github.repository }}
 
