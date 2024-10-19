@@ -33,13 +33,13 @@ jobs:
           cmake -Bbuild
           cmake --build build
 
-      - name: benchmark
-        run: |
-          cd benchmark
-          cmake -Bbuild
-          cmake --build build
-          bash run_benchmark.sh
-          cd ..
+          #- name: benchmark
+        #  run: |
+          #    cd benchmark
+          #    cmake -Bbuild
+          #    cmake --build build
+          #    bash run_benchmark.sh
+          #    cd ..
 
       - name: Setup python
         uses: actions/setup-python@v5
@@ -66,14 +66,14 @@ jobs:
           mv *.png results/
           cd ..
 
-      - name: Auto-update files
-        run: |
-          git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git add .
-          git commit -m "update benchmark"
-          git push origin HEAD:${GITHUB_REF}
+          #- name: Auto-update files
+        #  run: |
+          #    git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          #    git config --global user.name "${GITHUB_ACTOR}"
+          #    git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          #    git add .
+          #    git commit -m "update benchmark"
+          #    git push origin HEAD:${GITHUB_REF}
 
       - name: Upload Benchmark
         uses: actions/upload-artifact@v4
