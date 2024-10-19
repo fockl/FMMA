@@ -30,10 +30,10 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - name: build
-        run: |
-          cmake -Bbuild
-          cmake --build build
+          #- name: build
+        #  run: |
+          #    cmake -Bbuild
+          #    cmake --build build
 
           #- name: benchmark
         #  run: |
@@ -49,9 +49,9 @@ jobs:
           python-version: '3.8'
           cache: 'pip'
 
-      - name: Pip python
-        run: |
-          pip install -r .github/workflows/requirements.txt
+          #- name: Pip python
+        #  run: |
+          #    pip install -r .github/workflows/requirements.txt
 
           #- name: benchmark image
         #  run: |
@@ -93,8 +93,9 @@ jobs:
 
       - name: gh comment
         run:
-          gh issue comment 13 --body "Hello World!!!!!"
+          gh issue comment ${NUMBER} --body "Hello World!!!!!"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
 
