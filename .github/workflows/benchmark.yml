@@ -9,7 +9,7 @@ on:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    permissions: write-all
+    #permissions: write-all
 
     steps:
       - name: Setup Cpp
