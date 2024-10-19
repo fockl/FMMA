@@ -94,7 +94,7 @@ jobs:
       - name: create comment
         run: |
           {
-            echo "GH_SAMPLE_COMMENT<EOF"
+            echo "GH_SAMPLE_COMMENT<<EOF"
             echo "This"
             echo "is"
             echo "multiline"
