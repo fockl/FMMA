@@ -51,20 +51,20 @@ jobs:
         run: |
           pip install -r .github/workflows/requirements.txt
 
-      - name: benchmark image
-        run: |
-          cd benchmark
-          python3 plot_time.py
-          python3 plot_error.py
-          cd ..
+          #- name: benchmark image
+        #  run: |
+          #    cd benchmark
+          #    python3 plot_time.py
+          #    python3 plot_error.py
+          #    cd ..
 
-      - name: move benchmark results
-        run: |
-          cd benchmark
-          mkdir -p results
-          mv *.csv results/
-          mv *.png results/
-          cd ..
+          #- name: move benchmark results
+        #  run: |
+          #    cd benchmark
+          #    mkdir -p results
+          #    mv *.csv results/
+          #    mv *.png results/
+          #    cd ..
 
           #- name: Auto-update files
         #  run: |
