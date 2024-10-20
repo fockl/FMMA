@@ -81,18 +81,18 @@ jobs:
 
       - name: Setup python
         uses: actions/setup-python@v5
-        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        if: ${{ !env.SKIP_UPDATE_BENCHMARK }}
         with:
           python-version: '3.8'
           cache: 'pip'
 
       - name: Pip python
-        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        if: ${{ !env.SKIP_UPDATE_BENCHMARK }}
         run: |
           pip install -r .github/workflows/requirements.txt
 
       - name: benchmark image
-        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        if: ${{ !env.SKIP_UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           python3 plot_time.py
@@ -100,7 +100,7 @@ jobs:
           cd ..
 
       - name: move benchmark results
-        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        if: ${{ !env.SKIP_UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           mkdir -p results
@@ -109,7 +109,7 @@ jobs:
           cd ..
 
           #- name: Auto-update files
-        #  if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        #  if: ${{ !env.SKIP_UPDATE_BENCHMARK }}
         #  run: |
           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #     git config --global user.name "${GITHUB_ACTOR}"
