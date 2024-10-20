@@ -6,6 +6,10 @@ on:
       - '**.hpp'
       - '**.yml'
 
+env:
+  SKIP_UPDATE_BENCHMARK: false;
+
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest
@@ -64,32 +68,28 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: gh comment to pull request
-        run: |
-          {
-            echo "GH_PR_STATUS<<EOF"
-            (gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}") != null
-            echo EOF
-          } >> "$GITHUB_ENV"
+        run: 
+            gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || env.SKIP_UPDATE_BENCHMARK = true
         env:
           GH_TOKEN: ${{ github.token }}
 
       - name: check GH_PR_STATUS
-        run: echo "${{ env.GH_PR_STATUS }}"
+        run: echo "${{ env.SKIP_UPDATE_BENCHMARK }}"
 
       - name: Setup python
         uses: actions/setup-python@v5
-        if: ${{ env.GH_PR_STATUS == null }}
+        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
         with:
           python-version: '3.8'
           cache: 'pip'
 
       - name: Pip python
-        if: ${{ env.GH_PR_STATUS == null }}
+        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
         run: |
           pip install -r .github/workflows/requirements.txt
 
       - name: benchmark image
-        if: ${{ env.GH_PR_STATUS == null }}
+        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           python3 plot_time.py
@@ -97,7 +97,7 @@ jobs:
           cd ..
 
       - name: move benchmark results
-        if: ${{ env.GH_PR_STATUS == null }}
+        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           mkdir -p results
@@ -106,7 +106,7 @@ jobs:
           cd ..
 
           #- name: Auto-update files
-        #  if: ${{ env.GH_PR_STATUS == null }}
+        #  if: ${{ env.SKIP_UPDATE_BENCHMARK }}
         #  run: |
           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #     git config --global user.name "${GITHUB_ACTOR}"
