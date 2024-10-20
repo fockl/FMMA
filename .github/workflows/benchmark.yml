@@ -5,7 +5,6 @@ on:
       - '**.cpp'
       - '**.hpp'
       - '**.yml'
-  pull_request:
 
 jobs:
   benchmark:
@@ -79,16 +78,18 @@ jobs:
 
       - name: Setup python
         uses: actions/setup-python@v5
-        if: ${{ env.GH_PR_STATUS }}
+        if: ${{ env.GH_PR_STATUS == NULL }}
         with:
           python-version: '3.8'
           cache: 'pip'
 
       - name: Pip python
+        if: ${{ env.GH_PR_STATUS == NULL }}
         run: |
           pip install -r .github/workflows/requirements.txt
 
       - name: benchmark image
+        if: ${{ env.GH_PR_STATUS == NULL }}
         run: |
           cd benchmark
           python3 plot_time.py
@@ -96,6 +97,7 @@ jobs:
           cd ..
 
       - name: move benchmark results
+        if: ${{ env.GH_PR_STATUS == NULL }}
         run: |
           cd benchmark
           mkdir -p results
@@ -104,6 +106,7 @@ jobs:
           cd ..
 
           #- name: Auto-update files
+        #  if: ${{ env.GH_PR_STATUS == NULL }}
         #  run: |
           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #     git config --global user.name "${GITHUB_ACTOR}"
