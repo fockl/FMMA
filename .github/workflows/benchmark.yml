@@ -5,7 +5,7 @@ on:
       - '**.cpp'
       - '**.hpp'
   pull_request:
-    types: [opened]
+    types: [opened, reopened]
 
 jobs:
   benchmark:
