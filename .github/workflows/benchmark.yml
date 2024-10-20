@@ -6,10 +6,6 @@ on:
       - '**.hpp'
       - '**.yml'
 
-env:
-  SKIP_UPDATE_BENCHMARK: false
-
-
 jobs:
   benchmark:
     runs-on: ubuntu-latest
@@ -68,8 +64,11 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: gh comment to pull request
+        id: action1
         run: 
-            gh issue comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh issue comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || export env.SKIP_UPDATE_BENCHMARK=true
+            SKIP_UPDATE__BENCHMARK=false
+            gh issue comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh issue comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || SKIP_UPDATE_BENCHMARK=true
+            echo "SKIP_UPDATE_BENCHMARK=${SKIP_UPDATE_BENCHMARK}" >> $GITUHB_OUTPUT
         env:
           GH_TOKEN: ${{ github.token }}
 
@@ -78,7 +77,7 @@ jobs:
 
       - name: Setup python
         uses: actions/setup-python@v5
-        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        if: ${{ steps.action1.outputs.SKIP_UPDATE_BENCHMARK }}
         with:
           python-version: '3.8'
           cache: 'pip'
@@ -89,7 +88,7 @@ jobs:
           pip install -r .github/workflows/requirements.txt
 
       - name: benchmark image
-        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        if: ${{ steps.action1.outputs.SKIP_UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           python3 plot_time.py
@@ -97,7 +96,7 @@ jobs:
           cd ..
 
       - name: move benchmark results
-        if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        if: ${{ steps.action1.outputs.SKIP_UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           mkdir -p results
@@ -106,7 +105,7 @@ jobs:
           cd ..
 
           #- name: Auto-update files
-        #  if: ${{ env.SKIP_UPDATE_BENCHMARK }}
+        #  if: ${{ steps.action1.outputs.SKIP_UPDATE_BENCHMARK }}
         #  run: |
           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #     git config --global user.name "${GITHUB_ACTOR}"
