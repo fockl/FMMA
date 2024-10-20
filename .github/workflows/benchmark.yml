@@ -67,7 +67,7 @@ jobs:
         run: |
           {
             echo "GH_PR_STATUS<<EOF"
-            gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}"
+            (gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}") != null
             echo EOF
           } >> "$GITHUB_ENV"
         env:
@@ -106,7 +106,7 @@ jobs:
           cd ..
 
           #- name: Auto-update files
-        #  if: ${{ env.GH_PR_STATUS == NULL }}
+        #  if: ${{ env.GH_PR_STATUS == null }}
         #  run: |
           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #     git config --global user.name "${GITHUB_ACTOR}"
