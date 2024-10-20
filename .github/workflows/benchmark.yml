@@ -28,18 +28,18 @@ jobs:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-       - name: build
-         run: |
-           cmake -Bbuild
-           cmake --build build
+      - name: build
+        run: |
+          cmake -Bbuild
+          cmake --build build
 
-       - name: benchmark
-         run: |
-           cd benchmark
-           cmake -Bbuild
-           cmake --build build
-           bash run_benchmark.sh
-           cd ..
+      - name: benchmark
+        run: |
+          cd benchmark
+          cmake -Bbuild
+          cmake --build build
+          bash run_benchmark.sh
+          cd ..
 
       - name: Setup python
         uses: actions/setup-python@v5
