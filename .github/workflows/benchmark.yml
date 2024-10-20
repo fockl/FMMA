@@ -73,7 +73,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
 
       - name: check GH_PR_STATUS
-        run: echo "${{ env.SKIP_UPDATE_BENCHMARK }}"
+        run: echo "${{ steps.action1.outputs.SKIP_UPDATE_BENCHMARK }}"
 
       - name: Setup python
         uses: actions/setup-python@v5
