@@ -69,7 +69,7 @@ jobs:
 
       - name: gh comment to pull request
         run: 
-            gh issue comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh issue comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || env.SKIP_UPDATE_BENCHMARK = true
+            gh issue comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh issue comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || echo "env.SKIP_UPDATE_BENCHMARK=true"
         env:
           GH_TOKEN: ${{ github.token }}
 
