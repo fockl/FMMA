@@ -81,13 +81,13 @@ jobs:
 
       - name: Setup python
         uses: actions/setup-python@v5
-        if: ${{ ${{ env.SKIP_UPDATE_BENCHMARK }} == false }}
+        if: ${{ ${env.SKIP_UPDATE_BENCHMARK} == false }}
         with:
           python-version: '3.8'
           cache: 'pip'
 
       - name: Pip python
-        if: ${{ "${{ env.SKIP_UPDATE_BENCHMARK }}" == false }}
+        if: ${{ env.SKIP_UPDATE_BENCHMARK == false }}
         run: |
           pip install -r .github/workflows/requirements.txt
 
