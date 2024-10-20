@@ -66,33 +66,33 @@ jobs:
       - name: gh comment to pull request
         id: action1
         run: |
-            SKIP_UPDATE_BENCHMARK=false
-            gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || SKIP_UPDATE_BENCHMARK=true
+            UPDATE_BENCHMARK=true
+            gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || UPDATE_BENCHMARK=false
             {
-              echo "SKIP_UPDATE_BENCHMARK<<EOF"
-              echo ${SKIP_UPDATE_BENCHMARK}
+              echo "UPDATE_BENCHMARK<<EOF"
+              echo ${UPDATE_BENCHMARK}
               echo EOF
             } >> "$GITHUB_ENV"
         env:
           GH_TOKEN: ${{ github.token }}
 
       - name: check GH_PR_STATUS
-        run: echo "${{ env.SKIP_UPDATE_BENCHMARK }}"
+        run: echo "${{ env.UPDATE_BENCHMARK }}"
 
       - name: Setup python
         uses: actions/setup-python@v5
-        if: ${{ ${env.SKIP_UPDATE_BENCHMARK} == false }}
+        if: ${{ env.UPDATE_BENCHMARK }}
         with:
           python-version: '3.8'
           cache: 'pip'
 
       - name: Pip python
-        if: ${{ env.SKIP_UPDATE_BENCHMARK == false }}
+        if: ${{ env.UPDATE_BENCHMARK }}
         run: |
           pip install -r .github/workflows/requirements.txt
 
       - name: benchmark image
-        if: ${{ env.SKIP_UPDATE_BENCHMARK == false }}
+        if: ${{ env.UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           python3 plot_time.py
@@ -100,7 +100,7 @@ jobs:
           cd ..
 
       - name: move benchmark results
-        if: ${{ env.SKIP_UPDATE_BENCHMARK == false }}
+        if: ${{ env.UPDATE_BENCHMARK }}
         run: |
           cd benchmark
           mkdir -p results
@@ -109,7 +109,7 @@ jobs:
           cd ..
 
           #- name: Auto-update files
-        #  if: ${{ env.SKIP_UPDATE_BENCHMARK == false }}
+        #  if: ${{ env.UPDATE_BENCHMARK }}
         #  run: |
           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #     git config --global user.name "${GITHUB_ACTOR}"
