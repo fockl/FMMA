@@ -4,6 +4,8 @@ on:
     paths:
       - '**.cpp'
       - '**.hpp'
+  pull_request:
+    types: [opened]
 
 jobs:
   benchmark:
