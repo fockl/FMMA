@@ -5,3 +5,7 @@
 # FMMA
 
 fast-multipole-like method for arbitrary functions
+
+![ time ](benchmark/results/time.png)
+
+![ error ](benchmark/results/error.png)

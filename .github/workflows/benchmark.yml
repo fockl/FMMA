@@ -1,0 +1,125 @@
+name: benchmark
+on:
+  push:
+    paths:
+      - '**.cpp'
+      - '**.hpp'
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: gcc
+          cmake: true
+          make: true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Github Actions
+        uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: build
+        run: |
+          cmake -Bbuild
+          cmake --build build
+
+      - name: benchmark
+        run: |
+          cd benchmark
+          cmake -Bbuild
+          cmake --build build
+          bash run_benchmark.sh
+          cd ..
+
+      - name: Upload Benchmark
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark results
+          path:
+            benchmark/results/*
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      - name: create comment
+        run: |
+          {
+            echo "GH_SAMPLE_COMMENT<<EOF"
+            cat benchmark/comment.md
+            echo EOF
+          } >> "$GITHUB_ENV"
+
+      - name: gh comment to pull request
+        id: action1
+        run: |
+            {
+              echo "TRUE<<EOF"
+              echo true
+              echo EOF
+            } >> "$GITHUB_ENV"
+            UPDATE_BENCHMARK=true
+            #gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || UPDATE_BENCHMARK=false # 最後のコメントを編集する場合
+            gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || UPDATE_BENCHMARK=false # コメントを追加する場合
+            {
+              echo "UPDATE_BENCHMARK<<EOF"
+              echo ${UPDATE_BENCHMARK}
+              echo EOF
+            } >> "$GITHUB_ENV"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: check GH_PR_STATUS
+        run: echo "${{ env.UPDATE_BENCHMARK }}"
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
+        with:
+          python-version: '3.8'
+          cache: 'pip'
+
+      - name: Pip python
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
+        run: |
+          pip install -r .github/workflows/requirements.txt
+
+      - name: benchmark image
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
+        run: |
+          cd benchmark
+          python3 plot_time.py
+          python3 plot_error.py
+          cd ..
+
+      - name: move benchmark results
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
+        run: |
+          cd benchmark
+          mkdir -p results
+          mv *.csv results/
+          mv *.png results/
+          cd ..
+
+      - name: Auto-update files
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
+        run: |
+           git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+           git config --global user.name "${GITHUB_ACTOR}"
+           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+           git add benchmark/results/*
+           git commit -m "update benchmark"
+           git push origin HEAD:${GITHUB_REF}
+
