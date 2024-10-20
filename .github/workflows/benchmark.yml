@@ -4,7 +4,6 @@ on:
     paths:
       - '**.cpp'
       - '**.hpp'
-      - '**.yml'
 
 jobs:
   benchmark:
@@ -117,13 +116,13 @@ jobs:
           mv *.png results/
           cd ..
 
-          #- name: Auto-update files
-        #  if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
-        #  run: |
-           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-           #     git config --global user.name "${GITHUB_ACTOR}"
-           #     git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-           #     git add benchmark/results/*
-           #     git commit -m "update benchmark"
-           #     git push origin HEAD:${GITHUB_REF}
+      - name: Auto-update files
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
+        run: |
+            git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+            git config --global user.name "${GITHUB_ACTOR}"
+            git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+            git add benchmark/results/*
+            git commit -m "update benchmark"
+            git push origin HEAD:${GITHUB_REF}
 
