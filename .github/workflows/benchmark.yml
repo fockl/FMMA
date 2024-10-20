@@ -92,12 +92,12 @@ jobs:
           cache: 'pip'
 
       - name: Pip python
-        if: ${{ env.UPDATE_BENCHMARK }}
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
         run: |
           pip install -r .github/workflows/requirements.txt
 
       - name: benchmark image
-        if: ${{ env.UPDATE_BENCHMARK }}
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
         run: |
           cd benchmark
           python3 plot_time.py
@@ -105,7 +105,7 @@ jobs:
           cd ..
 
       - name: move benchmark results
-        if: ${{ env.UPDATE_BENCHMARK }}
+        if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
         run: |
           cd benchmark
           mkdir -p results
@@ -114,7 +114,7 @@ jobs:
           cd ..
 
           #- name: Auto-update files
-        #  if: ${{ env.UPDATE_BENCHMARK }}
+        #  if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
         #  run: |
           #     git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #     git config --global user.name "${GITHUB_ACTOR}"
