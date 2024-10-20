@@ -65,7 +65,7 @@ jobs:
 
       - name: gh comment to pull request
         id: action1
-        run: 
+        run: |
             SKIP_UPDATE__BENCHMARK=false
             gh issue comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh issue comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || SKIP_UPDATE_BENCHMARK=true
             {
