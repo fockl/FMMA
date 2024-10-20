@@ -70,9 +70,11 @@ jobs:
             echo "GH_PR_STATUS<<EOF"
             gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}"
           } >> "$GITHUB_ENV"
-          echo "${{ env.GH_PR_STATUS }}"
         env:
           GH_TOKEN: ${{ github.token }}
+
+      - name: check GH_PR_STATUS
+        run: echo "${{ env.GH_PR_STATUS }}"
 
       - name: Setup python
         uses: actions/setup-python@v5
