@@ -58,7 +58,7 @@ int main(void){
 
       double diff = 0.0;
       for(int n=0; n<N; ++n){
-        double tmp = (ans_exact[n]-ans_nrnmm[n]);
+        double tmp = (ans_exact[n]-ans_nrnmm[n])/ans_exact[n];
         diff += tmp*tmp;
       }
       diff = sqrt(diff/N);
