@@ -65,7 +65,7 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: gh comment to pull request
-        run:
+        run: |
           {
             echo "GH_PR_STATUS<<EOF"
             gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}"
