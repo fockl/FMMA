@@ -81,7 +81,7 @@ jobs:
 
       - name: Setup python
         uses: actions/setup-python@v5
-        if: ${{ env.UPDATE_BENCHMARK }}
+        if: ${{ env.UPDATE_BENCHMARK == "true" }}
         with:
           python-version: '3.8'
           cache: 'pip'
