@@ -72,7 +72,7 @@ jobs:
               echo "SKIP_UPDATE_BENCHMARK<<EOF"
               echo ${SKIP_UPDATE_BENCHMARK}
               echo EOF
-            } >> "$GITUHB_ENV"
+            } >> "$GITHUB_ENV"
         env:
           GH_TOKEN: ${{ github.token }}
 
