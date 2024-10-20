@@ -69,6 +69,7 @@ jobs:
           {
             echo "GH_PR_STATUS<<EOF"
             gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}"
+            echo EOF
           } >> "$GITHUB_ENV"
         env:
           GH_TOKEN: ${{ github.token }}
