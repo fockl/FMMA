@@ -72,7 +72,7 @@ jobs:
               echo EOF
             } >> "$GITHUB_ENV"
             UPDATE_BENCHMARK=true
-            gh issue comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh issue comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || UPDATE_BENCHMARK=false
+            gh pr comment ${{ github.ref_name }} --body "${{ env.GH_SAMPLE_COMMENT }}" --edit-last || gh pr comment ${{ github.refname }} --body "${{ env.GH_SAMPLE_COMMENT }}" || UPDATE_BENCHMARK=false
             {
               echo "UPDATE_BENCHMARK<<EOF"
               echo ${UPDATE_BENCHMARK}
