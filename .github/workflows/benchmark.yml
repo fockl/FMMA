@@ -9,7 +9,6 @@ on:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    #permissions: write-all
 
     steps:
       - name: Setup Cpp
@@ -72,7 +71,7 @@ jobs:
           #    git remote set-url origin https://github-actions:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           #    git config --global user.name "${GITHUB_ACTOR}"
           #    git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          #    git add .
+          #    git add benchmark/results/*
           #    git commit -m "update benchmark"
           #    git push origin HEAD:${GITHUB_REF}
 
@@ -94,10 +93,7 @@ jobs:
         run: |
           {
             echo "GH_SAMPLE_COMMENT<<EOF"
-            echo "This"
-            echo "is"
-            echo "multiline"
-            echo "comment"
+            cat benchmark/comment.md
             echo EOF
           } >> "$GITHUB_ENV"
 

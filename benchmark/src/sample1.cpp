@@ -106,5 +106,23 @@ int main(void){
     fclose(fp);
   }
 
+  {
+    FILE *fp;
+    fp = fopen("comment.md", "w");
+    fprintf(fp, "| type | N | time | error |\n");
+    fprintf(fp, "| --- | --- | --- | --- |\n");
+    fprintf(fp, "| exact | %d | %e | --- |\n", size[0], exact_time[0]);
+    for(int repeat=1; repeat<REPEAT; ++repeat){
+      fprintf(fp, "| | %d | %e | --- |\n", size[repeat], exact_time[repeat]);
+    }
+    for(int order=1; order<=ORDER; ++order){
+      fprintf(fp, "| nrnmm(%d) | %d | %e | %e |\n", order, size[0], nrnmm_time[0][order-1], nrnmm_error[0][order-1]);
+      for(int repeat=1; repeat<REPEAT; ++repeat){
+        fprintf(fp, "| | %d | %e | %e |\n", size[repeat], nrnmm_time[repeat][order-1], nrnmm_error[repeat][order-1]);
+      }
+    }
+    fclose(fp);
+  }
+
   return 0;
 }
