@@ -179,12 +179,13 @@ bool test_kernel_approx_4(int Nmax, TYPE tol){
   std::vector<TYPE> diff(Nmax, 0.0);
 
   std::function<TYPE(const std::array<TYPE, 2>& x, const std::array<TYPE, 2>& y)> fn = [](const std::array<TYPE, 2>& x, const std::array<TYPE, 2>& y){
-    return (x[0]-y[0])*(x[0]-y[0])-4*exp((x[1]-y[1])*(x[0]-y[0])/16.0);
+    TYPE len2 = (x[0]-y[0])*(x[0]-y[0]) + (x[1]-y[1])*(x[1]-y[1]);
+    return 1.0/len2;
   };
 
   for(std::size_t d=0; d<10; ++d){
-    TYPE x0 = (TYPE)rand()/RAND_MAX-4.0;
-    TYPE x1 = (TYPE)rand()/RAND_MAX-4.0;
+    TYPE x0 = (TYPE)rand()/RAND_MAX-3.0;
+    TYPE x1 = (TYPE)rand()/RAND_MAX-3.0;
     TYPE y0 = (TYPE)rand()*4.0/RAND_MAX+1.0;
     TYPE y1 = (TYPE)rand()*4.0/RAND_MAX+1.0;
     std::array<TYPE, 2> x{x0, x1}, y{y0, y1};
