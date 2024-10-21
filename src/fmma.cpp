@@ -32,7 +32,6 @@ void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, co
     ans[i] = 0.0;
     for(std::size_t j=0; j<source.size(); ++j){
       ans[i] += fn(target[i]-source[j]);
-      //ans[i] += fn(target[i], source[j]);
     }
   }
   return;
@@ -48,9 +47,7 @@ void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, co
   for(std::size_t i=0; i<N; ++i){
     ans[i] = 0.0;
     for(std::size_t j=0; j<source.size(); ++j){
-      TYPE tmp = fn(target[i]-source[j]);
-      //TYPE tmp = fn(target[i], source[j]);
-      ans[i] += source_weight[j] * tmp;
+      ans[i] += source_weight[j] * fn(target[i]-source[j]);
     }
   }
   return;
