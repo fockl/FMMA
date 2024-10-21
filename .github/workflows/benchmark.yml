@@ -46,7 +46,7 @@ jobs:
         run: |
           cd benchmark
           mkdir -p results
-          mv *.png results/
+          mv *.csv results/
           cd ..
 
       - name: create comment
