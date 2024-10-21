@@ -4,6 +4,7 @@ on:
     paths:
       - '**.cpp'
       - '**.hpp'
+      - '**.yml'
   pull_request:
     types: [opened, reopened]
 
@@ -46,7 +47,7 @@ jobs:
         run: |
           cd benchmark
           mkdir -p results
-          mv *.png results/
+          mv *.csv results/
           cd ..
 
       - name: create comment
