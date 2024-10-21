@@ -10,7 +10,7 @@
 namespace fmma {
 
 template<typename TYPE, std::size_t DIM>
-void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans){
+void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
 
   std::size_t M = source.size();
   std::size_t N = target.size();
@@ -91,7 +91,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& source, co
       for(std::size_t dim=0; dim<DIM; ++dim){
         val *= SChebyshev(poly_ord+1, chebyshev_node_all[k][dim], relative_pos[dim]);
       }
-      Wm[pos_node][k] += val;
+      Wm[pos_node][k] += source_weight[s]*val;
     }
   }
 
@@ -119,14 +119,14 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& source, co
 
       if(max_dist_from_t <= 1){
         for(std::size_t i=0; i<source_ind_in_box[s].size(); ++i){
-          ans[t] += fn(target[t], source[source_ind_in_box[s][i]]);
+          ans[t] += source_weight[source_ind_in_box[s][i]]*fn(target[t]-source[source_ind_in_box[s][i]]);
         }
       }else{
         for(std::size_t k=0; k<poly_ord_all; ++k){
           for(std::size_t dim=0; dim<DIM; ++dim){
             chebyshev_real_pos[dim] = (chebyshev_node_all[k][dim]+1.0)/2.0*len+relative_orig_pos[dim];
           }
-          ans[t] += fn(target[t], chebyshev_real_pos)*Wm[s][k];
+          ans[t] += fn(target[t]-chebyshev_real_pos)*Wm[s][k];
         }
       }
     }
@@ -135,7 +135,22 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& source, co
   return;
 };
 
-template void FMMA<double, 1>::nrnmm(const std::vector<std::array<double, 1>>& source, const std::vector<std::array<double, 1>>& target, std::vector<double>& ans);
-template void FMMA<double, 2>::nrnmm(const std::vector<std::array<double, 2>>& source, const std::vector<std::array<double, 2>>& target, std::vector<double>& ans);
+template void FMMA<double, 1>::nrnmm(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
+template void FMMA<double, 2>::nrnmm(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
+
+template<typename TYPE, std::size_t DIM>
+void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
+  std::vector<TYPE> ones(source.size());
+  for(std::size_t i=0; i<source.size(); ++i){
+    ones[i] = 1.0;
+  }
+
+  nrnmm(target, ones, source, ans);
+
+  return;
+};
+
+template void FMMA<double, 1>::nrnmm(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
+template void FMMA<double, 2>::nrnmm(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 
 };

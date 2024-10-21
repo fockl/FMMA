@@ -11,17 +11,67 @@
 namespace fmma {
 
 template<typename TYPE, std::size_t DIM>
+std::array<TYPE, DIM> operator+(const std::array<TYPE, DIM>& lhs, const std::array<TYPE, DIM>& rhs){
+  std::array<TYPE, DIM> ans;
+  for(std::size_t dim=0; dim<DIM; ++dim){
+    ans[dim] = lhs[dim]+rhs[dim];
+  }
+  return ans;
+};
+
+template<typename TYPE, std::size_t DIM>
+std::array<TYPE, DIM> operator-(const std::array<TYPE, DIM>& lhs, const std::array<TYPE, DIM>& rhs){
+  std::array<TYPE, DIM> ans;
+  for(std::size_t dim=0; dim<DIM; ++dim){
+    ans[dim] = lhs[dim]-rhs[dim];
+  }
+  return ans;
+};
+
+template<typename TYPE, std::size_t DIM>
+std::array<TYPE, DIM> operator*(const std::array<TYPE, DIM>& lhs, const std::array<TYPE, DIM>& rhs){
+  std::array<TYPE, DIM> ans;
+  for(std::size_t dim=0; dim<DIM; ++dim){
+    ans[dim] = lhs[dim]*rhs[dim];
+  }
+  return ans;
+};
+
+template<typename TYPE, std::size_t DIM>
+std::array<TYPE, DIM> operator/(const std::array<TYPE, DIM>& lhs, const std::array<TYPE, DIM>& rhs){
+  std::array<TYPE, DIM> ans;
+  for(std::size_t dim=0; dim<DIM; ++dim){
+    ans[dim] = lhs[dim]/rhs[dim];
+  }
+  return ans;
+};
+
+
+template<typename TYPE, std::size_t DIM>
 class FMMA{
   public:
-    std::function<TYPE(const std::array<TYPE, DIM>& source, const std::array<TYPE, DIM>& target)> fn = 
-      [](const std::array<TYPE, DIM>& source, const std::array<TYPE, DIM>& target){
+    std::function<TYPE(const std::array<TYPE, DIM>& target_source)> fn = 
+      [](const std::array<TYPE, DIM>& target_source){
         double len = 0.0;
         for(std::size_t dim=0; dim<DIM; ++dim){
-          double diff = source[dim]-target[dim];
+          double diff = target_source[dim];
           len += diff*diff;
         }
         return 1.0/std::sqrt(len);
       };
+
+    void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target_source)>& fn){
+      this->fn = fn;
+      return;
+    }
+
+    void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)>& fn){
+      this->fn = [fn](const std::array<TYPE, DIM>& target_source){
+        std::array<TYPE, DIM> zero;
+        return fn(target_source, zero);
+      };
+      return;
+    }
 
     std::string solve_type = "exact";
 
@@ -31,9 +81,12 @@ class FMMA{
   public:
     FMMA(void);
     ~FMMA(void);
-    void solve(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
-    void exact(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
-    void nrnmm(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans);
+    void solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+    void solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+    void exact(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+    void exact(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+    void nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+    void nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
 };
 
 } // namespace fmma
