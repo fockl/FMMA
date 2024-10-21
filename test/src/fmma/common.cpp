@@ -85,8 +85,7 @@ bool test_exact_1_r2(int ssize, int tsize, TYPE tol){
     }
     return sum/len2;
   };
-  //fmma.set_fn(fn);
-  fmma.fn = fn;
+  fmma.set_fn(fn);
   fmma.exact(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize);

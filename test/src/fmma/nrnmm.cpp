@@ -89,8 +89,8 @@ bool test_nrnmm_1_r2(int ssize, int tsize, TYPE tol){
     }
     return sum/len2;
   };
-  //fmma.set_fn(fn);
-  fmma.fn = fn;
+  fmma.set_fn(fn);
+  //fmma.fn = fn;
   fmma.poly_ord=3;
   fmma.nrn_N = 6;
   fmma.nrnmm(target, source_weight, source, ans);

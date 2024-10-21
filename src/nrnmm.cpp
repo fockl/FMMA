@@ -79,8 +79,6 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
     }
   }
 
-  //fprintf(stderr, "chebyshev\n");
-
   std::array<TYPE, DIM> relative_pos;
   for(std::size_t dim=0; dim<DIM; ++dim) relative_pos[dim] = 0.0;
   for(std::size_t s=0; s<source.size(); ++s){
@@ -130,8 +128,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
 
       if(max_dist_from_t <= 1){
         for(std::size_t i=0; i<source_ind_in_box[s].size(); ++i){
-          //ans[t] += source_weight.at(source_ind_in_box.at(s).at(i))*fn(target.at(t)-source.at(source_ind_in_box.at(s).at(i)));
-          ans[t] += source_weight.at(source_ind_in_box.at(s).at(i))*fn(target.at(t), source.at(source_ind_in_box.at(s).at(i)));
+          ans[t] += source_weight.at(source_ind_in_box.at(s).at(i))*fn(target.at(t)-source.at(source_ind_in_box.at(s).at(i)));
         }
       }else{
         for(std::size_t k=0; k<poly_ord_all; ++k){
@@ -140,9 +137,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
             chebyshev_real_pos.at(dim) = (chebyshev_node_all.at(k).at(dim)+1.0)/2.0*len+relative_orig_pos.at(dim);
             diff.at(dim) = target.at(t).at(dim) - chebyshev_real_pos.at(dim);
           }
-          //ans.at(t) += fn(target.at(t)-chebyshev_real_pos)*Wm.at(s).at(k);
-          //ans.at(t) += fn(diff)*Wm.at(s).at(k);
-          ans.at(t) += fn(target.at(t), chebyshev_real_pos)*Wm.at(s).at(k);
+          ans.at(t) += fn(target.at(t)-chebyshev_real_pos)*Wm.at(s).at(k);
         }
       }
     }

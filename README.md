@@ -16,7 +16,7 @@
 
 ``` math
 
-c_i = \sum_{j} a_i f(x_i-y_j) b_j
+c_i = \sum_{j} a_i b_j f(x_i-y_j)
 
 ```
 
@@ -28,7 +28,7 @@ c_i = \sum_{j} a_i f(x_i-y_j) b_j
 FMMA<double, 3> fmma;
 fmma.fn = fn;
 fmma.solve_type = solve_type;
-fmma.solve(y, x, c);
+fmma.solve(target, source, ans);
 ```
 
 fnは任意の関数を指定できる。C++だと
@@ -73,7 +73,7 @@ FMMA is a library to calculate fastly
 
 ``` math
 
-c_i = \sum_{j} a_i f(x_i-y_j) b_j
+c_i = \sum_{j} a_i b_j f(x_i-y_j)
 
 ```
 
@@ -99,7 +99,7 @@ Benchmark results using github-actions are follows :
 FMMA<double, 3> fmma;
 fmma.fn = fn;
 fmma.solve_type = solve_type;
-fmma.solve(y, x, c);
+fmma.solve(target, source, ans);
 ```
 
 arbitrary function can be set as fn. In C++, a definition of fn is like:
@@ -124,6 +124,14 @@ when $O(n(x)) = O(n(y)) = O(N)$, the computational cost are as follows:
 
 Benchmark results using github-actions are as follows:
 
-![ time ](benchmark/results/time.png)
+1D:
 
-![ error ](benchmark/results/error.png)
+![ time ](benchmark/results/time_1.png)
+
+![ error ](benchmark/results/error_1.png)
+
+2D:
+
+![ time ](benchmark/results/time_2.png)
+
+![ error ](benchmark/results/error_2.png)

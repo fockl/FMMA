@@ -110,7 +110,7 @@ int main(void){
     FILE *fp;
     fp = fopen("comment_1.md", "w");
     fprintf(fp, "1D results\n");
-    fprintf(fp, "| type | N | time | error |\n");
+    fprintf(fp, "| type | N | time[ms] | relative error |\n");
     fprintf(fp, "| --- | --- | --- | --- |\n");
     fprintf(fp, "| exact | %d | %e | --- |\n", size[0], exact_time[0]);
     for(int repeat=1; repeat<REPEAT; ++repeat){
