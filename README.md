@@ -12,11 +12,11 @@
 
 # FMMA
 
-任意次元の任意の関数$f$について、
+任意次元の変数 $x_i $, $y_j$ と任意の関数 $f$ について、
 
 ``` math
 
-c_i = \sum_{j} a_i f(\bm{x}_i-\bm{y}_j) b_j
+c_i = \sum_{j} a_i f(x_i-y_j) b_j
 
 ```
 
@@ -65,11 +65,11 @@ FMMA is a library to calculate fastly
 
 ``` math
 
-c_i = \sum_{j} a_i f(\bm{x}_i-\bm{y}_j) b_j
+c_i = \sum_{j} a_i f(x_i-y_j) b_j
 
 ```
 
-for arbitrary function $f$ in arbitrary dimension.
+for arbitrary function $f$ and variables $x_i$, $y_j$ in arbitrary dimension.
 
 Benchmark results using github-actions are follows :
 
