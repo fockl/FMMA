@@ -4,6 +4,7 @@ on:
     paths:
       - '**.cpp'
       - '**.hpp'
+      - '**.yml'
   pull_request:
     types: [opened, reopened]
 
@@ -40,13 +41,6 @@ jobs:
           cmake -Bbuild
           cmake --build build
           bash run_benchmark.sh
-          cd ..
-
-      - name: move benchmark results
-        run: |
-          cd benchmark
-          mkdir -p results
-          mv *.csv results/
           cd ..
 
       - name: create comment
@@ -100,6 +94,13 @@ jobs:
           cd benchmark
           python3 plot_time.py
           python3 plot_error.py
+          cd ..
+
+      - name: move benchmark results
+        run: |
+          cd benchmark
+          mkdir -p results
+          mv *.csv results/
           cd ..
 
       - name: move benchmark images
