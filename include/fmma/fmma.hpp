@@ -50,17 +50,6 @@ std::array<TYPE, DIM> operator/(const std::array<TYPE, DIM>& lhs, const std::arr
 template<typename TYPE, std::size_t DIM>
 class FMMA{
   public:
-    /*
-    std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)> fn = 
-      [](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
-        double len = 0.0;
-        for(std::size_t dim=0; dim<DIM; ++dim){
-          double diff = target[dim]-source[dim];
-          len += diff*diff;
-        }
-        return 1.0/std::sqrt(len);
-      };
-      */
     std::function<TYPE(const std::array<TYPE, DIM>& target_source)> fn = 
       [](const std::array<TYPE, DIM>& target_source){
         double len = 0.0;
