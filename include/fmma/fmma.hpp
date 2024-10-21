@@ -68,10 +68,24 @@ class FMMA{
     void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)>& fn){
       this->fn = [fn](const std::array<TYPE, DIM>& target_source){
         std::array<TYPE, DIM> zero;
+        for(std::size_t dim=0; dim<DIM; ++dim){
+          zero[dim] = 0.0;
+        }
         return fn(target_source, zero);
       };
       return;
     }
+    /*
+    std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)> fn = 
+      [](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
+        double len = 0.0;
+        for(std::size_t dim=0; dim<DIM; ++dim){
+          double diff = target[dim] - source[dim];
+          len += diff*diff;
+        }
+        return 1.0/std::sqrt(len);
+      };
+      */
 
     std::string solve_type = "exact";
 

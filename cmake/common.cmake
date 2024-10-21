@@ -1,5 +1,5 @@
 function(set_common_properties FMMA_TARGET)
-  target_compile_options(${FMMA_TARGET} PUBLIC -g -O3 -Wall -fPIC)
+  target_compile_options(${FMMA_TARGET} PUBLIC -g -O3 -Wall -Wextra -fPIC)
 
   find_package(OpenMP)
   if(OpenMP_CXX_FOUND)

@@ -43,7 +43,7 @@ bool test_nrnmm(int ssize, int tsize, TYPE tol){
   TYPE diff = 0.0;
   for(int i=0; i<tsize; ++i){
     TYPE d = ans[i]-exact[i];
-    diff += d*d/ans[i]/ans[i];
+    diff += d*d/exact[i]/exact[i];
   }
   diff = sqrt(diff / tsize);
 
@@ -90,11 +90,12 @@ bool test_nrnmm_1_r2(int ssize, int tsize, TYPE tol){
     return sum/len2;
   };
   fmma.set_fn(fn);
-  fmma.poly_ord=2;
+  //fmma.fn = fn;
+  fmma.poly_ord=3;
   fmma.nrn_N = 6;
   fmma.nrnmm(target, source_weight, source, ans);
 
-  std::vector<TYPE> exact(tsize);
+  std::vector<TYPE> exact(tsize, 0.0);
   for(int i=0; i<ssize; ++i){
     for(int j=0; j<tsize; ++j){
       TYPE len2 = 0.0;
@@ -111,7 +112,7 @@ bool test_nrnmm_1_r2(int ssize, int tsize, TYPE tol){
   TYPE diff = 0.0;
   for(int i=0; i<tsize; ++i){
     TYPE d = ans[i]-exact[i];
-    diff += d*d/ans[i]/ans[i];
+    diff += d*d/exact[i]/exact[i];
   }
   diff = sqrt(diff / tsize);
 
@@ -152,13 +153,23 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
-  if(!test_nrnmm_1_r2<double, 1>(10, 10, 3.0e-3)){
+  if(!test_nrnmm_1_r2<double, 1>(10, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
-  if(!test_nrnmm_1_r2<double, 1>(10, 20, 3.0e-3)){
+  if(!test_nrnmm_1_r2<double, 1>(10, 20, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
-  if(!test_nrnmm_1_r2<double, 1>(20, 10, 3.0e-3)){
+  if(!test_nrnmm_1_r2<double, 1>(20, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+
+  if(!test_nrnmm_1_r2<double, 2>(10, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<double, 2>(10, 20, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<double, 2>(20, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
 

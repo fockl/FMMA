@@ -21,6 +21,10 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
   if(M == 0 || N == 0){
     return;
   }
+  if(source_weight.size() != M){
+    fprintf(stderr, "%s:%d ERROR : source_weight size (%zu) != source size (%zu)\n", __FILE__, __LINE__, source_weight.size(), source.size());
+    exit(EXIT_FAILURE);
+  }
 
   std::size_t SIZE = 1;
   for(std::size_t i=0; i<DIM; ++i){
@@ -28,6 +32,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
   }
 
   std::array<TYPE, DIM> min_pos, max_pos;
+  for(std::size_t dim=0; dim<DIM; ++dim){min_pos[dim] = 0.0; max_pos[dim] = 0.0;}
   min_pos = source[0];
   max_pos = source[0];
   for(std::size_t s=0; s<source.size(); ++s){
@@ -64,6 +69,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
     chebyshev_node[k] = cos((2.0*k+1.0)/(2*poly_ord+2)*M_PI);
   }
   std::vector<std::array<TYPE, DIM>> chebyshev_node_all(poly_ord_all);
+  for(std::size_t k=0; k<poly_ord_all; ++k) for(std::size_t dim=0; dim<DIM; ++dim) chebyshev_node_all[k][dim] = 0.0;
   for(std::size_t k=0; k<poly_ord_all; ++k){
     std::size_t k_copy = k;
     for(std::size_t dim=0; dim<DIM; ++dim){
@@ -74,6 +80,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
   }
 
   std::array<TYPE, DIM> relative_pos;
+  for(std::size_t dim=0; dim<DIM; ++dim) relative_pos[dim] = 0.0;
   for(std::size_t s=0; s<source.size(); ++s){
     std::array<TYPE, DIM> source_pos = source[s];
     std::size_t pos_node = 0;
@@ -95,10 +102,12 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
     }
   }
 
+
   std::array<TYPE, DIM> chebyshev_real_pos;
   std::array<TYPE, DIM> relative_orig_pos;
   std::array<int, DIM> target_ind_of_box;
   std::array<int, DIM> ind_of_box;
+  for(std::size_t dim=0; dim<DIM; ++dim){ chebyshev_real_pos[dim] = 0.0; relative_orig_pos[dim] = 0.0; target_ind_of_box[dim] = 0; ind_of_box[dim] = 0;}
   for(std::size_t t=0; t<target.size(); ++t){
     ans[t] = 0.0;
 
@@ -123,8 +132,10 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
         }
       }else{
         for(std::size_t k=0; k<poly_ord_all; ++k){
+          std::array<TYPE, DIM> diff;
           for(std::size_t dim=0; dim<DIM; ++dim){
             chebyshev_real_pos[dim] = (chebyshev_node_all[k][dim]+1.0)/2.0*len+relative_orig_pos[dim];
+            diff[dim] = target[t][dim] - chebyshev_real_pos[dim];
           }
           ans[t] += fn(target[t]-chebyshev_real_pos)*Wm[s][k];
         }

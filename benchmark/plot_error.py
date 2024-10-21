@@ -9,7 +9,7 @@ def plot_error(name):
   nrnmm_3_error = input_csv[input_csv.keys()[3]]
 
   plt.xlabel("N")
-  plt.ylabel("error")
+  plt.ylabel("relative error")
 
   plt.xscale("log")
   plt.yscale("log")
