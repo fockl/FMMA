@@ -42,19 +42,12 @@ jobs:
           bash run_benchmark.sh
           cd ..
 
-      - name: Upload Benchmark
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmark results
-          path:
-            benchmark/results/*
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-        env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+      - name: move benchmark results
+        run: |
+          cd benchmark
+          mkdir -p results
+          mv *.png results/
+          cd ..
 
       - name: create comment
         run: |
@@ -109,12 +102,10 @@ jobs:
           python3 plot_error.py
           cd ..
 
-      - name: move benchmark results
+      - name: move benchmark images
         if: ${{ env.UPDATE_BENCHMARK == env.TRUE }}
         run: |
           cd benchmark
-          mkdir -p results
-          mv *.csv results/
           mv *.png results/
           cd ..
 
@@ -127,4 +118,18 @@ jobs:
           git add benchmark/results/*
           git commit -m "update benchmark"
           git push origin HEAD:${GITHUB_REF}
+
+      - name: Upload Benchmark
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark results
+          path:
+            benchmark/results/*
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
