@@ -28,6 +28,24 @@ std::array<TYPE, DIM> operator-(const std::array<TYPE, DIM>& lhs, const std::arr
   return ans;
 };
 
+template<typename TYPE, std::size_t DIM>
+std::array<TYPE, DIM> operator*(const std::array<TYPE, DIM>& lhs, const std::array<TYPE, DIM>& rhs){
+  std::array<TYPE, DIM> ans;
+  for(std::size_t dim=0; dim<DIM; ++dim){
+    ans[dim] = lhs[dim]*rhs[dim];
+  }
+  return ans;
+};
+
+template<typename TYPE, std::size_t DIM>
+std::array<TYPE, DIM> operator/(const std::array<TYPE, DIM>& lhs, const std::array<TYPE, DIM>& rhs){
+  std::array<TYPE, DIM> ans;
+  for(std::size_t dim=0; dim<DIM; ++dim){
+    ans[dim] = lhs[dim]/rhs[dim];
+  }
+  return ans;
+};
+
 
 template<typename TYPE, std::size_t DIM>
 class FMMA{
