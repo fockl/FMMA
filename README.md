@@ -55,9 +55,17 @@ $O(n(x)) = O(n(y)) = O(N)$の時の計算量は以下の通り：
 
 github-actions を用いたベンチマーク結果：
 
-![ time ](benchmark/results/time.png)
+1次元の場合:
 
-![ error ](benchmark/results/error.png)
+![ time ](benchmark/results/time_1.png)
+
+![ error ](benchmark/results/error_1.png)
+
+2次元の場合:
+
+![ time ](benchmark/results/time_2.png)
+
+![ error ](benchmark/results/error_2.png)
 
 # FMMA(English)
 
@@ -73,9 +81,17 @@ for arbitrary function $f$ and variables $x_i$, $y_j$ in arbitrary dimension.
 
 Benchmark results using github-actions are follows :
 
-![ time ](benchmark/results/time.png)
+1D:
 
-![ error ](benchmark/results/error.png)
+![ time ](benchmark/results/time_1.png)
+
+![ error ](benchmark/results/error_1.png)
+
+2D:
+
+![ time ](benchmark/results/time_2.png)
+
+![ error ](benchmark/results/error_2.png)
 
 # Usage(English)
 
