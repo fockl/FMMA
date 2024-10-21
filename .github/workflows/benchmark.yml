@@ -60,7 +60,7 @@ jobs:
         run: |
           {
             echo "GH_SAMPLE_COMMENT<<EOF"
-            cat benchmark/comment.md
+            cat benchmark/comment_1.md
             echo EOF
           } >> "$GITHUB_ENV"
 

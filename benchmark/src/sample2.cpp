@@ -9,12 +9,13 @@
 int main(void){
 
   int N = 1024;
-  int REPEAT = 4;
+  int REPEAT = 7;
   int ORDER = 3;
 
-  auto fn = [](const std::array<double, 1>& source, const std::array<double, 1>& target){
-    double diff = source[0]-target[0];
-    double len = diff*diff;
+  auto fn = [](const std::array<double, 2>& target, const std::array<double, 2>& source){
+    double diff0 = target[0]-source[0];
+    double diff1 = target[1]-source[1];
+    double len = diff0*diff0 + diff1*diff1;
     return 1.0/std::sqrt(len);
   };
 
@@ -29,11 +30,13 @@ int main(void){
     N *= 2;
 
     size[repeat] = N;
-    fmma::FMMA<double, 1> fmma;
-    std::vector<std::array<double, 1>> source(N), target(N);
+    fmma::FMMA<double, 2> fmma;
+    std::vector<std::array<double, 2>> source(N), target(N);
     for(int n=0; n<N; ++n){
-      source[n][0] = (double)rand()/RAND_MAX;
-      target[n][0] = (double)rand()/RAND_MAX;
+      for(int dim=0; dim<2; ++dim){
+        source[n][dim] = (double)rand()/RAND_MAX;
+        target[n][dim] = (double)rand()/RAND_MAX;
+      }
     }
     std::vector<double> ans_exact(N);
     fmma.set_fn(fn);
@@ -68,7 +71,7 @@ int main(void){
 
   {
     FILE *fp;
-    fp = fopen("time_1.csv", "w");
+    fp = fopen("time_2.csv", "w");
     fprintf(fp, "N");
     fprintf(fp, ", exact");
     for(int order=1; order<=ORDER; ++order){
@@ -89,7 +92,7 @@ int main(void){
 
   {
     FILE *fp;
-    fp = fopen("error_1.csv", "w");
+    fp = fopen("error_2.csv", "w");
     fprintf(fp, "N");
     for(int order=1; order<=ORDER; ++order){
       fprintf(fp, ", nrnmm(%d)", order);
@@ -108,8 +111,8 @@ int main(void){
 
   {
     FILE *fp;
-    fp = fopen("comment_1.md", "w");
-    fprintf(fp, "1D results\n");
+    fp = fopen("comment_2.md", "w");
+    fprintf(fp, "2D results\n");
     fprintf(fp, "| type | N | time | error |\n");
     fprintf(fp, "| --- | --- | --- | --- |\n");
     fprintf(fp, "| exact | %d | %e | --- |\n", size[0], exact_time[0]);

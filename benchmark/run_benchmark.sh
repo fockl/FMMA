@@ -13,3 +13,7 @@ do
     fi
   fi
 done
+
+echo "`cat comment_1.md`" > comment.md
+echo "" >> comment.md
+echo "` cat comment_2.md`" >> comment.md

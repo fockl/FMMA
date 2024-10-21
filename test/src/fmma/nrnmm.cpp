@@ -25,14 +25,14 @@ bool test_nrnmm(int ssize, int tsize, TYPE tol){
   std::vector<TYPE> ans(tsize);
   fmma.poly_ord=2;
   fmma.nrn_N = 3;
-  fmma.nrnmm(source, target, ans);
+  fmma.nrnmm(target, source, ans);
 
   std::vector<TYPE> exact(tsize);
   for(int i=0; i<ssize; ++i){
     for(int j=0; j<tsize; ++j){
       TYPE len = 0.0;
       for(std::size_t dim=0; dim<DIM; ++dim){
-        TYPE d = source[i][dim] - target[j][dim];
+        TYPE d = target[j][dim] - source[i][dim];
         len += d * d;
       }
       len = std::sqrt(len);
@@ -64,41 +64,47 @@ bool test_nrnmm(int ssize, int tsize, TYPE tol){
 template<typename TYPE, std::size_t DIM>
 bool test_nrnmm_1_r2(int ssize, int tsize, TYPE tol){
   std::vector<std::array<TYPE, DIM>> source(ssize), target(tsize);
+  std::vector<TYPE> source_weight(ssize);
   for(int i=0; i<ssize; ++i){
     for(std::size_t dim=0; dim<DIM; ++dim){
-      source[i][dim] = (TYPE)rand()/RAND_MAX-0.5;
+      source[i][dim] = ((TYPE)rand()/RAND_MAX-0.5)*5;
     }
+    source_weight[i] = (TYPE)rand()/RAND_MAX;
   }
   for(int i=0; i<tsize; ++i){
     for(std::size_t dim=0; dim<DIM; ++dim){
-      target[i][dim] = (TYPE)rand()/RAND_MAX-0.5;
+      target[i][dim] = ((TYPE)rand()/RAND_MAX-0.5)*5;
     }
   }
 
   fmma::FMMA<TYPE, DIM> fmma;
   std::vector<TYPE> ans(tsize);
-  auto fn = [](const std::array<TYPE, DIM>& source, const std::array<TYPE, DIM>& target){
+  auto fn = [](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
     TYPE len2 = 0.0;
+    TYPE sum = 0.0;
     for(std::size_t dim=0; dim<DIM; ++dim){
-      TYPE diff = source[dim]-target[dim];
+      TYPE diff = target[dim]-source[dim];
       len2 += diff*diff;
+      sum += diff;
     }
-    return 1.0/len2;
+    return sum/len2;
   };
-  fmma.fn = fn;
+  fmma.set_fn(fn);
   fmma.poly_ord=2;
-  fmma.nrn_N = 3;
-  fmma.nrnmm(source, target, ans);
+  fmma.nrn_N = 6;
+  fmma.nrnmm(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize);
   for(int i=0; i<ssize; ++i){
     for(int j=0; j<tsize; ++j){
       TYPE len2 = 0.0;
+      TYPE sum = 0.0;
       for(std::size_t dim=0; dim<DIM; ++dim){
-        TYPE d = source[i][dim] - target[j][dim];
+        TYPE d = target[j][dim] - source[i][dim];
         len2 += d * d;
+        sum += d;
       }
-      exact[j] += 1.0/len2;
+      exact[j] += source_weight[i]*sum/len2;
     }
   }
 
@@ -146,13 +152,13 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
-  if(!test_nrnmm_1_r2<double, 1>(10, 10, 1.0e-3)){
+  if(!test_nrnmm_1_r2<double, 1>(10, 10, 3.0e-3)){
     exit(EXIT_FAILURE);
   }
-  if(!test_nrnmm_1_r2<double, 1>(10, 20, 1.0e-3)){
+  if(!test_nrnmm_1_r2<double, 1>(10, 20, 3.0e-3)){
     exit(EXIT_FAILURE);
   }
-  if(!test_nrnmm_1_r2<double, 1>(20, 10, 1.0e-3)){
+  if(!test_nrnmm_1_r2<double, 1>(20, 10, 3.0e-3)){
     exit(EXIT_FAILURE);
   }
 

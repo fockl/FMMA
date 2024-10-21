@@ -23,14 +23,14 @@ bool test_exact(int ssize, int tsize, TYPE tol){
 
   fmma::FMMA<TYPE, DIM> fmma;
   std::vector<TYPE> ans(tsize);
-  fmma.exact(source, target, ans);
+  fmma.exact(target, source, ans);
 
   std::vector<TYPE> exact(tsize);
   for(int i=0; i<ssize; ++i){
     for(int j=0; j<tsize; ++j){
       TYPE len = 0.0;
       for(std::size_t dim=0; dim<DIM; ++dim){
-        TYPE d = source[i][dim] - target[j][dim];
+        TYPE d = target[j][dim] - source[i][dim];
         len += d * d;
       }
       len = std::sqrt(len);
@@ -60,39 +60,45 @@ bool test_exact(int ssize, int tsize, TYPE tol){
 template<typename TYPE, std::size_t DIM>
 bool test_exact_1_r2(int ssize, int tsize, TYPE tol){
   std::vector<std::array<TYPE, DIM>> source(ssize), target(tsize);
+  std::vector<TYPE> source_weight(ssize);
   for(int i=0; i<ssize; ++i){
     for(std::size_t dim=0; dim<DIM; ++dim){
-      source[i][dim] = (TYPE)rand()/RAND_MAX-0.5;
+      source[i][dim] = ((TYPE)rand()/RAND_MAX-0.5)*5;
     }
+    source_weight[i] = (TYPE)rand()/RAND_MAX;
   }
   for(int i=0; i<tsize; ++i){
     for(std::size_t dim=0; dim<DIM; ++dim){
-      target[i][dim] = (TYPE)rand()/RAND_MAX-0.5;
+      target[i][dim] = ((TYPE)rand()/RAND_MAX-0.5)*5;
     }
   }
 
   fmma::FMMA<TYPE, DIM> fmma;
   std::vector<TYPE> ans(tsize);
-  auto fn = [](const std::array<TYPE, DIM>& source, const std::array<TYPE, DIM>& target){
+  auto fn = [](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
     TYPE len2 = 0.0;
+    TYPE sum = 0.0;
     for(std::size_t dim=0; dim<DIM; ++dim){
-      TYPE diff = source[dim]-target[dim];
+      TYPE diff = target[dim]-source[dim];
       len2 += diff*diff;
+      sum += diff;
     }
-    return 1.0/len2;
+    return sum/len2;
   };
-  fmma.fn = fn;
-  fmma.exact(source, target, ans);
+  fmma.set_fn(fn);
+  fmma.exact(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize);
   for(int i=0; i<ssize; ++i){
     for(int j=0; j<tsize; ++j){
-      TYPE len = 0.0;
+      TYPE len2 = 0.0;
+      TYPE sum = 0.0;
       for(std::size_t dim=0; dim<DIM; ++dim){
-        TYPE d = source[i][dim] - target[j][dim];
-        len += d * d;
+        TYPE d = target[j][dim] - source[i][dim];
+        len2 += d * d;
+        sum += d;
       }
-      exact[j] += 1.0/len;
+      exact[j] += source_weight[i]*sum/len2;
     }
   }
 

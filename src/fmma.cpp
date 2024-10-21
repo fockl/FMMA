@@ -25,27 +25,43 @@ template FMMA<double, 1>::~FMMA(void);
 template FMMA<double, 2>::~FMMA(void);
 
 template<typename TYPE, std::size_t DIM>
-void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans){
+void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
   std::size_t N = target.size();
   ans.resize(N);
   for(std::size_t i=0; i<N; ++i){
     ans[i] = 0.0;
     for(std::size_t j=0; j<source.size(); ++j){
-      ans[i] += fn(source[j], target[i]);
+      ans[i] += fn(target[i]-source[j]);
     }
   }
   return;
 };
 
-template void FMMA<double, 1>::exact(const std::vector<std::array<double, 1>>& source, const std::vector<std::array<double, 1>>& target, std::vector<double>& ans);
-template void FMMA<double, 2>::exact(const std::vector<std::array<double, 2>>& source, const std::vector<std::array<double, 2>>& target, std::vector<double>& ans);
+template void FMMA<double, 1>::exact(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
+template void FMMA<double, 2>::exact(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 
 template<typename TYPE, std::size_t DIM>
-void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& source, const std::vector<std::array<TYPE, DIM>>& target, std::vector<TYPE>& ans){
+void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
+  std::size_t N = target.size();
+  ans.resize(N);
+  for(std::size_t i=0; i<N; ++i){
+    ans[i] = 0.0;
+    for(std::size_t j=0; j<source.size(); ++j){
+      ans[i] += source_weight[j] * fn(target[i]-source[j]);
+    }
+  }
+  return;
+};
+
+template void FMMA<double, 1>::exact(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
+template void FMMA<double, 2>::exact(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
+
+template<typename TYPE, std::size_t DIM>
+void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
   if(this->solve_type == "exact"){
-    exact(source, target, ans);
+    exact(target, source, ans);
   }else if(this->solve_type == "nrnmm"){
-    nrnmm(source, target, ans);
+    nrnmm(target, source, ans);
   }else{
     fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solve_type.c_str());
     exit(EXIT_FAILURE);
@@ -53,7 +69,23 @@ void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& source, co
   return;
 };
 
-template void FMMA<double, 1>::solve(const std::vector<std::array<double, 1>>& source, const std::vector<std::array<double, 1>>& target, std::vector<double>& ans);
-template void FMMA<double, 2>::solve(const std::vector<std::array<double, 2>>& source, const std::vector<std::array<double, 2>>& target, std::vector<double>& ans);
+template void FMMA<double, 1>::solve(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
+template void FMMA<double, 2>::solve(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
+
+template<typename TYPE, std::size_t DIM>
+void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
+  if(this->solve_type == "exact"){
+    exact(target, source_weight, source, ans);
+  }else if(this->solve_type == "nrnmm"){
+    nrnmm(target, source_weight, source, ans);
+  }else{
+    fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solve_type.c_str());
+    exit(EXIT_FAILURE);
+  }
+  return;
+};
+
+template void FMMA<double, 1>::solve(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
+template void FMMA<double, 2>::solve(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 
 } // namespace fmma
