@@ -10,11 +10,12 @@
 namespace fmma {
 
 template<typename TYPE, std::size_t DIM>
-std::array<std::size_t, DIM> FMMA<TYPE, DIM>::get_box_ind_of_ind(std::size_t ind, int N){
+std::array<std::size_t, DIM> FMMA<TYPE, DIM>::get_box_ind_of_ind(const std::size_t ind, int N){
   std::array<std::size_t, DIM> ans;
+  std::size_t ind_copy = ind;
   for(std::size_t dim=0; dim<DIM; ++dim){
-    ans[DIM-1-dim] = ind%N;
-    ind /= N;
+    ans[DIM-1-dim] = ind_copy%N;
+    ind_copy /= N;
   }
   return ans;
 }
@@ -23,7 +24,7 @@ template std::array<std::size_t, 1> FMMA<double, 1>::get_box_ind_of_ind(std::siz
 template std::array<std::size_t, 2> FMMA<double, 2>::get_box_ind_of_ind(std::size_t ind, int N);
 
 template<typename TYPE, std::size_t DIM>
-std::size_t FMMA<TYPE, DIM>::get_ind_of_box_ind(std::array<int, DIM> box_ind, int N){
+std::size_t FMMA<TYPE, DIM>::get_ind_of_box_ind(const std::array<int, DIM>& box_ind, int N){
   std::size_t ans = 0;
   for(std::size_t dim=0; dim<DIM; ++dim){
     ans *= N;
@@ -32,11 +33,11 @@ std::size_t FMMA<TYPE, DIM>::get_ind_of_box_ind(std::array<int, DIM> box_ind, in
   return ans;
 }
 
-template std::size_t FMMA<double, 1>::get_ind_of_box_ind(std::array<int, 1> box_ind, int N);
-template std::size_t FMMA<double, 2>::get_ind_of_box_ind(std::array<int, 2> box_ind, int N);
+template std::size_t FMMA<double, 1>::get_ind_of_box_ind(const std::array<int, 1>& box_ind, int N);
+template std::size_t FMMA<double, 2>::get_ind_of_box_ind(const std::array<int, 2>& box_ind, int N);
 
 template<typename TYPE, std::size_t DIM>
-std::vector<std::size_t> FMMA<TYPE, DIM>::multipole_calc_box_indices(std::array<int, DIM> box_ind, int N){
+std::vector<std::size_t> FMMA<TYPE, DIM>::multipole_calc_box_indices(const std::array<int, DIM>& box_ind, int N){
   std::vector<std::size_t> ans;
   std::array<int, DIM> lower, upper;
   for(std::size_t dim=0; dim<DIM; ++dim){
@@ -81,11 +82,11 @@ std::vector<std::size_t> FMMA<TYPE, DIM>::multipole_calc_box_indices(std::array<
   return ans;
 }
 
-template std::vector<std::size_t> FMMA<double, 1>::multipole_calc_box_indices(std::array<int, 1> box_ind, int N);
-template std::vector<std::size_t> FMMA<double, 2>::multipole_calc_box_indices(std::array<int, 2> box_ind, int N);
+template std::vector<std::size_t> FMMA<double, 1>::multipole_calc_box_indices(const std::array<int, 1>& box_ind, int N);
+template std::vector<std::size_t> FMMA<double, 2>::multipole_calc_box_indices(const std::array<int, 2>& box_ind, int N);
 
 template<typename TYPE, std::size_t DIM>
-std::vector<std::size_t> FMMA<TYPE, DIM>::exact_calc_box_indices(std::array<int, DIM> box_ind, int N){
+std::vector<std::size_t> FMMA<TYPE, DIM>::exact_calc_box_indices(const std::array<int, DIM>& box_ind, int N){
   std::vector<std::size_t> ans;
   std::array<int, DIM> lower, upper;
   for(std::size_t dim=0; dim<DIM; ++dim){
@@ -121,8 +122,8 @@ std::vector<std::size_t> FMMA<TYPE, DIM>::exact_calc_box_indices(std::array<int,
   return ans;
 }
 
-template std::vector<std::size_t> FMMA<double, 1>::exact_calc_box_indices(std::array<int, 1> box_ind, int N);
-template std::vector<std::size_t> FMMA<double, 2>::exact_calc_box_indices(std::array<int, 2> box_ind, int N);
+template std::vector<std::size_t> FMMA<double, 1>::exact_calc_box_indices(const std::array<int, 1>& box_ind, int N);
+template std::vector<std::size_t> FMMA<double, 2>::exact_calc_box_indices(const std::array<int, 2>& box_ind, int N);
 
 
 template<typename TYPE, std::size_t DIM>
