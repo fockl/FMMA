@@ -148,7 +148,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
     ans[t] = 0.0;
 
     for(std::size_t dim=0; dim<DIM; ++dim){
-      target_ind_of_box[DIM-1-dim] = std::min((int)((target[t][dim]-min_pos[dim])/len), nrn_N-1);
+      target_ind_of_box[dim] = std::min((int)((target[t][dim]-min_pos[dim])/len), nrn_N-1);
     }
 
     for(std::size_t s=0; s<SIZE; ++s){
@@ -156,10 +156,10 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
       int max_dist_from_t = 0;
       for(std::size_t dim=0; dim<DIM; ++dim){
         relative_orig_pos[DIM-1-dim] = len*(s_copy%nrn_N)+min_pos[DIM-1-dim];
-        ind_of_box[dim] = s_copy%nrn_N;
+        ind_of_box[DIM-1-dim] = s_copy%nrn_N;
         s_copy /= nrn_N;
 
-        max_dist_from_t = std::max(max_dist_from_t, std::abs(ind_of_box[dim]-target_ind_of_box[dim]));
+        max_dist_from_t = std::max(max_dist_from_t, std::abs(ind_of_box[DIM-1-dim]-target_ind_of_box[DIM-1-dim]));
       }
 
       if(max_dist_from_t <= 1){

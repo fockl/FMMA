@@ -23,8 +23,8 @@ bool test_tree(int ssize, int tsize, TYPE tol){
 
   fmma::FMMA<TYPE, DIM> fmma;
   std::vector<TYPE> ans(tsize);
-  fmma.poly_ord=3;
-  fmma.Depth = 4;
+  fmma.poly_ord=2;
+  fmma.Depth = 3;
   fmma.tree(target, source, ans);
 
   std::vector<TYPE> exact(tsize);
@@ -43,7 +43,6 @@ bool test_tree(int ssize, int tsize, TYPE tol){
   TYPE diff = 0.0;
   for(int i=0; i<tsize; ++i){
     TYPE d = ans[i]-exact[i];
-    fprintf(stderr, "%d %lf %lf\n", i, ans[i], exact[i]);
     diff += d*d/exact[i]/exact[i];
   }
   diff = sqrt(diff / tsize);

@@ -162,7 +162,6 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
   std::vector<std::vector<std::vector<std::size_t>>> source_ind_in_box(Depth);
   std::vector<std::vector<std::array<TYPE, DIM>>> chebyshev_node_all(Depth);
 
-
   {
     std::size_t tmp_N = 1;
     for(int depth=0; depth<Depth; ++depth){
@@ -171,7 +170,6 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     }
   }
 
-  std::size_t poly_ord_all = chebyshev_node_all[0].size();
 
   std::array<TYPE, DIM> chebyshev_real_pos;
   std::array<TYPE, DIM> relative_orig_pos;
@@ -181,10 +179,11 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
 
     int tmp_N = 1;
     for(int depth=0; depth<Depth; ++depth){
+      std::size_t poly_ord_all = chebyshev_node_all[depth].size();
       TYPE len = Len/tmp_N;
 
       for(std::size_t dim=0; dim<DIM; ++dim){
-        target_ind_of_box[DIM-1-dim] = std::min((int)((target[t][dim]-min_pos[dim])/len), tmp_N-1);
+        target_ind_of_box[dim] = std::min((int)((target[t][dim]-min_pos[dim])/len), tmp_N-1);
       }
 
       std::vector<std::size_t> indices = multipole_calc_box_indices(target_ind_of_box, tmp_N);
