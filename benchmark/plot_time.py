@@ -8,6 +8,9 @@ def plot_time(name):
   nrnmm_1_time = input_csv[input_csv.keys()[2]]
   nrnmm_2_time = input_csv[input_csv.keys()[3]]
   nrnmm_3_time = input_csv[input_csv.keys()[4]]
+  tree_1_time = input_csv[input_csv.keys()[5]]
+  tree_2_time = input_csv[input_csv.keys()[6]]
+  tree_3_time = input_csv[input_csv.keys()[7]]
 
   plt.xlabel("N")
   plt.ylabel("time[ms]")
@@ -19,6 +22,9 @@ def plot_time(name):
   plt.plot(Ns, nrnmm_1_time, label="nrnmm order 1")
   plt.plot(Ns, nrnmm_2_time, label="nrnmm order 2")
   plt.plot(Ns, nrnmm_3_time, label="nrnmm order 3")
+  plt.plot(Ns, tree_1_time, label="tree order 1")
+  plt.plot(Ns, tree_2_time, label="tree order 2")
+  plt.plot(Ns, tree_3_time, label="tree order 3")
   plt.legend()
   plt.savefig(name)
 
