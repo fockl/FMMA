@@ -22,6 +22,8 @@ int main(void){
   std::vector<int> size(REPEAT);
   std::vector<std::vector<double>> nrnmm_time(REPEAT, std::vector<double>(ORDER));
   std::vector<std::vector<double>> nrnmm_error(REPEAT, std::vector<double>(ORDER));
+  std::vector<std::vector<double>> tree_time(REPEAT, std::vector<double>(ORDER));
+  std::vector<std::vector<double>> tree_error(REPEAT, std::vector<double>(ORDER));
 
   std::chrono::system_clock::time_point start, end;
 
@@ -64,6 +66,28 @@ int main(void){
       diff = sqrt(diff/N);
       nrnmm_error[repeat][order-1] = diff;
     }
+
+    fprintf(stderr, "tree calculation\n");
+    for(int order=1; order<=ORDER; ++order){
+      std::vector<double> ans_tree(N);
+
+      fmma.poly_ord = order;
+      start = std::chrono::system_clock::now();
+      fmma.tree(source, target, ans_tree);
+      end = std::chrono::system_clock::now();
+      elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+      tree_time[repeat][order-1] = elapsed;
+
+      double diff = 0.0;
+      for(int n=0; n<N; ++n){
+        double tmp = (ans_exact[n]-ans_tree[n])/ans_exact[n];
+        diff += tmp*tmp;
+      }
+      diff = sqrt(diff/N);
+      tree_error[repeat][order-1] = diff;
+    }
+
+
   }
 
   {
@@ -74,6 +98,9 @@ int main(void){
     for(int order=1; order<=ORDER; ++order){
       fprintf(fp, ", nrnmm(%d)", order);
     }
+    for(int order=1; order<=ORDER; ++order){
+      fprintf(fp, ", tree(%d)", order);
+    }
     fprintf(fp, "\n");
 
     for(int repeat=0; repeat<REPEAT; ++repeat){
@@ -81,6 +108,9 @@ int main(void){
       fprintf(fp, ", %lf", exact_time[repeat]);
       for(int order=1; order<=ORDER; ++order){
         fprintf(fp, ", %lf", nrnmm_time[repeat][order-1]);
+      }
+      for(int order=1; order<=ORDER; ++order){
+        fprintf(fp, ", %lf", tree_time[repeat][order-1]);
       }
       fprintf(fp, "\n");
     }
@@ -94,12 +124,18 @@ int main(void){
     for(int order=1; order<=ORDER; ++order){
       fprintf(fp, ", nrnmm(%d)", order);
     }
+    for(int order=1; order<=ORDER; ++order){
+      fprintf(fp, ", tree(%d)", order);
+    }
     fprintf(fp, "\n");
 
     for(int repeat=0; repeat<REPEAT; ++repeat){
       fprintf(fp, "%d", size[repeat]);
       for(int order=1; order<=ORDER; ++order){
         fprintf(fp, ", %e", nrnmm_error[repeat][order-1]);
+      }
+      for(int order=1; order<=ORDER; ++order){
+        fprintf(fp, ", %e", tree_error[repeat][order-1]);
       }
       fprintf(fp, "\n");
     }
@@ -120,6 +156,12 @@ int main(void){
       fprintf(fp, "| nrnmm(%d) | %d | %e | %e |\n", order, size[0], nrnmm_time[0][order-1], nrnmm_error[0][order-1]);
       for(int repeat=1; repeat<REPEAT; ++repeat){
         fprintf(fp, "| | %d | %e | %e |\n", size[repeat], nrnmm_time[repeat][order-1], nrnmm_error[repeat][order-1]);
+      }
+    }
+    for(int order=1; order<=ORDER; ++order){
+      fprintf(fp, "| tree(%d) | %d | %e | %e |\n", order, size[0], tree_time[0][order-1], tree_error[0][order-1]);
+      for(int repeat=1; repeat<REPEAT; ++repeat){
+        fprintf(fp, "| | %d | %e | %e |\n", size[repeat], tree_time[repeat][order-1], tree_error[repeat][order-1]);
       }
     }
     fclose(fp);

@@ -72,8 +72,8 @@ template<typename TYPE, std::size_t DIM>
       std::array<TYPE, DIM> source_pos = source[s];
       std::size_t pos_node = 0;
       for(std::size_t dim=0; dim<DIM; ++dim){
-        int tmp = std::min((int)((source_pos[dim]-min_pos[dim])/len), nrn_N-1);
-        pos_node *= nrn_N;
+        int tmp = std::min((int)((source_pos[dim]-min_pos[dim])/len), N-1);
+        pos_node *= N;
         pos_node += tmp;
         relative_pos[dim] = std::max(std::min(2.0*((source_pos[dim]-min_pos[dim])/len-tmp)-1.0, 1.0), -1.0);
       }
@@ -198,4 +198,4 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
 template void FMMA<double, 1>::nrnmm(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::nrnmm(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 
-};
+}; // namespace fmma

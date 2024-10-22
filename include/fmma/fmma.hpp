@@ -97,6 +97,10 @@ class FMMA{
   private:
     void get_minmax(const std::vector<std::array<TYPE, DIM>>& array1, const std::vector<std::array<TYPE, DIM>>& array2, std::array<TYPE, DIM>& min_array, std::array<TYPE, DIM>& max_array);
     void set_ground(const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, int N, const std::array<TYPE, DIM>& min_pos, const TYPE len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<TYPE>>& Wm, std::vector<std::array<TYPE, DIM>>& chebyshev_node_all);
+    std::array<std::size_t, DIM> get_box_ind_of_ind(std::size_t ind, int N);
+    std::size_t get_ind_of_box_ind(std::array<int, DIM> box_ind, int N);
+    std::vector<std::size_t> multipole_calc_box_indices(std::array<int, DIM> box_ind, int N);
+    std::vector<std::size_t> exact_calc_box_indices(std::array<int, DIM> box_ind, int N);
 
 };
 
