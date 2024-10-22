@@ -75,22 +75,12 @@ class FMMA{
       };
       return;
     }
-    /*
-    std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)> fn = 
-      [](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
-        double len = 0.0;
-        for(std::size_t dim=0; dim<DIM; ++dim){
-          double diff = target[dim] - source[dim];
-          len += diff*diff;
-        }
-        return 1.0/std::sqrt(len);
-      };
-      */
 
     std::string solve_type = "exact";
 
-    int nrn_N = -1; // 1辺辺りの分割数 nrnで使用
+    int nrn_N = -1; // 1辺辺りの分割数
     int poly_ord = 1;
+    int Depth = -1; // 深さ、2^Depth = 最深部のnrn_N
 
   public:
     FMMA(void);
@@ -101,6 +91,13 @@ class FMMA{
     void exact(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
     void nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
     void nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+    void tree(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+    void tree(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans);
+
+  private:
+    void get_minmax(const std::vector<std::array<TYPE, DIM>>& array1, const std::vector<std::array<TYPE, DIM>>& array2, std::array<TYPE, DIM>& min_array, std::array<TYPE, DIM>& max_array);
+    void set_ground(const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, int N, const std::array<TYPE, DIM>& min_pos, const TYPE len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<TYPE>>& Wm, std::vector<std::array<TYPE, DIM>>& chebyshev_node_all);
+
 };
 
 } // namespace fmma
