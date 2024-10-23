@@ -16,7 +16,7 @@
 
 ``` math
 
-c_i = \sum_{j} a_i b_j f(x_i-y_j)
+c_i = \sum_{j} w_j f(x_i-y_j)
 
 ```
 
@@ -28,7 +28,7 @@ c_i = \sum_{j} a_i b_j f(x_i-y_j)
 FMMA<double, 3> fmma;
 fmma.fn = fn;
 fmma.solve_type = solve_type;
-fmma.solve(target, source, ans);
+fmma.solve(target, source_weight, source, ans);
 ```
 
 fnは任意の関数を指定できる。C++だと
@@ -42,14 +42,15 @@ auto fn = [](const std::array<double, 3>& y, const std::array<double, 3>& x){
 のように定義できる。
 
 solve_typeは計算方法。
-現在は`exact`と`nrnmm`の2通り実装
+現在は`exact`, `nrnmm`, `tree`が実装済み
 
 $O(n(x)) = O(n(y)) = O(N)$の時の計算量は以下の通り：
 
 |type|computatoin cost|
 |---|---|
-|exact|O(N^2)|
-|nrnmm|O(N\sqrt{N})|
+|exact|$O(N^2)$|
+|nrnmm|$O(N\sqrt{N})$|
+|tree|$O(N\log{N})$|
 
 # ベンチマーク結果
 
@@ -73,7 +74,7 @@ FMMA is a library to calculate fastly
 
 ``` math
 
-c_i = \sum_{j} a_i b_j f(x_i-y_j)
+c_i = \sum_{j} w_j f(x_i-y_j)
 
 ```
 
@@ -99,7 +100,7 @@ Benchmark results using github-actions are follows :
 FMMA<double, 3> fmma;
 fmma.fn = fn;
 fmma.solve_type = solve_type;
-fmma.solve(target, source, ans);
+fmma.solve(target, source_weight, source, ans);
 ```
 
 arbitrary function can be set as fn. In C++, a definition of fn is like:
@@ -111,14 +112,15 @@ auto fn = [](const std::array<double, 3>& y, const std::array<double, 3>& x){
 ```
 
 solve_type is a computaion method.
-`exact`, `nrnmm` are now implemented.
+`exact`, `nrnmm`, `tree` are now implemented.
 
 when $O(n(x)) = O(n(y)) = O(N)$, the computational cost are as follows:
 
 |type|computatoin cost|
 |---|---|
-|exact|O(N^2)|
-|nrnmm|O(N\sqrt{N})|
+|exact|$O(N^2)$|
+|nrnmm|$O(N\sqrt{N})$|
+|tree|$O(N\log{N})$|
 
 # Benchmark results
 
