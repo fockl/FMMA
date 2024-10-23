@@ -18,7 +18,7 @@ def plot_time(name):
   plt.xscale("log")
   plt.yscale("log")
 
-  plt.plot(Ns, exact_time, label="exact")
+  plt.plot(Ns, exact_time, label="exact", color="black")
   plt.plot(Ns, nrnmm_1_time, label="nrnmm order 1")
   plt.plot(Ns, nrnmm_2_time, label="nrnmm order 2")
   plt.plot(Ns, nrnmm_3_time, label="nrnmm order 3")

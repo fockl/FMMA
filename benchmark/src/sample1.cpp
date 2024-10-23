@@ -144,6 +144,37 @@ int main(void){
 
   {
     FILE *fp;
+    fp = fopen("all_1.csv", "w");
+    fprintf(fp, "N");
+    fprintf(fp, ", exact time");
+    for(int order=1; order<=ORDER; ++order){
+      fprintf(fp, ", nrnmm(%d) time", order);
+      fprintf(fp, ", nrnmm(%d) error", order);
+    }
+    for(int order=1; order<=ORDER; ++order){
+      fprintf(fp, ", tree(%d) time", order);
+      fprintf(fp, ", tree(%d) error", order);
+    }
+    fprintf(fp, "\n");
+
+    for(int repeat=0; repeat<REPEAT; ++repeat){
+      fprintf(fp, "%d", size[repeat]);
+      fprintf(fp, ", %e", exact_time[repeat]);
+      for(int order=1; order<=ORDER; ++order){
+        fprintf(fp, ", %e", nrnmm_time[repeat][order-1]);
+        fprintf(fp, ", %e", nrnmm_error[repeat][order-1]);
+      }
+      for(int order=1; order<=ORDER; ++order){
+        fprintf(fp, ", %e", tree_time[repeat][order-1]);
+        fprintf(fp, ", %e", tree_error[repeat][order-1]);
+      }
+      fprintf(fp, "\n");
+    }
+    fclose(fp);
+  }
+
+  {
+    FILE *fp;
     fp = fopen("comment_1.md", "w");
     fprintf(fp, "1D results\n");
     fprintf(fp, "| type | N | time[ms] | relative error |\n");
