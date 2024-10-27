@@ -1,11 +1,11 @@
+#include"../include/fmma/math.hpp"
+#include"../include/fmma/fmma.hpp"
 #include<cstdlib>
 #include<cstdio>
 #include<vector>
 #include<array>
 #include<functional>
 #include<cmath>
-#include"../include/fmma/fmma.hpp"
-#include"../include/fmma/math.hpp"
 
 namespace fmma {
 
@@ -146,27 +146,19 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     exit(EXIT_FAILURE);
   }
 
-  std::array<TYPE, DIM> min_pos, max_pos;
-  get_minmax(target, source, min_pos, max_pos);
-
-  TYPE Len = 0.0;
-  for(std::size_t dim=0; dim<DIM; ++dim){
-    Len = std::max(Len, max_pos[dim] - min_pos[dim]);
-  }
-
-  for(std::size_t dim=0; dim<DIM; ++dim){
-    min_pos[dim] = (max_pos[dim] + min_pos[dim])/2 - Len/2;
-    max_pos[dim] = min_pos[dim] + Len;
-  }
+  std::array<TYPE, DIM> origin;
+  TYPE Len;
+  get_origin_and_length(target, source, origin, Len);
 
   std::vector<std::vector<std::vector<TYPE>>> Wm(Depth);
   std::vector<std::vector<std::vector<std::size_t>>> source_ind_in_box(Depth);
   std::vector<std::vector<std::array<TYPE, DIM>>> chebyshev_node_all(Depth);
 
   {
+    // P2M
     std::size_t tmp_N = 1;
     for(int depth=0; depth<Depth; ++depth){
-      set_ground(source_weight, source, tmp_N, min_pos, Len/tmp_N, source_ind_in_box[depth], Wm[depth], chebyshev_node_all[depth]);
+      P2M(source_weight, source, tmp_N, origin, Len/tmp_N, source_ind_in_box[depth], Wm[depth], chebyshev_node_all[depth]);
       tmp_N *= 2;
     }
   }
@@ -184,7 +176,7 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
       TYPE len = Len/tmp_N;
 
       for(std::size_t dim=0; dim<DIM; ++dim){
-        target_ind_of_box[dim] = std::min((int)((target[t][dim]-min_pos[dim])/len), tmp_N-1);
+        target_ind_of_box[dim] = std::min((int)((target[t][dim]-origin[dim])/len), tmp_N-1);
       }
 
       std::vector<std::size_t> indices = multipole_calc_box_indices(target_ind_of_box, tmp_N);
@@ -193,7 +185,7 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
         std::size_t s = indices[i];
         std::size_t s_copy = s;
         for(std::size_t dim=0; dim<DIM; ++dim){
-          relative_orig_pos[DIM-1-dim] = len*(s_copy%tmp_N)+min_pos[DIM-1-dim];
+          relative_orig_pos[DIM-1-dim] = len*(s_copy%tmp_N)+origin[DIM-1-dim];
           s_copy /= tmp_N;
         }
 
@@ -209,6 +201,7 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     tmp_N /= 2;
 
     std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
+    // P2P
     for(std::size_t i=0; i<indices.size(); ++i){
       for(std::size_t j=0; j<source_ind_in_box[Depth-1][indices[i]].size(); ++j){
         ans[t] += source_weight[source_ind_in_box[Depth-1][indices[i]][j]]*fn(target[t]-source[source_ind_in_box[Depth-1][indices[i]][j]]);
