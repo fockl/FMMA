@@ -37,7 +37,26 @@ template void FMMA<double, 1>::get_minmax(const std::vector<std::array<double, 1
 template void FMMA<double, 2>::get_minmax(const std::vector<std::array<double, 2>>& array1, const std::vector<std::array<double, 2>>& array2, std::array<double, 2>& min_array, std::array<double, 2>& max_array);
 
 template<typename TYPE, std::size_t DIM>
-  void FMMA<TYPE, DIM>::set_ground(const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, int N, const std::array<TYPE, DIM>& min_pos, const TYPE len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<TYPE>>& Wm, std::vector<std::array<TYPE, DIM>>& chebyshev_node_all){
+  void FMMA<TYPE, DIM>::get_origin_and_length(const std::vector<std::array<TYPE, DIM>>& array1, const std::vector<std::array<TYPE, DIM>>& array2, std::array<TYPE, DIM>& origin, TYPE& Len){
+    std::array<TYPE, DIM> min_pos, max_pos;
+    get_minmax(array1, array2, min_pos, max_pos);
+
+    Len = 0.0;
+    for(std::size_t dim=0; dim<DIM; ++dim){
+      Len = std::max(Len, max_pos[dim] - min_pos[dim]);
+    }
+
+    for(std::size_t dim=0; dim<DIM; ++dim){
+      origin[dim] = (max_pos[dim] + min_pos[dim])/2 - Len/2;
+    }
+    return;
+  }
+
+template void FMMA<double, 1>::get_origin_and_length(const std::vector<std::array<double, 1>>& array1, const std::vector<std::array<double, 1>>& array2, std::array<double, 1>& origin, double& Len);
+template void FMMA<double, 2>::get_origin_and_length(const std::vector<std::array<double, 2>>& array1, const std::vector<std::array<double, 2>>& array2, std::array<double, 2>& origin, double& Len);
+
+template<typename TYPE, std::size_t DIM>
+  void FMMA<TYPE, DIM>::P2M(const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, int N, const std::array<TYPE, DIM>& min_pos, const TYPE len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<TYPE>>& Wm, std::vector<std::array<TYPE, DIM>>& chebyshev_node_all){
     std::size_t SIZE = 1;
     for(std::size_t dim=0; dim<DIM; ++dim){
       SIZE *= N;
@@ -92,8 +111,8 @@ template<typename TYPE, std::size_t DIM>
     return;
   }
 
-template void FMMA<double, 1>::set_ground(const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, int N, const std::array<double, 1>& min_pos, const double len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<double>>& Wm, std::vector<std::array<double, 1>>& chebyshev_node_all);
-template void FMMA<double, 2>::set_ground(const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, int N, const std::array<double, 2>& min_pos, const double len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<double>>& Wm, std::vector<std::array<double, 2>>& chebyshev_node_all);
+template void FMMA<double, 1>::P2M(const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, int N, const std::array<double, 1>& min_pos, const double len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<double>>& Wm, std::vector<std::array<double, 1>>& chebyshev_node_all);
+template void FMMA<double, 2>::P2M(const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, int N, const std::array<double, 2>& min_pos, const double len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<double>>& Wm, std::vector<std::array<double, 2>>& chebyshev_node_all);
 
   
 template<typename TYPE, std::size_t DIM>
@@ -136,7 +155,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
   std::vector<std::vector<std::size_t>> source_ind_in_box;
   std::vector<std::array<TYPE, DIM>> chebyshev_node_all;
 
-  set_ground(source_weight, source, nrn_N, min_pos, len, source_ind_in_box, Wm, chebyshev_node_all);
+  P2M(source_weight, source, nrn_N, min_pos, len, source_ind_in_box, Wm, chebyshev_node_all);
 
   std::size_t poly_ord_all = chebyshev_node_all.size();
 
