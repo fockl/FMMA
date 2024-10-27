@@ -92,17 +92,20 @@ template void FMMA<double, 2>::M2M(const std::size_t N, const std::vector<std::a
 
 
 template<typename TYPE, std::size_t DIM>
-std::vector<std::size_t> FMMA<TYPE, DIM>::multipole_calc_box_indices(const std::array<int, DIM>& box_ind, int N){
+template<typename UINT>
+std::vector<std::size_t> FMMA<TYPE, DIM>::multipole_calc_box_indices(const std::array<UINT, DIM>& box_ind, int N){
   std::vector<std::size_t> ans;
   std::array<int, DIM> lower, upper;
   for(std::size_t dim=0; dim<DIM; ++dim){
     if(box_ind[dim]/2>0){
-      lower[dim] = box_ind[dim]/2-1;
+      lower[dim] = box_ind[dim]/2;
+      lower[dim] -= 1;
     }else{
       lower[dim] = box_ind[dim]/2;
     }
-    if(box_ind[dim]/2+1<N/2){
-      upper[dim] = box_ind[dim]/2+1;
+    if(box_ind[dim]/2+1<(UINT)N/2){
+      upper[dim] = box_ind[dim]/2;
+      upper[dim] += 1;
     }else{
       upper[dim] = box_ind[dim]/2;
     }
@@ -123,7 +126,7 @@ std::vector<std::size_t> FMMA<TYPE, DIM>::multipole_calc_box_indices(const std::
     std::array<int, DIM> pos = lower;
     for(std::size_t dim=0; dim<DIM; ++dim){
       pos[DIM-1-dim] += s_copy%shape[DIM-1-dim];
-      max_dist_from_ind = std::max(max_dist_from_ind, std::abs(pos[DIM-1-dim]-box_ind[DIM-1-dim]));
+      max_dist_from_ind = std::max(max_dist_from_ind, std::abs(pos[DIM-1-dim]-(int)box_ind[DIM-1-dim]));
       s_copy /= shape[DIM-1-dim];
     }
 
@@ -139,6 +142,9 @@ std::vector<std::size_t> FMMA<TYPE, DIM>::multipole_calc_box_indices(const std::
 
 template std::vector<std::size_t> FMMA<double, 1>::multipole_calc_box_indices(const std::array<int, 1>& box_ind, int N);
 template std::vector<std::size_t> FMMA<double, 2>::multipole_calc_box_indices(const std::array<int, 2>& box_ind, int N);
+template std::vector<std::size_t> FMMA<double, 1>::multipole_calc_box_indices(const std::array<std::size_t, 1>& box_ind, int N);
+template std::vector<std::size_t> FMMA<double, 2>::multipole_calc_box_indices(const std::array<std::size_t, 2>& box_ind, int N);
+
 
 template<typename TYPE, std::size_t DIM>
 std::vector<std::size_t> FMMA<TYPE, DIM>::exact_calc_box_indices(const std::array<int, DIM>& box_ind, int N){
@@ -229,6 +235,7 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
   for(std::size_t t=0; t<target.size(); ++t){
     ans[t] = 0.0;
 
+    // M2P
     int tmp_N = 1;
     for(int depth=0; depth<Depth; ++depth){
       std::size_t poly_ord_all = chebyshev_node_all.size();

@@ -64,6 +64,8 @@ void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, co
     nrnmm(target, source, ans);
   }else if(this->solve_type == "tree"){
     tree(target, source, ans);
+  }else if(this->solve_type == "fmm"){
+    fmm(target, source, ans);
   }else{
     fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solve_type.c_str());
     exit(EXIT_FAILURE);
@@ -82,6 +84,8 @@ void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, co
     nrnmm(target, source_weight, source, ans);
   }else if(this->solve_type == "tree"){
     tree(target, source_weight, source, ans);
+  }else if(this->solve_type == "fmm"){
+    fmm(target, source_weight, source, ans);
   }else{
     fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solve_type.c_str());
     exit(EXIT_FAILURE);

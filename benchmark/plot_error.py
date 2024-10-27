@@ -10,6 +10,9 @@ def plot_error(name):
   tree_1_error = input_csv[input_csv.keys()[4]]
   tree_2_error = input_csv[input_csv.keys()[5]]
   tree_3_error = input_csv[input_csv.keys()[6]]
+  fmm_1_error = input_csv[input_csv.keys()[7]]
+  fmm_2_error = input_csv[input_csv.keys()[8]]
+  fmm_3_error = input_csv[input_csv.keys()[9]]
 
   plt.xlabel("N")
   plt.ylabel("relative error")
@@ -23,6 +26,9 @@ def plot_error(name):
   plt.plot(Ns, tree_1_error, label="tree order 1")
   plt.plot(Ns, tree_2_error, label="tree order 2")
   plt.plot(Ns, tree_3_error, label="tree order 3")
+  plt.plot(Ns, fmm_1_error, label="fmm order 1")
+  plt.plot(Ns, fmm_2_error, label="fmm order 2")
+  plt.plot(Ns, fmm_3_error, label="fmm order 3")
   plt.legend()
   plt.savefig(name)
 
