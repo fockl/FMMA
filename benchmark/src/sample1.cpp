@@ -19,6 +19,7 @@ int main(void){
   };
 
   std::vector<double> exact_time(REPEAT);
+  std::vector<double> exact_matvec_time(REPEAT);
   std::vector<int> size(REPEAT);
   std::vector<std::vector<double>> nrnmm_time(REPEAT, std::vector<double>(ORDER));
   std::vector<std::vector<double>> nrnmm_error(REPEAT, std::vector<double>(ORDER));
@@ -40,6 +41,7 @@ int main(void){
       target[n][0] = (double)rand()/RAND_MAX;
     }
     std::vector<double> ans_exact(N);
+    std::vector<double> ans_exact_matvec(N);
     fmma.set_fn(fn);
 
     start = std::chrono::system_clock::now();
@@ -48,6 +50,13 @@ int main(void){
     end = std::chrono::system_clock::now();
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
     exact_time[repeat] = elapsed;
+
+    start = std::chrono::system_clock::now();
+    fprintf(stderr, "exact_matvec calculation\n");
+    fmma.exact_matvec(source, target, ans_exact_matvec);
+    end = std::chrono::system_clock::now();
+    elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+    exact_matvec_time[repeat] = elapsed;
 
     fprintf(stderr, "nrnmm calculation\n");
     for(int order=1; order<=ORDER; ++order){
@@ -126,6 +135,7 @@ int main(void){
     for(int order=1; order<=ORDER; ++order){
       fprintf(fp, ", fmm(%d)", order);
     }
+    fprintf(fp, ", exact_matvec");
     fprintf(fp, "\n");
 
     for(int repeat=0; repeat<REPEAT; ++repeat){
@@ -140,6 +150,7 @@ int main(void){
       for(int order=1; order<=ORDER; ++order){
         fprintf(fp, ", %lf", fmm_time[repeat][order-1]);
       }
+      fprintf(fp, ", %lf", exact_matvec_time[repeat]);
       fprintf(fp, "\n");
     }
     fclose(fp);
@@ -193,6 +204,7 @@ int main(void){
       fprintf(fp, ", fmm(%d) time", order);
       fprintf(fp, ", fmm(%d) error", order);
     }
+    fprintf(fp, ", exact_matvec time");
     fprintf(fp, "\n");
 
     for(int repeat=0; repeat<REPEAT; ++repeat){
@@ -210,6 +222,7 @@ int main(void){
         fprintf(fp, ", %e", fmm_time[repeat][order-1]);
         fprintf(fp, ", %e", fmm_error[repeat][order-1]);
       }
+      fprintf(fp, ", %e", exact_matvec_time[repeat]);
       fprintf(fp, "\n");
     }
     fclose(fp);
@@ -242,6 +255,10 @@ int main(void){
       for(int repeat=1; repeat<REPEAT; ++repeat){
         fprintf(fp, "| | %d | %e | %e |\n", size[repeat], fmm_time[repeat][order-1], fmm_error[repeat][order-1]);
       }
+    }
+    fprintf(fp, "| exact_matvec | %d | %e | --- |\n", size[0], exact_matvec_time[0]);
+    for(int repeat=1; repeat<REPEAT; ++repeat){
+      fprintf(fp, "| | %d | %e | --- |\n", size[repeat], exact_matvec_time[repeat]);
     }
     fclose(fp);
   }

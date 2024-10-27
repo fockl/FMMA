@@ -1,10 +1,13 @@
+#include"../include/fmma/math.hpp"
 #include<cstdlib>
 #include<cstdio>
 #include<cmath>
 #include<complex>
 #include<vector>
 #include<array>
-#include"../include/fmma/math.hpp"
+#ifdef FMMA_USE_BLAS
+#include<cblas.h>
+#endif
 
 namespace fmma {
 
@@ -58,12 +61,31 @@ void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<
   }
   ans.resize(M);
 
+#if FMMA_USE_BLAS
+  fprintf(stderr, "blas matvec\n");
+
+  const auto *xd = x.data();
+  auto *yd = ans.data();
+  const auto *vald = A.data();
+  const auto m = M;
+  const auto n = N;
+  const double alpha = 1.0;
+  const double beta = 0.0;
+
+  cblas_dgemv(CblasRowMajor, CblasNoTrans, m, n, alpha, vald, n, xd, 1, beta, yd, 1);
+
+#else
+  static_assert(false, "no blas");
+  fprintf(stderr, "no blas matvec\n");
+
   for(std::size_t m=0; m<M; ++m){
     ans[m] = 0.0;
     for(std::size_t n=0; n<N; ++n){
       ans[m] += A[m*N+n]*x[n];
     }
   }
+
+#endif
 
   return;
 }
