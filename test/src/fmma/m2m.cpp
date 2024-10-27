@@ -33,7 +33,6 @@ bool test_m2m(std::size_t M, std::size_t N, TYPE tol){
     source_weight[n] = (TYPE)rand()/RAND_MAX-0.5;
   }
 
-  //fmma::FMMA<TYPE, DIM> fmma;
   std::array<TYPE, DIM> origin;
   TYPE Len;
   this->get_origin_and_length(target, source, origin, Len);
