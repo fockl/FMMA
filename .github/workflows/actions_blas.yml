@@ -21,14 +21,14 @@ jobs:
 
       - name: install blas
         run: |
-          apt-get update
-          apt-get install -y build-essential libopenblas-dev
+          sudo apt-get update
+          sudo apt-get install -y build-essential libopenblas-dev
 
       - name: build
         run: |
           cmake -Bbuild -DFMMA_USE_BLAS=ON
           cmake --build build
-          cmake --install build
+          sudo cmake --install build
 
       - name: test
         run: |

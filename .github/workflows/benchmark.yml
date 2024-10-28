@@ -33,7 +33,7 @@ jobs:
         run: |
           cmake -Bbuild
           cmake --build build
-          cmake --install build
+          sudo cmake --install build
 
       - name: benchmark
         run: |
