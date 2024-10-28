@@ -26,6 +26,19 @@ template FMMA<double, 1>::~FMMA(void);
 template FMMA<double, 2>::~FMMA(void);
 
 template<typename TYPE, std::size_t DIM>
+bool FMMA<TYPE, DIM>::check_blas(void){
+#if FMMA_USE_BLAS
+  return true;
+#else
+  return false;
+#endif
+};
+
+template bool FMMA<double, 1>::check_blas(void);
+template bool FMMA<double, 2>::check_blas(void);
+
+
+template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
   std::size_t N = target.size();
   ans.resize(N);
@@ -53,6 +66,9 @@ void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, co
   }
   return;
 };
+
+template void FMMA<double, 1>::exact(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
+template void FMMA<double, 2>::exact(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::exact_matvec(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){

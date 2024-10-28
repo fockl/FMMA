@@ -1,0 +1,11 @@
+if(FMMA_USE_BLAS)
+  set(fmma_target "${fmma_target}_blas")
+else()
+  set(fmma_target "${fmma_target}")
+endif()
+
+if(FMMA_USE_GPU)
+  set(fmma_target "${fmma_target}_gpu")
+else()
+  set(fmma_target "${fmma_target}_cpu")
+endif()

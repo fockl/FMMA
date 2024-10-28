@@ -62,8 +62,6 @@ void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<
   ans.resize(M);
 
 #if FMMA_USE_BLAS
-  fprintf(stderr, "blas matvec\n");
-
   const auto *xd = x.data();
   auto *yd = ans.data();
   const auto *vald = A.data();
@@ -75,9 +73,6 @@ void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<
   cblas_dgemv(CblasRowMajor, CblasNoTrans, m, n, alpha, vald, n, xd, 1, beta, yd, 1);
 
 #else
-  static_assert(false, "no blas");
-  fprintf(stderr, "no blas matvec\n");
-
   for(std::size_t m=0; m<M; ++m){
     ans[m] = 0.0;
     for(std::size_t n=0; n<N; ++n){

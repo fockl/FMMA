@@ -19,9 +19,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: install blas
+        run: |
+          apt-get update
+          apt-get install -y build-essential libopenblas-dev
+
       - name: build
         run: |
-          cmake -Bbuild
+          cmake -Bbuild -DFMMA_USE_BLAS=ON
           cmake --build build
           cmake --install build
 
@@ -30,4 +35,4 @@ jobs:
           cd test
           cmake -Bbuild
           cmake --build build
-          bash run_test.sh 0
+          bash run_test.sh 1

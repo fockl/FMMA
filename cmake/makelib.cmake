@@ -14,9 +14,13 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
 
 add_library(${fmma_target} ${fmma_sources})
 set_common_properties(${fmma_target})
+set_blas(${fmma_target})
+
+set_target_properties(${fmma_target} PROPERTIES OUTPUT_NAME ${fmma_link})
 
 install(
   TARGETS ${fmma_target}
   LIBRARY
   DESTINATION lib
   )
+
