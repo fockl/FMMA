@@ -11,15 +11,13 @@ function(set_test_properties TEST_TARGET)
   find_path(FMMA_INCLUDE_PATH
     NAMES fmma.hpp
     HINTS
-    ${PROJECT_SOURCE_DIR}/../include/fmma
+    /usr/local/include/fmma
     REQUIRED
     )
   target_include_directories(${TEST_TARGET} PRIVATE ${FMMA_INCLUDE_PATH})
 
   find_library(FMMA_LIBRARIES
-    NAMES fmma_cpu
-    HINTS
-    ${PROJECT_SOURCE_DIR}/../build
+    NAMES fmma
     REQUIRED
     )
   target_link_libraries(${TEST_TARGET} PRIVATE ${FMMA_LIBRARIES})
