@@ -27,7 +27,7 @@ c_i = \sum_{j} w_j f(x_i-y_j)
 ```c++
 FMMA<double, 3> fmma;
 fmma.fn = fn;
-fmma.solve_type = solve_type;
+fmma.solve_type = "exact";
 fmma.solve(target, source_weight, source, ans);
 ```
 
@@ -42,7 +42,7 @@ auto fn = [](const std::array<double, 3>& y, const std::array<double, 3>& x){
 のように定義できる。
 
 solve_typeは計算方法。
-現在は`exact`, `nrnmm`, `tree`が実装済み
+現在は`exact`, `nrnmm`, `tree`, `fmm`が実装済み
 
 $O(n(x)) = O(n(y)) = O(N)$の時の計算量は以下の通り：
 
@@ -51,6 +51,7 @@ $O(n(x)) = O(n(y)) = O(N)$の時の計算量は以下の通り：
 |exact|$O(N^2)$|
 |nrnmm|$O(N\sqrt{N})$|
 |tree|$O(N\log{N})$|
+|fmm|$O(N)$|
 
 # ベンチマーク結果
 
@@ -112,7 +113,7 @@ auto fn = [](const std::array<double, 3>& y, const std::array<double, 3>& x){
 ```
 
 solve_type is a computaion method.
-`exact`, `nrnmm`, `tree` are now implemented.
+`exact`, `nrnmm`, `tree`, `fmm` are now implemented.
 
 when $O(n(x)) = O(n(y)) = O(N)$, the computational cost are as follows:
 
@@ -121,6 +122,7 @@ when $O(n(x)) = O(n(y)) = O(N)$, the computational cost are as follows:
 |exact|$O(N^2)$|
 |nrnmm|$O(N\sqrt{N})$|
 |tree|$O(N\log{N})$|
+|fmm|$O(N)$|
 
 # Benchmark results
 

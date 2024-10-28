@@ -44,15 +44,15 @@ int main(void){
     std::vector<double> ans_exact_matvec(N);
     fmma.set_fn(fn);
 
-    start = std::chrono::system_clock::now();
     fprintf(stderr, "exact calculation\n");
+    start = std::chrono::system_clock::now();
     fmma.exact(source, target, ans_exact);
     end = std::chrono::system_clock::now();
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
     exact_time[repeat] = elapsed;
 
-    start = std::chrono::system_clock::now();
     fprintf(stderr, "exact_matvec calculation\n");
+    start = std::chrono::system_clock::now();
     fmma.exact_matvec(source, target, ans_exact_matvec);
     end = std::chrono::system_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
