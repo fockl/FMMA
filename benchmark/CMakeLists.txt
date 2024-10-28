@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 function(set_test_properties TEST_TARGET)
   find_path(FMMA_INCLUDE_PATH
     NAMES fmma.hpp
+    HINTS
+    /usr/local/include/fmma
     REQUIRED
     )
   target_include_directories(${TEST_TARGET} PRIVATE ${FMMA_INCLUDE_PATH})
