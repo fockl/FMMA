@@ -11,6 +11,7 @@ namespace fmma {
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
+  std::chrono::system_clock::time_point start, end;
 
   {
     std::size_t M = source.size();
@@ -42,10 +43,17 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
   {
     // P2M
     std::size_t tmp_N = 1<<(Depth-1);
+    start = std::chrono::system_clock::now();
     P2M(source_weight, source, tmp_N, origin, Len/tmp_N, source_ind_in_box, Wm[Depth-1], chebyshev_node_all);
+    end = std::chrono::system_clock::now();
+    time_log["P2M"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+
     // M2M
     for(int depth=0; depth+1<Depth; ++depth){
+      start = std::chrono::system_clock::now();
       M2M(tmp_N, chebyshev_node_all, Wm[Depth-depth-1], Wm[Depth-depth-2]);
+      end = std::chrono::system_clock::now();
+      time_log["M2M"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
       tmp_N /= 2;
     }
   }
@@ -56,7 +64,10 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     // M2P
     int tmp_N = 1;
     for(int depth=0; depth<Depth; ++depth){
+      start = std::chrono::system_clock::now();
       M2P(target[t], tmp_N, origin, Len, chebyshev_node_all, Wm[depth], ans[t]);
+      end = std::chrono::system_clock::now();
+      time_log["M2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
       tmp_N *= 2;
     }
 
@@ -69,13 +80,16 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
       target_ind_of_box[dim] = std::min((int)((target[t][dim]-origin[dim])/len), tmp_N-1);
     }
 
-    std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
     // P2P
+    start = std::chrono::system_clock::now();
+    std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
     for(std::size_t i=0; i<indices.size(); ++i){
       for(std::size_t j=0; j<source_ind_in_box[indices[i]].size(); ++j){
         ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t]-source[source_ind_in_box[indices[i]][j]]);
       }
     }
+    end = std::chrono::system_clock::now();
+    time_log["P2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
   }
 
   return;
@@ -83,6 +97,7 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
 
 template void FMMA<double, 1>::tree(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::tree(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
+template void FMMA<double, 3>::tree(const std::vector<std::array<double, 3>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -98,5 +113,6 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
 
 template void FMMA<double, 1>::tree(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::tree(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
+template void FMMA<double, 3>::tree(const std::vector<std::array<double, 3>>& target, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
 
 }; // namespace fmma

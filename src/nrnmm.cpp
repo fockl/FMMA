@@ -12,6 +12,7 @@ namespace fmma {
  
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
+  std::chrono::system_clock::time_point start, end;
 
   std::size_t M = source.size();
   std::size_t N = target.size();
@@ -41,7 +42,10 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
   std::vector<std::vector<std::size_t>> source_ind_in_box;
   std::vector<std::array<TYPE, DIM>> chebyshev_node_all;
 
+  start = std::chrono::system_clock::now();
   P2M(source_weight, source, nrn_N, origin, len, source_ind_in_box, Wm, chebyshev_node_all);
+  end = std::chrono::system_clock::now();
+  time_log["P2M"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
   std::size_t poly_ord_all = chebyshev_node_all.size();
 
@@ -59,6 +63,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
     for(std::size_t s=0; s<SIZE; ++s){
       std::size_t s_copy = s;
       int max_dist_from_t = 0;
+      start = std::chrono::system_clock::now();
       for(std::size_t dim=0; dim<DIM; ++dim){
         relative_orig_pos[DIM-1-dim] = len*(s_copy%nrn_N)+origin[DIM-1-dim];
         ind_of_box[DIM-1-dim] = s_copy%nrn_N;
@@ -71,6 +76,8 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
         for(std::size_t i=0; i<source_ind_in_box[s].size(); ++i){
           ans[t] += source_weight[source_ind_in_box[s][i]]*fn(target[t]-source[source_ind_in_box[s][i]]);
         }
+        end = std::chrono::system_clock::now();
+        time_log["P2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
       }else{
         for(std::size_t k=0; k<poly_ord_all; ++k){
           for(std::size_t dim=0; dim<DIM; ++dim){
@@ -78,6 +85,8 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
           }
           ans[t] += fn(target[t]-chebyshev_real_pos)*Wm[s][k];
         }
+        end = std::chrono::system_clock::now();
+        time_log["M2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
       }
     }
   }
@@ -87,6 +96,7 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
 
 template void FMMA<double, 1>::nrnmm(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::nrnmm(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
+template void FMMA<double, 3>::nrnmm(const std::vector<std::array<double, 3>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -102,5 +112,6 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
 
 template void FMMA<double, 1>::nrnmm(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::nrnmm(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
+template void FMMA<double, 3>::nrnmm(const std::vector<std::array<double, 3>>& target, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
 
 }; // namespace fmma

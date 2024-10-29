@@ -7,6 +7,8 @@
 #include<functional>
 #include<cmath>
 #include<string>
+#include<chrono>
+#include<map>
 
 namespace fmma {
 
@@ -112,13 +114,16 @@ class FMMA{
     void M2P(const std::array<TYPE, DIM>& target, const std::size_t N, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm, TYPE& ans);
     void M2L(const std::size_t N, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm, std::vector<std::vector<TYPE>>& Wl);
     void L2L(const std::size_t N, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wl_in, std::vector<std::vector<TYPE>>& Wl_out);
-    void L2P(const std::array<TYPE, DIM>& target, const std::size_t N, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wl, std::array<int, DIM>& target_ind_of_box, TYPE& ans);
+    void L2P(const std::vector<std::array<TYPE, DIM>>& target, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wl, std::vector<TYPE>& ans);
   private:
     std::array<std::size_t, DIM> get_box_ind_of_ind(const std::size_t ind, int N);
     std::size_t get_ind_of_box_ind(const std::array<int, DIM>& box_ind, int N);
     template<typename INT>
     std::vector<std::size_t> multipole_calc_box_indices(const std::array<INT, DIM>& box_ind, int N);
     std::vector<std::size_t> exact_calc_box_indices(const std::array<int, DIM>& box_ind, int N);
+
+  private:
+    std::map<std::string, double> time_log;
 
 };
 
