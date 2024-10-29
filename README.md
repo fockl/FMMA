@@ -69,6 +69,10 @@ github-actions を用いたベンチマーク結果：
 
 ![ error ](benchmark/results/error_2.png)
 
+# 参考文献
+
+- W. Fong and E. Darve. The black-box fast multipole method. Journal of Computational Physics, 228 (2009).
+
 # FMMA(English)
 
 FMMA is a library to calculate fastly
@@ -139,3 +143,7 @@ Benchmark results using github-actions are as follows:
 ![ time ](benchmark/results/time_2.png)
 
 ![ error ](benchmark/results/error_2.png)
+
+# References
+
+- W. Fong and E. Darve. The black-box fast multipole method. Journal of Computational Physics, 228 (2009).
