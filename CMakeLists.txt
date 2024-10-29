@@ -11,6 +11,7 @@ project(fmma)
 set(fmma_target "fmma")
 set(fmma_link "fmma")
 
+option(FMMA_CMAKE_DEBUG_FLAG "Cmake Debug flag" ON)
 option(FMMA_USE_BLAS "Use BLAS" OFF)
 
 include(cmake/set_name.cmake)

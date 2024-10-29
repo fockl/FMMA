@@ -1,7 +1,9 @@
 function(set_blas FMMA_TARGET)
   if(FMMA_USE_BLAS)
     target_compile_definitions(${FMMA_TARGET} PRIVATE FMMA_USE_BLAS)
-    message(STATUS "Use Blas")
+    if(FMMA_CMAKE_DEBUG_FLAG)
+      message(STATUS "Use Blas")
+    endif()
     find_package(BLAS REQUIRED)
     find_path(BLAS_INCLUDE_DIRS
       NAMES cblas.h
@@ -26,7 +28,9 @@ function(set_blas FMMA_TARGET)
     message(STATUS ${BLAS_LIBRARIES})
     message(STATUS ${BLAS_LIBRARIES_NEW})
   else()
-    message(STATUS "Not Use Blas")
+    if(FMMA_CMAKE_DEBUG_FLAG)
+      message(STATUS "Not Use Blas")
+    endif()
   endif()
 
 endfunction()
