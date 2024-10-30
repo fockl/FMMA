@@ -58,39 +58,39 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     }
   }
 
+  // M2P
+  start = std::chrono::system_clock::now();
   for(std::size_t t=0; t<target.size(); ++t){
     ans[t] = 0.0;
+  }
+  int tmp_N = 1;
+  for(int depth=0; depth<Depth; ++depth){
+    M2P(target, tmp_N, origin, Len, chebyshev_node_all, Wm[depth], ans);
+    tmp_N *= 2;
+  }
+  end = std::chrono::system_clock::now();
+  time_log["M2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
-    // M2P
-    int tmp_N = 1;
-    for(int depth=0; depth<Depth; ++depth){
-      start = std::chrono::system_clock::now();
-      M2P(target[t], tmp_N, origin, Len, chebyshev_node_all, Wm[depth], ans[t]);
-      end = std::chrono::system_clock::now();
-      time_log["M2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
-      tmp_N *= 2;
-    }
-
-    tmp_N /= 2;
-
+  start = std::chrono::system_clock::now();
+  // P2P
+#pragma omp parallel for
+  for(std::size_t t=0; t<target.size(); ++t){
+    std::size_t tmp_N = 1<<(Depth-1);
     TYPE len = Len/tmp_N;
 
     std::array<int, DIM> target_ind_of_box;
     for(std::size_t dim=0; dim<DIM; ++dim){
-      target_ind_of_box[dim] = std::min((int)((target[t][dim]-origin[dim])/len), tmp_N-1);
+      target_ind_of_box[dim] = std::min((int)((target[t][dim]-origin[dim])/len), (int)tmp_N-1);
     }
-
-    // P2P
-    start = std::chrono::system_clock::now();
     std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
     for(std::size_t i=0; i<indices.size(); ++i){
       for(std::size_t j=0; j<source_ind_in_box[indices[i]].size(); ++j){
         ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t]-source[source_ind_in_box[indices[i]][j]]);
       }
     }
-    end = std::chrono::system_clock::now();
-    time_log["P2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
   }
+  end = std::chrono::system_clock::now();
+  time_log["P2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
   return;
 };

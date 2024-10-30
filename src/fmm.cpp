@@ -6,6 +6,9 @@
 #include<array>
 #include<functional>
 #include<cmath>
+#if FMMA_USE_OPENMP
+#include<omp.h>
+#endif
 
 namespace fmma {
 
@@ -34,6 +37,9 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
 
   fprintf(stderr, "fmm poly order = %d\n", poly_ord);
   fprintf(stderr, "fmm Depth = %d\n", Depth);
+#if FMMA_USE_OPENMP
+  fprintf(stderr, "omp parallel num = %d\n", omp_get_max_threads());
+#endif
 
   std::array<TYPE, DIM> origin;
   TYPE Len;
@@ -102,6 +108,8 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
 
 
   start = std::chrono::system_clock::now();
+  // P2P
+#pragma omp parallel for
   for(std::size_t t=0; t<target.size(); ++t){
     std::size_t tmp_N = 1<<(Depth-1);
     std::array<int, DIM> target_ind_of_box;
@@ -110,7 +118,6 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
       target_ind_of_box[dim] = std::min((int)((target[t][dim]-origin[dim])/len), (int)tmp_N-1);
     }
 
-    // P2P
     std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
     for(std::size_t i=0; i<indices.size(); ++i){
       for(std::size_t j=0; j<source_ind_in_box[indices[i]].size(); ++j){
