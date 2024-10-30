@@ -3,7 +3,7 @@ function(set_common_properties FMMA_TARGET)
 
   find_package(OpenMP)
   if(OpenMP_CXX_FOUND)
-    add_definitions(-DOPENMP_FOUND)
+    target_compile_definitions(${FMMA_TARGET} PRIVATE FMMA_USE_OPENMP)
     if(FMMA_CMAKE_DEBUG_FLAG)
       message(STATUS "Found OpenMP")
     endif()

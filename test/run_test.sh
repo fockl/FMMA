@@ -1,6 +1,10 @@
 #!/bin/bash
 
-blas_flag=$1
+blas_flag=0
+if [[ $# > 0 ]]
+then
+  blas_flag=$1
+fi
 
 for name in ./build/*
 do
