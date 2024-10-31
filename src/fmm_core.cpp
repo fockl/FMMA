@@ -361,17 +361,18 @@ void FMMA<TYPE, DIM>::M2L(const std::size_t N, const TYPE Len, const std::vector
     for(std::size_t ind=ind_begin; ind<ind_end; ++ind){
       std::array<std::size_t, DIM> l_box_ind = get_box_ind_of_ind(ind, N);
       std::vector<std::size_t> indices = multipole_calc_box_indices(l_box_ind, N);
-      std::array<TYPE, DIM> relative_vector;
+      std::array<TYPE, DIM> relative_vector_l;
+      std::array<TYPE, DIM> relative_vector_m;
       std::vector<TYPE> fns(poly_ord_all*poly_ord_all);
       for(std::size_t i=0; i<indices.size(); ++i){
         std::array<std::size_t, DIM> m_box_ind = get_box_ind_of_ind(indices[i], N);
         for(std::size_t kl=0; kl<poly_ord_all; ++kl){
           for(std::size_t km=0; km<poly_ord_all; ++km){
             for(std::size_t dim=0; dim<DIM; ++dim){
-              relative_vector[dim] = len*(((TYPE)l_box_ind[dim]+chebyshev_node_all[kl][dim]/2)-((TYPE)m_box_ind[dim]+chebyshev_node_all[km][dim]/2));
+              relative_vector_l[dim] = len*(((TYPE)l_box_ind[dim]+chebyshev_node_all[kl][dim]/2));
+              relative_vector_m[dim] = len*(((TYPE)m_box_ind[dim]+chebyshev_node_all[km][dim]/2));
             }
-            fns[kl*poly_ord_all+km] = fn(relative_vector);
-            //Wl[ind][kl] += fn(relative_vector)*Wm[indices[i]][km];
+            fns[kl*poly_ord_all+km] = fn(relative_vector_l, relative_vector_m);
           }
         }
         matvec(1.0, fns, Wm[indices[i]], 1.0, Wl[ind]);
@@ -532,7 +533,7 @@ void FMMA<TYPE, DIM>::M2P(const std::vector<std::array<TYPE, DIM>>& target, cons
         for(std::size_t dim=0; dim<DIM; ++dim){
           chebyshev_real_pos[dim] = (chebyshev_node_all[k][dim]+1.0)/2.0*len+relative_orig_pos[dim];
         }
-        ansp[t] += fn(target[t]-chebyshev_real_pos)*Wm[s][k];
+        ansp[t] += fn(target[t], chebyshev_real_pos)*Wm[s][k];
       }
     }
   }

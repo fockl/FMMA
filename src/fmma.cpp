@@ -54,7 +54,7 @@ void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, co
 #pragma omp parallel for reduction(+:ansp[:N])
   for(std::size_t i=0; i<N; ++i){
     for(std::size_t j=0; j<source.size(); ++j){
-      ansp[i] += fn(target[i]-source[j]);
+      ansp[i] += fn(target[i], source[j]);
     }
   }
   return;
@@ -75,7 +75,7 @@ void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, co
 #pragma omp parallel for reduction(+:ansp[:N])
   for(std::size_t i=0; i<N; ++i){
     for(std::size_t j=0; j<source.size(); ++j){
-      ansp[i] += source_weight[j] * fn(target[i]-source[j]);
+      ansp[i] += source_weight[j] * fn(target[i], source[j]);
     }
   }
   return;
@@ -93,7 +93,7 @@ void FMMA<TYPE, DIM>::exact_matvec(const std::vector<std::array<TYPE, DIM>>& tar
   std::vector<TYPE> Mat(N*M);
   for(std::size_t i=0; i<N; ++i){
     for(std::size_t j=0; j<M; ++j){
-      Mat[i*M+j] = fn(target[i]-source[j]);
+      Mat[i*M+j] = fn(target[i], source[j]);
     }
   }
   matvec(Mat, source_weight, ans);

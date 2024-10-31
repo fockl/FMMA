@@ -52,22 +52,26 @@ std::array<TYPE, DIM> operator/(const std::array<TYPE, DIM>& lhs, const std::arr
 template<typename TYPE, std::size_t DIM>
 class FMMA{
   public:
-    std::function<TYPE(const std::array<TYPE, DIM>& target_source)> fn = 
-      [](const std::array<TYPE, DIM>& target_source){
+    std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)> fn = 
+      [](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
         double len = 0.0;
         for(std::size_t dim=0; dim<DIM; ++dim){
-          double diff = target_source[dim];
+          double diff = target[dim]-source[dim];
           len += diff*diff;
         }
         return 1.0/std::sqrt(len);
       };
 
     void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target_source)>& fn){
-      this->fn = fn;
+      //this->fn = fn;
+      this->fn = [fn](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
+        return fn(target-source);
+      };
       return;
     }
 
     void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)>& fn){
+      /*
       this->fn = [fn](const std::array<TYPE, DIM>& target_source){
         std::array<TYPE, DIM> zero;
         for(std::size_t dim=0; dim<DIM; ++dim){
@@ -75,6 +79,8 @@ class FMMA{
         }
         return fn(target_source, zero);
       };
+      */
+      this->fn = fn;
       return;
     }
 

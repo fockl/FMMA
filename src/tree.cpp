@@ -85,7 +85,7 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
     for(std::size_t i=0; i<indices.size(); ++i){
       for(std::size_t j=0; j<source_ind_in_box[indices[i]].size(); ++j){
-        ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t]-source[source_ind_in_box[indices[i]][j]]);
+        ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t], source[source_ind_in_box[indices[i]][j]]);
       }
     }
   }
