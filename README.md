@@ -16,7 +16,7 @@
 
 ``` math
 
-c_i = \sum_{j} w_j f(x_i-y_j)
+c_i = \sum_{j} w_j f(x_i, y_j)
 
 ```
 
@@ -79,7 +79,7 @@ FMMA is a library to calculate fastly
 
 ``` math
 
-c_i = \sum_{j} w_j f(x_i-y_j)
+c_i = \sum_{j} w_j f(x_i, y_j)
 
 ```
 

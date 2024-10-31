@@ -83,7 +83,7 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     std::size_t tmp_N = 1;
     start = std::chrono::system_clock::now();
     for(int depth=0; depth<Depth; ++depth){
-      M2L(tmp_N, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
+      M2L(tmp_N, origin, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
       tmp_N *= 2;
     }
     end = std::chrono::system_clock::now();
