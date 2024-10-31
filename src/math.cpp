@@ -51,7 +51,7 @@ TYPE SChebyshev(int n, TYPE x, TYPE y){
 template double SChebyshev(int n, double x, double y);
 
 template<typename TYPE>
-void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<TYPE>& ans){
+void matvec(const TYPE alpha, const std::vector<TYPE>& A, const std::vector<TYPE>& x, const TYPE beta, std::vector<TYPE>& ans){
   // matrix-vector multiplication (ans = Ax)
   std::size_t N = x.size();
   std::size_t M = A.size()/N;
@@ -67,21 +67,27 @@ void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<
   const auto *vald = A.data();
   const auto m = M;
   const auto n = N;
-  const double alpha = 1.0;
-  const double beta = 0.0;
 
   cblas_dgemv(CblasRowMajor, CblasNoTrans, m, n, alpha, vald, n, xd, 1, beta, yd, 1);
 
 #else
   for(std::size_t m=0; m<M; ++m){
-    ans[m] = 0.0;
+    ans[m] = beta*ans[m];
     for(std::size_t n=0; n<N; ++n){
-      ans[m] += A[m*N+n]*x[n];
+      ans[m] += alpha*A[m*N+n]*x[n];
     }
   }
 
 #endif
 
+  return;
+}
+
+template void matvec(const double alpha, const std::vector<double>& A, const std::vector<double>& x, const double beta, std::vector<double>& ans);
+
+template<typename TYPE>
+void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<TYPE>& ans){
+  matvec(1.0, A, x, 0.0, ans);
   return;
 }
 
