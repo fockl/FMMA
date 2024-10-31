@@ -19,6 +19,9 @@ template<typename TYPE>
 void matvec(const std::vector<TYPE>& A, const std::vector<TYPE>& x, std::vector<TYPE>& ans);
 
 template<typename TYPE>
+void matvec(const TYPE alpha, const std::vector<TYPE>& A, const std::vector<TYPE>& x, const TYPE beta, std::vector<TYPE>& ans);
+
+template<typename TYPE>
 TYPE dot(const std::vector<TYPE>& x, const std::vector<TYPE>& y);
 
 template<typename TYPE>
