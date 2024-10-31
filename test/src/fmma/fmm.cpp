@@ -91,7 +91,7 @@ bool test_fmm_1_r2(int ssize, int tsize, TYPE tol){
   };
   fmma.set_fn(fn);
   fmma.poly_ord=4;
-  fmma.nrn_N = 6;
+  fmma.Depth = 3;
   fmma.fmm(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize, 0.0);
@@ -160,7 +160,7 @@ bool test_fmm_sum2_r2(int ssize, int tsize, TYPE tol){
   };
   fmma.set_fn(fn);
   fmma.poly_ord=5;
-  fmma.nrn_N = 6;
+  fmma.Depth = 3;
   fmma.fmm(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize, 0.0);
