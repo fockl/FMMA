@@ -342,7 +342,7 @@ template void FMMA<double, 3>::M2M(const std::size_t N, const std::vector<std::a
 
   //{{{ M2L
 template<typename TYPE, std::size_t DIM>
-void FMMA<TYPE, DIM>::M2L(const std::size_t N, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm, std::vector<std::vector<TYPE>>& Wl){
+void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm, std::vector<std::vector<TYPE>>& Wl){
   TYPE len = Len/N;
   std::size_t poly_ord_all = chebyshev_node_all.size();
   Wl.resize(Wm.size());
@@ -350,32 +350,96 @@ void FMMA<TYPE, DIM>::M2L(const std::size_t N, const std::array<TYPE, DIM>& orig
     Wl[ind].resize(poly_ord_all);
   }
 
+  if(this->trans_sym_flag){
+    std::size_t SIZE = 1;
+    for(std::size_t dim=0; dim<DIM; ++dim){
+      SIZE *= 7;
+    }
+    std::vector<std::vector<TYPE>> fns(SIZE, std::vector<TYPE>(poly_ord_all*poly_ord_all));
 #pragma omp parallel
-  {
-    std::size_t ind_begin = 0;
-    std::size_t ind_end = Wl.size();
+    for(std::size_t sind=0; sind<SIZE; ++sind){
+      std::array<int, DIM> shift;
+      std::size_t s_copy = sind;
+      int max_dist_from_ind = 0;
+      for(std::size_t dim=0; dim<DIM; ++dim){
+        shift[DIM-1-dim] = s_copy%7-3;
+        max_dist_from_ind = std::max(max_dist_from_ind, std::abs(shift[DIM-1-dim]));
+        s_copy /= 7;
+      }
+      if(max_dist_from_ind <= 1){
+        continue;
+      }
+      std::vector<std::array<TYPE, DIM>> relative_vector_l(poly_ord_all);
+      std::vector<std::array<TYPE, DIM>> relative_vector_m(poly_ord_all);
+      for(std::size_t k=0; k<poly_ord_all; ++k){
+        for(std::size_t dim=0; dim<DIM; ++dim){
+          relative_vector_l[k][dim] = len*(chebyshev_node_all[k][dim]/2);
+          relative_vector_m[k][dim] = len*((TYPE)shift[dim]+chebyshev_node_all[k][dim]/2);
+        }
+      }
+      for(std::size_t kl=0; kl<poly_ord_all; ++kl){
+        for(std::size_t km=0; km<poly_ord_all; ++km){
+          fns[sind][kl*poly_ord_all+km] = fn(relative_vector_l[kl], relative_vector_m[km]);
+        }
+      }
+    }
+#pragma omp parallel
+    {
+      std::size_t ind_begin = 0;
+      std::size_t ind_end = Wl.size();
 #if FMMA_USE_OPENMP
-    ind_begin = Wl.size()*omp_get_thread_num()/omp_get_num_threads();
-    ind_end = Wl.size()*(omp_get_thread_num()+1)/omp_get_num_threads();
+      ind_begin = Wl.size()*omp_get_thread_num()/omp_get_num_threads();
+      ind_end = Wl.size()*(omp_get_thread_num()+1)/omp_get_num_threads();
 #endif
-    for(std::size_t ind=ind_begin; ind<ind_end; ++ind){
-      std::array<std::size_t, DIM> l_box_ind = get_box_ind_of_ind(ind, N);
-      std::vector<std::size_t> indices = multipole_calc_box_indices(l_box_ind, N);
-      std::array<TYPE, DIM> relative_vector_l;
-      std::array<TYPE, DIM> relative_vector_m;
-      std::vector<TYPE> fns(poly_ord_all*poly_ord_all);
-      for(std::size_t i=0; i<indices.size(); ++i){
-        std::array<std::size_t, DIM> m_box_ind = get_box_ind_of_ind(indices[i], N);
+      for(std::size_t ind=ind_begin; ind<ind_end; ++ind){
+        std::array<std::size_t, DIM> l_box_ind = get_box_ind_of_ind(ind, N);
+        std::vector<std::size_t> indices = multipole_calc_box_indices(l_box_ind, N);
+        for(std::size_t i=0; i<indices.size(); ++i){
+          std::array<std::size_t, DIM> m_box_ind = get_box_ind_of_ind(indices[i], N);
+          int sind = 0;
+          for(std::size_t dim=0; dim<DIM; ++dim){
+            sind *= 7;
+            sind += (int)m_box_ind[dim]+3-(int)l_box_ind[dim];
+          }
+
+          matvec(1.0, fns[sind], Wm[indices[i]], 1.0, Wl[ind]);
+        }
+      }
+    }
+  }else{
+#pragma omp parallel
+    {
+      std::size_t ind_begin = 0;
+      std::size_t ind_end = Wl.size();
+#if FMMA_USE_OPENMP
+      ind_begin = Wl.size()*omp_get_thread_num()/omp_get_num_threads();
+      ind_end = Wl.size()*(omp_get_thread_num()+1)/omp_get_num_threads();
+#endif
+      for(std::size_t ind=ind_begin; ind<ind_end; ++ind){
+        std::array<std::size_t, DIM> l_box_ind = get_box_ind_of_ind(ind, N);
+        std::vector<std::size_t> indices = multipole_calc_box_indices(l_box_ind, N);
+        std::vector<std::array<TYPE, DIM>> relative_vector_l(poly_ord_all);
         for(std::size_t kl=0; kl<poly_ord_all; ++kl){
-          for(std::size_t km=0; km<poly_ord_all; ++km){
-            for(std::size_t dim=0; dim<DIM; ++dim){
-              relative_vector_l[dim] = len*((TYPE)l_box_ind[dim]+(1.0+chebyshev_node_all[kl][dim])/2)+origin[dim];
-              relative_vector_m[dim] = len*((TYPE)m_box_ind[dim]+(1.0+chebyshev_node_all[km][dim])/2)+origin[dim];
-            }
-            fns[kl*poly_ord_all+km] = fn(relative_vector_l, relative_vector_m);
+          for(std::size_t dim=0; dim<DIM; ++dim){
+            relative_vector_l[kl][dim] = len*((TYPE)l_box_ind[dim]+(1.0+chebyshev_node_all[kl][dim])/2)+origin[dim];
           }
         }
-        matvec(1.0, fns, Wm[indices[i]], 1.0, Wl[ind]);
+        std::vector<std::array<TYPE, DIM>> relative_vector_m(poly_ord_all);
+        std::vector<TYPE> fns(poly_ord_all*poly_ord_all);
+        for(std::size_t i=0; i<indices.size(); ++i){
+          std::array<std::size_t, DIM> m_box_ind = get_box_ind_of_ind(indices[i], N);
+          for(std::size_t km=0; km<poly_ord_all; ++km){
+            for(std::size_t dim=0; dim<DIM; ++dim){
+              relative_vector_m[km][dim] = len*((TYPE)m_box_ind[dim]+(1.0+chebyshev_node_all[km][dim])/2)+origin[dim];
+            }
+          }
+          for(std::size_t kl=0; kl<poly_ord_all; ++kl){
+            for(std::size_t km=0; km<poly_ord_all; ++km){
+              fns[kl*poly_ord_all+km] = fn(relative_vector_l[kl], relative_vector_m[km]);
+            }
+          }
+          matvec(1.0, fns, Wm[indices[i]], 1.0, Wl[ind]);
+        }
       }
     }
   }
@@ -383,9 +447,9 @@ void FMMA<TYPE, DIM>::M2L(const std::size_t N, const std::array<TYPE, DIM>& orig
   return;
 }
 
-template void FMMA<double, 1>::M2L(const std::size_t N, const std::array<double, 1>& origin, const double Len, const std::vector<std::array<double, 1>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
-template void FMMA<double, 2>::M2L(const std::size_t N, const std::array<double, 2>& origin, const double Len, const std::vector<std::array<double, 2>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
-template void FMMA<double, 3>::M2L(const std::size_t N, const std::array<double, 3>& origin, const double Len, const std::vector<std::array<double, 3>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
+template void FMMA<double, 1>::M2L(const int depth, const std::size_t N, const std::array<double, 1>& origin, const double Len, const std::vector<std::array<double, 1>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
+template void FMMA<double, 2>::M2L(const int depth, const std::size_t N, const std::array<double, 2>& origin, const double Len, const std::vector<std::array<double, 2>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
+template void FMMA<double, 3>::M2L(const int depth, const std::size_t N, const std::array<double, 3>& origin, const double Len, const std::vector<std::array<double, 3>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
 //}}}
 
 //{{{ L2L

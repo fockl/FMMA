@@ -92,6 +92,7 @@ bool test_fmm_1_r2(int ssize, int tsize, TYPE tol){
   fmma.set_fn(fn);
   fmma.poly_ord=4;
   fmma.Depth = 3;
+  fmma.trans_sym_flag = 1;
   fmma.fmm(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize, 0.0);
