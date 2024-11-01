@@ -90,7 +90,7 @@ bool test_nrnmm_1_r2(int ssize, int tsize, TYPE tol){
     return sum/len2;
   };
   fmma.set_fn(fn);
-  fmma.poly_ord=3;
+  fmma.poly_ord=4;
   fmma.nrn_N = 6;
   fmma.nrnmm(target, source_weight, source, ans);
 
@@ -180,7 +180,7 @@ bool test_nrnmm_sum2_r2(int ssize, int tsize, TYPE tol){
 
   TYPE diff = 0.0;
   for(int i=0; i<tsize; ++i){
-    TYPE d = ans[i]-exact[i];
+    TYPE d = (ans[i]-exact[i])/exact[i];
     diff += d*d;
   }
   diff = sqrt(diff / tsize);
@@ -210,7 +210,6 @@ int main(void){
   if(!test_nrnmm<double, 1>(20, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
-
   if(!test_nrnmm<double, 2>(10, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
@@ -218,6 +217,24 @@ int main(void){
     exit(EXIT_FAILURE);
   }
   if(!test_nrnmm<double, 2>(20, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm<float, 1>(10, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm<float, 1>(10, 20, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm<float, 1>(20, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm<float, 2>(10, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm<float, 2>(10, 20, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm<float, 2>(20, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
 
@@ -230,7 +247,6 @@ int main(void){
   if(!test_nrnmm_1_r2<double, 1>(20, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
-
   if(!test_nrnmm_1_r2<double, 2>(10, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
@@ -238,6 +254,24 @@ int main(void){
     exit(EXIT_FAILURE);
   }
   if(!test_nrnmm_1_r2<double, 2>(20, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<float, 1>(10, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<float, 1>(10, 20, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<float, 1>(20, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<float, 2>(10, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<float, 2>(10, 20, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_1_r2<float, 2>(20, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
 
@@ -250,7 +284,6 @@ int main(void){
   if(!test_nrnmm_sum2_r2<double, 1>(20, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
-
   if(!test_nrnmm_sum2_r2<double, 2>(10, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
@@ -258,6 +291,24 @@ int main(void){
     exit(EXIT_FAILURE);
   }
   if(!test_nrnmm_sum2_r2<double, 2>(20, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_sum2_r2<float, 1>(10, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_sum2_r2<float, 1>(10, 20, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_sum2_r2<float, 1>(20, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_sum2_r2<float, 2>(10, 10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_sum2_r2<float, 2>(10, 20, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_nrnmm_sum2_r2<float, 2>(20, 10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
 

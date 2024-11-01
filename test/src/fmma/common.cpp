@@ -40,7 +40,7 @@ bool test_exact(int ssize, int tsize, TYPE tol){
 
   TYPE diff = 0.0;
   for(int i=0; i<tsize; ++i){
-    TYPE d = ans[i]-exact[i];
+    TYPE d = (ans[i]-exact[i])/exact[i];
     diff += d*d;
   }
   diff = sqrt(diff / tsize);
@@ -104,7 +104,7 @@ bool test_exact_1_r2(int ssize, int tsize, TYPE tol){
 
   TYPE diff = 0.0;
   for(int i=0; i<tsize; ++i){
-    TYPE d = ans[i]-exact[i];
+    TYPE d = (ans[i]-exact[i])/exact[i];
     diff += d*d;
   }
   diff = sqrt(diff / tsize);
@@ -170,7 +170,7 @@ bool test_exact_sum2_r2(int ssize, int tsize, TYPE tol){
 
   TYPE diff = 0.0;
   for(int i=0; i<tsize; ++i){
-    TYPE d = ans[i]-exact[i];
+    TYPE d = (ans[i]-exact[i])/exact[i];
     diff += d*d;
   }
   diff = sqrt(diff / tsize);
@@ -207,6 +207,24 @@ int main(void){
   if(!test_exact<double, 2>(20, 10, 1.0e-6)){
     exit(EXIT_FAILURE);
   }
+  if(!test_exact<float, 1>(10, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact<float, 1>(10, 20, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact<float, 1>(20, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact<float, 2>(10, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact<float, 2>(10, 20, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact<float, 2>(20, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
 
   if(!test_exact_1_r2<double, 1>(10, 10, 1.0e-6)){
     exit(EXIT_FAILURE);
@@ -226,6 +244,24 @@ int main(void){
   if(!test_exact_1_r2<double, 2>(20, 10, 1.0e-6)){
     exit(EXIT_FAILURE);
   }
+  if(!test_exact_1_r2<float, 1>(10, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_1_r2<float, 1>(10, 20, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_1_r2<float, 1>(20, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_1_r2<float, 2>(10, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_1_r2<float, 2>(10, 20, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_1_r2<float, 2>(20, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
 
   if(!test_exact_sum2_r2<double, 1>(10, 10, 1.0e-6)){
     exit(EXIT_FAILURE);
@@ -243,6 +279,24 @@ int main(void){
     exit(EXIT_FAILURE);
   }
   if(!test_exact_sum2_r2<double, 2>(20, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_sum2_r2<float, 1>(10, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_sum2_r2<float, 1>(10, 20, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_sum2_r2<float, 1>(20, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_sum2_r2<float, 2>(10, 10, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_sum2_r2<float, 2>(10, 20, 1.0e-4)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_exact_sum2_r2<float, 2>(20, 10, 1.0e-4)){
     exit(EXIT_FAILURE);
   }
 

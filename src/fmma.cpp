@@ -19,6 +19,9 @@ FMMA<TYPE, DIM>::FMMA(void){
 template FMMA<double, 1>::FMMA(void);
 template FMMA<double, 2>::FMMA(void);
 template FMMA<double, 3>::FMMA(void);
+template FMMA<float, 1>::FMMA(void);
+template FMMA<float, 2>::FMMA(void);
+template FMMA<float, 3>::FMMA(void);
 
 template<typename TYPE, std::size_t DIM>
 FMMA<TYPE, DIM>::~FMMA(void){
@@ -28,6 +31,9 @@ FMMA<TYPE, DIM>::~FMMA(void){
 template FMMA<double, 1>::~FMMA(void);
 template FMMA<double, 2>::~FMMA(void);
 template FMMA<double, 3>::~FMMA(void);
+template FMMA<float, 1>::~FMMA(void);
+template FMMA<float, 2>::~FMMA(void);
+template FMMA<float, 3>::~FMMA(void);
 
 template<typename TYPE, std::size_t DIM>
 bool FMMA<TYPE, DIM>::check_blas(void){
@@ -41,6 +47,9 @@ bool FMMA<TYPE, DIM>::check_blas(void){
 template bool FMMA<double, 1>::check_blas(void);
 template bool FMMA<double, 2>::check_blas(void);
 template bool FMMA<double, 3>::check_blas(void);
+template bool FMMA<float, 1>::check_blas(void);
+template bool FMMA<float, 2>::check_blas(void);
+template bool FMMA<float, 3>::check_blas(void);
 
 
 template<typename TYPE, std::size_t DIM>
@@ -63,6 +72,9 @@ void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, co
 template void FMMA<double, 1>::exact(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::exact(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::exact(const std::vector<std::array<double, 3>>& target, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::exact(const std::vector<std::array<float, 1>>& target, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::exact(const std::vector<std::array<float, 2>>& target, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::exact(const std::vector<std::array<float, 3>>& target, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -84,6 +96,9 @@ void FMMA<TYPE, DIM>::exact(const std::vector<std::array<TYPE, DIM>>& target, co
 template void FMMA<double, 1>::exact(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::exact(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::exact(const std::vector<std::array<double, 3>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::exact(const std::vector<std::array<float, 1>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::exact(const std::vector<std::array<float, 2>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::exact(const std::vector<std::array<float, 3>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::exact_matvec(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -103,6 +118,9 @@ void FMMA<TYPE, DIM>::exact_matvec(const std::vector<std::array<TYPE, DIM>>& tar
 template void FMMA<double, 1>::exact_matvec(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::exact_matvec(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::exact_matvec(const std::vector<std::array<double, 3>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::exact_matvec(const std::vector<std::array<float, 1>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::exact_matvec(const std::vector<std::array<float, 2>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::exact_matvec(const std::vector<std::array<float, 3>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::exact_matvec(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -118,6 +136,9 @@ void FMMA<TYPE, DIM>::exact_matvec(const std::vector<std::array<TYPE, DIM>>& tar
 template void FMMA<double, 1>::exact_matvec(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::exact_matvec(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::exact_matvec(const std::vector<std::array<double, 3>>& target, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::exact_matvec(const std::vector<std::array<float, 1>>& target, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::exact_matvec(const std::vector<std::array<float, 2>>& target, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::exact_matvec(const std::vector<std::array<float, 3>>& target, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -141,6 +162,9 @@ void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, co
 template void FMMA<double, 1>::solve(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::solve(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::solve(const std::vector<std::array<double, 3>>& target, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::solve(const std::vector<std::array<float, 1>>& target, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::solve(const std::vector<std::array<float, 2>>& target, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::solve(const std::vector<std::array<float, 3>>& target, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -183,5 +207,8 @@ void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, co
 template void FMMA<double, 1>::solve(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::solve(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::solve(const std::vector<std::array<double, 3>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::solve(const std::vector<std::array<float, 1>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::solve(const std::vector<std::array<float, 2>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::solve(const std::vector<std::array<float, 3>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 } // namespace fmma

@@ -68,6 +68,12 @@ template std::vector<std::size_t> FMMA<double, 3>::multipole_calc_box_indices(co
 template std::vector<std::size_t> FMMA<double, 1>::multipole_calc_box_indices(const std::array<std::size_t, 1>& box_ind, int N);
 template std::vector<std::size_t> FMMA<double, 2>::multipole_calc_box_indices(const std::array<std::size_t, 2>& box_ind, int N);
 template std::vector<std::size_t> FMMA<double, 3>::multipole_calc_box_indices(const std::array<std::size_t, 3>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 1>::multipole_calc_box_indices(const std::array<int, 1>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 2>::multipole_calc_box_indices(const std::array<int, 2>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 3>::multipole_calc_box_indices(const std::array<int, 3>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 1>::multipole_calc_box_indices(const std::array<std::size_t, 1>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 2>::multipole_calc_box_indices(const std::array<std::size_t, 2>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 3>::multipole_calc_box_indices(const std::array<std::size_t, 3>& box_ind, int N);
 //}}}
 
 //{{{ exact_calc_box_indices
@@ -111,6 +117,9 @@ std::vector<std::size_t> FMMA<TYPE, DIM>::exact_calc_box_indices(const std::arra
 template std::vector<std::size_t> FMMA<double, 1>::exact_calc_box_indices(const std::array<int, 1>& box_ind, int N);
 template std::vector<std::size_t> FMMA<double, 2>::exact_calc_box_indices(const std::array<int, 2>& box_ind, int N);
 template std::vector<std::size_t> FMMA<double, 3>::exact_calc_box_indices(const std::array<int, 3>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 1>::exact_calc_box_indices(const std::array<int, 1>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 2>::exact_calc_box_indices(const std::array<int, 2>& box_ind, int N);
+template std::vector<std::size_t> FMMA<float, 3>::exact_calc_box_indices(const std::array<int, 3>& box_ind, int N);
 //}}}
 
 //{{{ get_minmax
@@ -141,6 +150,9 @@ template<typename TYPE, std::size_t DIM>
 template void FMMA<double, 1>::get_minmax(const std::vector<std::array<double, 1>>& array1, const std::vector<std::array<double, 1>>& array2, std::array<double, 1>& min_array, std::array<double, 1>& max_array);
 template void FMMA<double, 2>::get_minmax(const std::vector<std::array<double, 2>>& array1, const std::vector<std::array<double, 2>>& array2, std::array<double, 2>& min_array, std::array<double, 2>& max_array);
 template void FMMA<double, 3>::get_minmax(const std::vector<std::array<double, 3>>& array1, const std::vector<std::array<double, 3>>& array2, std::array<double, 3>& min_array, std::array<double, 3>& max_array);
+template void FMMA<float, 1>::get_minmax(const std::vector<std::array<float, 1>>& array1, const std::vector<std::array<float, 1>>& array2, std::array<float, 1>& min_array, std::array<float, 1>& max_array);
+template void FMMA<float, 2>::get_minmax(const std::vector<std::array<float, 2>>& array1, const std::vector<std::array<float, 2>>& array2, std::array<float, 2>& min_array, std::array<float, 2>& max_array);
+template void FMMA<float, 3>::get_minmax(const std::vector<std::array<float, 3>>& array1, const std::vector<std::array<float, 3>>& array2, std::array<float, 3>& min_array, std::array<float, 3>& max_array);
 //}}}
 
 //{{{ get_origin_and_length
@@ -163,6 +175,9 @@ template<typename TYPE, std::size_t DIM>
 template void FMMA<double, 1>::get_origin_and_length(const std::vector<std::array<double, 1>>& array1, const std::vector<std::array<double, 1>>& array2, std::array<double, 1>& origin, double& Len);
 template void FMMA<double, 2>::get_origin_and_length(const std::vector<std::array<double, 2>>& array1, const std::vector<std::array<double, 2>>& array2, std::array<double, 2>& origin, double& Len);
 template void FMMA<double, 3>::get_origin_and_length(const std::vector<std::array<double, 3>>& array1, const std::vector<std::array<double, 3>>& array2, std::array<double, 3>& origin, double& Len);
+template void FMMA<float, 1>::get_origin_and_length(const std::vector<std::array<float, 1>>& array1, const std::vector<std::array<float, 1>>& array2, std::array<float, 1>& origin, float& Len);
+template void FMMA<float, 2>::get_origin_and_length(const std::vector<std::array<float, 2>>& array1, const std::vector<std::array<float, 2>>& array2, std::array<float, 2>& origin, float& Len);
+template void FMMA<float, 3>::get_origin_and_length(const std::vector<std::array<float, 3>>& array1, const std::vector<std::array<float, 3>>& array2, std::array<float, 3>& origin, float& Len);
 //}}} 
 
 //{{{ get_box_ind_of_ind
@@ -180,6 +195,9 @@ std::array<std::size_t, DIM> FMMA<TYPE, DIM>::get_box_ind_of_ind(const std::size
 template std::array<std::size_t, 1> FMMA<double, 1>::get_box_ind_of_ind(std::size_t ind, int N);
 template std::array<std::size_t, 2> FMMA<double, 2>::get_box_ind_of_ind(std::size_t ind, int N);
 template std::array<std::size_t, 3> FMMA<double, 3>::get_box_ind_of_ind(std::size_t ind, int N);
+template std::array<std::size_t, 1> FMMA<float, 1>::get_box_ind_of_ind(std::size_t ind, int N);
+template std::array<std::size_t, 2> FMMA<float, 2>::get_box_ind_of_ind(std::size_t ind, int N);
+template std::array<std::size_t, 3> FMMA<float, 3>::get_box_ind_of_ind(std::size_t ind, int N);
 //}}}
 
 //{{{ get_ind_of_box_ind
@@ -196,6 +214,9 @@ std::size_t FMMA<TYPE, DIM>::get_ind_of_box_ind(const std::array<int, DIM>& box_
 template std::size_t FMMA<double, 1>::get_ind_of_box_ind(const std::array<int, 1>& box_ind, int N);
 template std::size_t FMMA<double, 2>::get_ind_of_box_ind(const std::array<int, 2>& box_ind, int N);
 template std::size_t FMMA<double, 3>::get_ind_of_box_ind(const std::array<int, 3>& box_ind, int N);
+template std::size_t FMMA<float, 1>::get_ind_of_box_ind(const std::array<int, 1>& box_ind, int N);
+template std::size_t FMMA<float, 2>::get_ind_of_box_ind(const std::array<int, 2>& box_ind, int N);
+template std::size_t FMMA<float, 3>::get_ind_of_box_ind(const std::array<int, 3>& box_ind, int N);
 //}}}
 
 //{{{ P2M
@@ -264,6 +285,9 @@ template<typename TYPE, std::size_t DIM>
 template void FMMA<double, 1>::P2M(const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, int N, const std::array<double, 1>& min_pos, const double len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<double>>& Wm, std::vector<std::array<double, 1>>& chebyshev_node_all);
 template void FMMA<double, 2>::P2M(const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, int N, const std::array<double, 2>& min_pos, const double len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<double>>& Wm, std::vector<std::array<double, 2>>& chebyshev_node_all);
 template void FMMA<double, 3>::P2M(const std::vector<double>& source_weight, const std::vector<std::array<double, 3>>& source, int N, const std::array<double, 3>& min_pos, const double len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<double>>& Wm, std::vector<std::array<double, 3>>& chebyshev_node_all);
+template void FMMA<float, 1>::P2M(const std::vector<float>& source_weight, const std::vector<std::array<float, 1>>& source, int N, const std::array<float, 1>& min_pos, const float len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<float>>& Wm, std::vector<std::array<float, 1>>& chebyshev_node_all);
+template void FMMA<float, 2>::P2M(const std::vector<float>& source_weight, const std::vector<std::array<float, 2>>& source, int N, const std::array<float, 2>& min_pos, const float len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<float>>& Wm, std::vector<std::array<float, 2>>& chebyshev_node_all);
+template void FMMA<float, 3>::P2M(const std::vector<float>& source_weight, const std::vector<std::array<float, 3>>& source, int N, const std::array<float, 3>& min_pos, const float len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<float>>& Wm, std::vector<std::array<float, 3>>& chebyshev_node_all);
 //}}}
 
 //{{{ M2M
@@ -341,6 +365,9 @@ void FMMA<TYPE, DIM>::M2M(const std::size_t N, const std::vector<std::array<TYPE
 template void FMMA<double, 1>::M2M(const std::size_t N, const std::vector<std::array<double, 1>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm_in, std::vector<std::vector<double>>& Wm_out);
 template void FMMA<double, 2>::M2M(const std::size_t N, const std::vector<std::array<double, 2>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm_in, std::vector<std::vector<double>>& Wm_out);
 template void FMMA<double, 3>::M2M(const std::size_t N, const std::vector<std::array<double, 3>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm_in, std::vector<std::vector<double>>& Wm_out);
+template void FMMA<float, 1>::M2M(const std::size_t N, const std::vector<std::array<float, 1>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm_in, std::vector<std::vector<float>>& Wm_out);
+template void FMMA<float, 2>::M2M(const std::size_t N, const std::vector<std::array<float, 2>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm_in, std::vector<std::vector<float>>& Wm_out);
+template void FMMA<float, 3>::M2M(const std::size_t N, const std::vector<std::array<float, 3>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm_in, std::vector<std::vector<float>>& Wm_out);
 //}}}
 
   //{{{ M2L
@@ -421,7 +448,7 @@ void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array
           //}
           //copy(poly_ord_all, Wm[indices[i]].data(), Wm_vector.data()+sind*poly_ord_all);
 
-          matvec(1.0, fns[sind], Wm[indices[i]], 1.0, Wl[ind]);
+          matvec((TYPE)1.0, fns[sind], Wm[indices[i]], (TYPE)1.0, Wl[ind]);
         }
         //matvec(fns_matrix, Wm_vector, Wl[ind]);
       }
@@ -458,7 +485,7 @@ void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array
               fns[kl*poly_ord_all+km] = fn(relative_vector_l[kl], relative_vector_m[km]);
             }
           }
-          matvec(1.0, fns, Wm[indices[i]], 1.0, Wl[ind]);
+          matvec((TYPE)1.0, fns, Wm[indices[i]], (TYPE)1.0, Wl[ind]);
         }
       }
     }
@@ -470,6 +497,9 @@ void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array
 template void FMMA<double, 1>::M2L(const int depth, const std::size_t N, const std::array<double, 1>& origin, const double Len, const std::vector<std::array<double, 1>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
 template void FMMA<double, 2>::M2L(const int depth, const std::size_t N, const std::array<double, 2>& origin, const double Len, const std::vector<std::array<double, 2>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
 template void FMMA<double, 3>::M2L(const int depth, const std::size_t N, const std::array<double, 3>& origin, const double Len, const std::vector<std::array<double, 3>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<std::vector<double>>& Wl);
+template void FMMA<float, 1>::M2L(const int depth, const std::size_t N, const std::array<float, 1>& origin, const float Len, const std::vector<std::array<float, 1>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm, std::vector<std::vector<float>>& Wl);
+template void FMMA<float, 2>::M2L(const int depth, const std::size_t N, const std::array<float, 2>& origin, const float Len, const std::vector<std::array<float, 2>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm, std::vector<std::vector<float>>& Wl);
+template void FMMA<float, 3>::M2L(const int depth, const std::size_t N, const std::array<float, 3>& origin, const float Len, const std::vector<std::array<float, 3>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm, std::vector<std::vector<float>>& Wl);
 //}}}
 
 //{{{ L2L
@@ -540,6 +570,9 @@ void FMMA<TYPE, DIM>::L2L(const std::size_t N, const std::vector<std::array<TYPE
 template void FMMA<double, 1>::L2L(const std::size_t N, const std::vector<std::array<double, 1>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wl_in, std::vector<std::vector<double>>& Wl_out);
 template void FMMA<double, 2>::L2L(const std::size_t N, const std::vector<std::array<double, 2>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wl_in, std::vector<std::vector<double>>& Wl_out);
 template void FMMA<double, 3>::L2L(const std::size_t N, const std::vector<std::array<double, 3>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wl_in, std::vector<std::vector<double>>& Wl_out);
+template void FMMA<float, 1>::L2L(const std::size_t N, const std::vector<std::array<float, 1>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wl_in, std::vector<std::vector<float>>& Wl_out);
+template void FMMA<float, 2>::L2L(const std::size_t N, const std::vector<std::array<float, 2>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wl_in, std::vector<std::vector<float>>& Wl_out);
+template void FMMA<float, 3>::L2L(const std::size_t N, const std::vector<std::array<float, 3>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wl_in, std::vector<std::vector<float>>& Wl_out);
 //}}}
 
 //{{{ L2P
@@ -584,6 +617,9 @@ void FMMA<TYPE, DIM>::L2P(const std::vector<std::array<TYPE, DIM>>& target, cons
 template void FMMA<double, 1>::L2P(const std::vector<std::array<double, 1>>& target, const std::array<double, 1>& origin, const double Len, const std::vector<std::array<double, 1>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wl, std::vector<double>& ans);
 template void FMMA<double, 2>::L2P(const std::vector<std::array<double, 2>>& target, const std::array<double, 2>& origin, const double Len, const std::vector<std::array<double, 2>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wl, std::vector<double>& ans);
 template void FMMA<double, 3>::L2P(const std::vector<std::array<double, 3>>& target, const std::array<double, 3>& origin, const double Len, const std::vector<std::array<double, 3>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wl, std::vector<double>& ans);
+template void FMMA<float, 1>::L2P(const std::vector<std::array<float, 1>>& target, const std::array<float, 1>& origin, const float Len, const std::vector<std::array<float, 1>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wl, std::vector<float>& ans);
+template void FMMA<float, 2>::L2P(const std::vector<std::array<float, 2>>& target, const std::array<float, 2>& origin, const float Len, const std::vector<std::array<float, 2>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wl, std::vector<float>& ans);
+template void FMMA<float, 3>::L2P(const std::vector<std::array<float, 3>>& target, const std::array<float, 3>& origin, const float Len, const std::vector<std::array<float, 3>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wl, std::vector<float>& ans);
 //}}}
 
 //{{{ M2P
@@ -627,6 +663,9 @@ void FMMA<TYPE, DIM>::M2P(const std::vector<std::array<TYPE, DIM>>& target, cons
 template void FMMA<double, 1>::M2P(const std::vector<std::array<double, 1>>& target, const std::size_t N, const std::array<double, 1>& origin, const double Len, const std::vector<std::array<double, 1>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<double>& ans);
 template void FMMA<double, 2>::M2P(const std::vector<std::array<double, 2>>& target, const std::size_t N, const std::array<double, 2>& origin, const double Len, const std::vector<std::array<double, 2>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<double>& ans);
 template void FMMA<double, 3>::M2P(const std::vector<std::array<double, 3>>& target, const std::size_t N, const std::array<double, 3>& origin, const double Len, const std::vector<std::array<double, 3>>& chebyshev_node_all, const std::vector<std::vector<double>>& Wm, std::vector<double>& ans);
+template void FMMA<float, 1>::M2P(const std::vector<std::array<float, 1>>& target, const std::size_t N, const std::array<float, 1>& origin, const float Len, const std::vector<std::array<float, 1>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm, std::vector<float>& ans);
+template void FMMA<float, 2>::M2P(const std::vector<std::array<float, 2>>& target, const std::size_t N, const std::array<float, 2>& origin, const float Len, const std::vector<std::array<float, 2>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm, std::vector<float>& ans);
+template void FMMA<float, 3>::M2P(const std::vector<std::array<float, 3>>& target, const std::size_t N, const std::array<float, 3>& origin, const float Len, const std::vector<std::array<float, 3>>& chebyshev_node_all, const std::vector<std::vector<float>>& Wm, std::vector<float>& ans);
 //}}}
 
 }; // namespace fmma

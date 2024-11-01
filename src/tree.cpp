@@ -102,6 +102,9 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
 template void FMMA<double, 1>::tree(const std::vector<std::array<double, 1>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::tree(const std::vector<std::array<double, 2>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::tree(const std::vector<std::array<double, 3>>& target, const std::vector<double>& source_weight, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::tree(const std::vector<std::array<float, 1>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::tree(const std::vector<std::array<float, 2>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::tree(const std::vector<std::array<float, 3>>& target, const std::vector<float>& source_weight, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
@@ -118,5 +121,8 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
 template void FMMA<double, 1>::tree(const std::vector<std::array<double, 1>>& target, const std::vector<std::array<double, 1>>& source, std::vector<double>& ans);
 template void FMMA<double, 2>::tree(const std::vector<std::array<double, 2>>& target, const std::vector<std::array<double, 2>>& source, std::vector<double>& ans);
 template void FMMA<double, 3>::tree(const std::vector<std::array<double, 3>>& target, const std::vector<std::array<double, 3>>& source, std::vector<double>& ans);
+template void FMMA<float, 1>::tree(const std::vector<std::array<float, 1>>& target, const std::vector<std::array<float, 1>>& source, std::vector<float>& ans);
+template void FMMA<float, 2>::tree(const std::vector<std::array<float, 2>>& target, const std::vector<std::array<float, 2>>& source, std::vector<float>& ans);
+template void FMMA<float, 3>::tree(const std::vector<std::array<float, 3>>& target, const std::vector<std::array<float, 3>>& source, std::vector<float>& ans);
 
 }; // namespace fmma
