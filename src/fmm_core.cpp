@@ -558,18 +558,17 @@ void FMMA<TYPE, DIM>::L2P(const std::vector<std::array<TYPE, DIM>>& target, cons
     std::array<int, DIM> target_ind_of_box;
 
     TYPE len = Len/N;
-    ind[t] = 0;
     for(std::size_t dim=0; dim<DIM; ++dim){
       target_ind_of_box[dim] = std::min((int)((target[t][dim]-origin[dim])/len), (int)N-1);
       relative_pos[t][dim] = std::max(std::min(2.0*((target[t][dim]-origin[dim])/len-target_ind_of_box[dim])-1.0, 1.0), -1.0);
     }
+
     ind[t] = get_ind_of_box_ind(target_ind_of_box, N);
   }
 
-  std::vector<TYPE> vals(poly_ord_all);
-
 #pragma omp parallel for
   for(std::size_t t=0; t<target.size(); ++t){
+    std::vector<TYPE> vals(poly_ord_all);
     for(std::size_t k=0; k<poly_ord_all; ++k){
       vals[k] = 1.0;
       for(std::size_t dim=0; dim<DIM; ++dim){
