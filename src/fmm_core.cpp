@@ -221,6 +221,7 @@ template<typename TYPE, std::size_t DIM>
       chebyshev_node[k] = cos((2.0*k+1.0)/(2*poly_ord+2)*M_PI);
     }
     chebyshev_node_all.resize(poly_ord_all);
+#pragma omp parallel for
     for(std::size_t k=0; k<poly_ord_all; ++k){
       std::size_t k_copy = k;
       for(std::size_t dim=0; dim<DIM; ++dim){
@@ -245,13 +246,15 @@ template<typename TYPE, std::size_t DIM>
     }
 
 #pragma omp parallel for
-    for(std::size_t k=0; k<poly_ord_all; ++k){
-      for(std::size_t s=0; s<source.size(); ++s){
-        TYPE val = 1.0;
-        for(std::size_t dim=0; dim<DIM; ++dim){
-          val *= SChebyshev(poly_ord+1, chebyshev_node_all[k][dim], relative_pos[s][dim]);
+    for(std::size_t siz=0; siz<SIZE; ++siz){
+      for(const auto s : source_ind_in_box[siz]){
+        for(std::size_t k=0; k<poly_ord_all; ++k){
+          TYPE val = 1.0;
+          for(std::size_t dim=0; dim<DIM; ++dim){
+            val *= SChebyshev(poly_ord+1, chebyshev_node_all[k][dim], relative_pos[s][dim]);
+          }
+          Wm[siz][k] += source_weight[s]*val;
         }
-        Wm[pos_node[s]][k] += source_weight[s]*val;
       }
     }
 
@@ -356,6 +359,7 @@ void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array
       SIZE *= 7;
     }
     std::vector<std::vector<TYPE>> fns(SIZE, std::vector<TYPE>(poly_ord_all*poly_ord_all));
+    //std::vector<TYPE> fns_matrix(poly_ord_all*SIZE*poly_ord_all); // kl x (in x km)
 #pragma omp parallel
     for(std::size_t sind=0; sind<SIZE; ++sind){
       std::array<int, DIM> shift;
@@ -379,7 +383,9 @@ void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array
       }
       for(std::size_t kl=0; kl<poly_ord_all; ++kl){
         for(std::size_t km=0; km<poly_ord_all; ++km){
-          fns[sind][kl*poly_ord_all+km] = fn(relative_vector_l[kl], relative_vector_m[km]);
+          TYPE tmp = fn(relative_vector_l[kl], relative_vector_m[km]);
+          fns[sind][kl*poly_ord_all+km] = tmp;
+          //fns_matrix[kl*SIZE*poly_ord_all + sind*poly_ord_all + km] = tmp;
         }
       }
     }
@@ -391,9 +397,17 @@ void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array
       ind_begin = Wl.size()*omp_get_thread_num()/omp_get_num_threads();
       ind_end = Wl.size()*(omp_get_thread_num()+1)/omp_get_num_threads();
 #endif
+      //std::vector<TYPE> Wm_vector(SIZE*poly_ord_all); // (ind x km)
+      //std::vector<TYPE> Wm_zero(SIZE*poly_ord_all, 0.0);
       for(std::size_t ind=ind_begin; ind<ind_end; ++ind){
         std::array<std::size_t, DIM> l_box_ind = get_box_ind_of_ind(ind, N);
         std::vector<std::size_t> indices = multipole_calc_box_indices(l_box_ind, N);
+
+        //for(std::size_t i=0; i<SIZE*poly_ord_all; ++i){
+        //  Wm_vector[i] = 0.0;
+        //}
+        //copy(SIZE*poly_ord_all, Wm_zero.data(), Wm_vector.data());
+
         for(std::size_t i=0; i<indices.size(); ++i){
           std::array<std::size_t, DIM> m_box_ind = get_box_ind_of_ind(indices[i], N);
           int sind = 0;
@@ -402,8 +416,14 @@ void FMMA<TYPE, DIM>::M2L(const int depth, const std::size_t N, const std::array
             sind += (int)m_box_ind[dim]+3-(int)l_box_ind[dim];
           }
 
+          //for(std::size_t k=0; k<poly_ord_all; ++k){
+          //  Wm_vector[sind*poly_ord_all + k] = Wm[indices[i]][k];
+          //}
+          //copy(poly_ord_all, Wm[indices[i]].data(), Wm_vector.data()+sind*poly_ord_all);
+
           matvec(1.0, fns[sind], Wm[indices[i]], 1.0, Wl[ind]);
         }
+        //matvec(fns_matrix, Wm_vector, Wl[ind]);
       }
     }
   }else{
@@ -538,24 +558,25 @@ void FMMA<TYPE, DIM>::L2P(const std::vector<std::array<TYPE, DIM>>& target, cons
     std::array<int, DIM> target_ind_of_box;
 
     TYPE len = Len/N;
+    ind[t] = 0;
     for(std::size_t dim=0; dim<DIM; ++dim){
       target_ind_of_box[dim] = std::min((int)((target[t][dim]-origin[dim])/len), (int)N-1);
       relative_pos[t][dim] = std::max(std::min(2.0*((target[t][dim]-origin[dim])/len-target_ind_of_box[dim])-1.0, 1.0), -1.0);
     }
-
     ind[t] = get_ind_of_box_ind(target_ind_of_box, N);
   }
 
+  std::vector<TYPE> vals(poly_ord_all);
 
 #pragma omp parallel for
   for(std::size_t t=0; t<target.size(); ++t){
     for(std::size_t k=0; k<poly_ord_all; ++k){
-      TYPE val = 1.0;
+      vals[k] = 1.0;
       for(std::size_t dim=0; dim<DIM; ++dim){
-        val *= SChebyshev(poly_ord+1, relative_pos[t][dim], chebyshev_node_all[k][dim]);
+        vals[k] *= SChebyshev(poly_ord+1, relative_pos[t][dim], chebyshev_node_all[k][dim]);
       }
-      ans[t] += Wl[ind[t]][k]*val;
     }
+    ans[t] += dot(poly_ord_all, Wl[ind[t]].data(), vals.data());
   }
 
   return;
