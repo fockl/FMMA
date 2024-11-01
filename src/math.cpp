@@ -51,6 +51,81 @@ TYPE SChebyshev(int n, TYPE x, TYPE y){
 template double SChebyshev(int n, double x, double y);
 
 template<typename TYPE>
+void copy(const std::size_t N, const TYPE* a, TYPE* y){
+#if FMMA_USE_BLAS
+  cblas_dcopy(N, a, 1, y, 1);
+#else
+  for(std::size_t n=0; n<N; ++n){
+    y[n] = a[n];
+  }
+#endif
+  return;
+}
+
+template void copy(const std::size_t N, const double* a, double* y);
+
+template<typename TYPE>
+TYPE dot(const std::size_t N, const TYPE* x, const TYPE* y){
+  TYPE ans = 0.0;
+#if FMMA_USE_BLAS
+  ans = cblas_ddot(N, x, 1, y, 1);
+#else
+  for(std::size_t n=0; n<N; ++n){
+    ans += x[n]*y[n];
+  }
+#endif
+  return ans;
+}
+
+template double dot(const std::size_t N, const double* x, const double* y);
+
+template<typename TYPE>
+void matmul(const std::size_t M, const std::size_t N, const std::size_t K, const TYPE alpha, const std::vector<TYPE>& A, const std::vector<TYPE>& B, const TYPE beta, std::vector<TYPE>& C){
+  // matrix-matrix multiplication (AB = C // MK * KN = MN)
+  if(A.size() != M*K){
+    fprintf(stderr, "%s:%d ERROR : matrix size error (A:%zu != M(%zu)*K(%zu))\n", __FILE__, __LINE__, A.size(), M, K);
+    exit(EXIT_FAILURE);
+  }
+  if(B.size() != K*N){
+    fprintf(stderr, "%s:%d ERROR : matrix size error (B:%zu != K(%zu)*N(%zu))\n", __FILE__, __LINE__, B.size(), K, N);
+    exit(EXIT_FAILURE);
+  }
+  C.resize(M*N);
+
+#if FMMA_USE_BLAS
+  const auto *Ad = A.data();
+  const auto *Bd = B.data();
+  auto *Cd = C.data();
+
+  cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, M, N, K, alpha, Ad, K, Bd, N, beta, Cd, N);
+#else
+  for(std::size_t m=0; m<M; ++m){
+    for(std::size_t n=0; n<N; ++n){
+      C[m*N+n] = beta*C[m*N+n];
+    }
+    for(std::size_t k=0; k<K; ++k){
+      for(std::size_t n=0; n<N; ++n){
+        C[m*N+n] += alpha*A[m*K+k]*B[k*N+n];
+      }
+    }
+  }
+
+#endif
+
+  return;
+}
+
+template void matmul(const std::size_t M, const std::size_t N, const std::size_t K, const double alpha, const std::vector<double>& A, const std::vector<double>& B, const double beta, std::vector<double>& C);
+
+template<typename TYPE>
+void matmul(const std::size_t M, const std::size_t N, const std::size_t K, const std::vector<TYPE>& A, const std::vector<TYPE>& B, std::vector<TYPE>& C){
+  matmul(M, N, K, 1.0, A, B, 0.0, C);
+  return;
+}
+
+template void matmul(const std::size_t M, const std::size_t N, const std::size_t K, const std::vector<double>& A, const std::vector<double>& B, std::vector<double>& C);
+
+template<typename TYPE>
 void matvec(const TYPE alpha, const std::vector<TYPE>& A, const std::vector<TYPE>& x, const TYPE beta, std::vector<TYPE>& ans){
   // matrix-vector multiplication (ans = Ax)
   std::size_t N = x.size();

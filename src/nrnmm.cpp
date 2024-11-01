@@ -79,7 +79,8 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
 
       if(max_dist_from_t <= 1){
         for(std::size_t i=0; i<source_ind_in_box[s].size(); ++i){
-          ansp[t] += source_weight[source_ind_in_box[s][i]]*fn(target[t]-source[source_ind_in_box[s][i]]);
+          //ansp[t] += source_weight[source_ind_in_box[s][i]]*fn(target[t]-source[source_ind_in_box[s][i]]);
+          ansp[t] += source_weight[source_ind_in_box[s][i]]*fn(target[t], source[source_ind_in_box[s][i]]);
         }
         end = std::chrono::system_clock::now();
         time_log["P2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
@@ -88,7 +89,8 @@ void FMMA<TYPE, DIM>::nrnmm(const std::vector<std::array<TYPE, DIM>>& target, co
           for(std::size_t dim=0; dim<DIM; ++dim){
             chebyshev_real_pos[dim] = (chebyshev_node_all[k][dim]+1.0)/2.0*len+relative_orig_pos[dim];
           }
-          ansp[t] += fn(target[t]-chebyshev_real_pos)*Wm[s][k];
+          //ansp[t] += fn(target[t]-chebyshev_real_pos)*Wm[s][k];
+          ansp[t] += fn(target[t], chebyshev_real_pos)*Wm[s][k];
         }
         end = std::chrono::system_clock::now();
         time_log["M2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();

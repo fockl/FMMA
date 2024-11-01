@@ -49,7 +49,8 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     time_log["P2M"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
     // M2M
-    for(int depth=0; depth+1<Depth; ++depth){
+    // depth=0, 1のWmは使わない
+    for(int depth=0; depth+3<Depth; ++depth){
       start = std::chrono::system_clock::now();
       M2M(tmp_N, chebyshev_node_all, Wm[Depth-depth-1], Wm[Depth-depth-2]);
       end = std::chrono::system_clock::now();
@@ -65,7 +66,10 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
   }
   int tmp_N = 1;
   for(int depth=0; depth<Depth; ++depth){
-    M2P(target, tmp_N, origin, Len, chebyshev_node_all, Wm[depth], ans);
+    if(depth>=2){
+      // depth=0, 1のWmは使わない
+      M2P(target, tmp_N, origin, Len, chebyshev_node_all, Wm[depth], ans);
+    }
     tmp_N *= 2;
   }
   end = std::chrono::system_clock::now();
@@ -85,7 +89,7 @@ void FMMA<TYPE, DIM>::tree(const std::vector<std::array<TYPE, DIM>>& target, con
     std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
     for(std::size_t i=0; i<indices.size(); ++i){
       for(std::size_t j=0; j<source_ind_in_box[indices[i]].size(); ++j){
-        ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t]-source[source_ind_in_box[indices[i]][j]]);
+        ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t], source[source_ind_in_box[indices[i]][j]]);
       }
     }
   }

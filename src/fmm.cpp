@@ -58,8 +58,9 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     time_log["P2M"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
     // M2M
+    // depth=0, 1のWmは使わない
     start = std::chrono::system_clock::now();
-    for(int depth=0; depth+1<Depth; ++depth){
+    for(int depth=0; depth+3<Depth; ++depth){
       M2M(tmp_N, chebyshev_node_all, Wm[Depth-depth-1], Wm[Depth-depth-2]);
       tmp_N /= 2;
     }
@@ -68,7 +69,8 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
   }
 
   std::vector<std::vector<std::vector<TYPE>>> Wl(Depth);
-  for(int depth=0; depth<Depth; ++depth){
+    // depth=0, 1のWlは使わない
+  for(int depth=2; depth<Depth; ++depth){
     Wl[depth].resize(Wm[depth].size());
     for(std::size_t ind=0; ind<Wl[depth].size(); ++ind){
       Wl[depth][ind].resize(chebyshev_node_all.size());
@@ -83,7 +85,10 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     std::size_t tmp_N = 1;
     start = std::chrono::system_clock::now();
     for(int depth=0; depth<Depth; ++depth){
-      M2L(tmp_N, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
+      if(depth>=2){
+        // depth=0, 1のWmは使わない
+        M2L(depth, tmp_N, origin, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
+      }
       tmp_N *= 2;
     }
     end = std::chrono::system_clock::now();
@@ -93,16 +98,21 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     tmp_N = 1;
     start = std::chrono::system_clock::now();
     for(int depth=0; depth+1<Depth; ++depth){
-      L2L(tmp_N*2, chebyshev_node_all, Wl[depth], Wl[depth+1]);
+      if(depth>=2){
+        // depth=0, 1のWlは使わない
+        L2L(tmp_N*2, chebyshev_node_all, Wl[depth], Wl[depth+1]);
+      }
       tmp_N *= 2;
     }
     end = std::chrono::system_clock::now();
     time_log["L2L"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
   }
 
-
   start = std::chrono::system_clock::now();
-  L2P(target, origin, Len, chebyshev_node_all, Wl[Depth-1], ans);
+  if(Depth-1>=2){
+    // depth=0, 1のWlは使わない
+    L2P(target, origin, Len, chebyshev_node_all, Wl[Depth-1], ans);
+  }
   end = std::chrono::system_clock::now();
   time_log["L2P"] += std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
@@ -121,7 +131,7 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     std::vector<std::size_t> indices = exact_calc_box_indices(target_ind_of_box, tmp_N);
     for(std::size_t i=0; i<indices.size(); ++i){
       for(std::size_t j=0; j<source_ind_in_box[indices[i]].size(); ++j){
-        ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t]-source[source_ind_in_box[indices[i]][j]]);
+        ans[t] += source_weight[source_ind_in_box[indices[i]][j]]*fn(target[t], source[source_ind_in_box[indices[i]][j]]);
       }
     }
   }
