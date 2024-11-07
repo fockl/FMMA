@@ -194,11 +194,32 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
+  if(!test_Chebyshev<float>(0, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_Chebyshev<float>(1, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_Chebyshev<float>(2, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_Chebyshev<float>(3, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
   if(!test_axpy<double>(100, 1.0e-6)){
     exit(EXIT_FAILURE);
   }
 
+  if(!test_axpy<float>(100, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
   if(!test_dot<double>(100, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
+  if(!test_dot<float>(100, 1.0e-6)){
     exit(EXIT_FAILURE);
   }
 
@@ -212,7 +233,21 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
+  if(!test_matvec<float>(10, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_matvec<float>(20, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_matvec<float>(10, 20, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
   if(!test_solve_gcr<double>(10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
+  if(!test_solve_gcr<float>(10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
 

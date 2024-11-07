@@ -11,13 +11,13 @@ template<typename TYPE>
 bool test_coef_1(int n, int Nth, TYPE tol){
   std::function<TYPE(const std::array<TYPE, 1>& pos)> fn = [n](const std::array<TYPE, 1>& pos){
     if(n==0){
-      return 1.0;
+      return (TYPE)1.0;
     }else if(n==1){
-      return pos[0];
+      return (TYPE)pos[0];
     }else if(n==2){
-      return 2*pos[0]*pos[0]-1;
+      return (TYPE)(2*pos[0]*pos[0]-1);
     }else if(n==3){
-      return 4*pos[0]*pos[0]*pos[0]-3*pos[0];
+      return (TYPE)(4*pos[0]*pos[0]*pos[0]-3*pos[0]);
     }else{
       fprintf(stderr, "%s:%d ERROR : test_coef_1 test is for n<=3 but %d\n", __FILE__, __LINE__, n);
       exit(EXIT_FAILURE);
@@ -119,13 +119,13 @@ template<typename TYPE>
 bool test_predict_1(int n, int Nth, TYPE tol){
   std::function<TYPE(const std::array<TYPE, 1>& pos)> fn = [n](const std::array<TYPE, 1>& pos){
     if(n==0){
-      return 1.0;
+      return (TYPE)(1.0);
     }else if(n==1){
-      return pos[0];
+      return (TYPE)(pos[0]);
     }else if(n==2){
-      return 2*pos[0]*pos[0]-1;
+      return (TYPE)(2*pos[0]*pos[0]-1);
     }else if(n==3){
-      return 4*pos[0]*pos[0]*pos[0]-3*pos[0];
+      return (TYPE)(4*pos[0]*pos[0]*pos[0]-3*pos[0]);
     }else{
       fprintf(stderr, "%s:%d ERROR : test_predict_1 test is for n<=3 but %d\n", __FILE__, __LINE__, n);
       exit(EXIT_FAILURE);
@@ -276,6 +276,19 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
+  if(!test_coef_1<float>(0, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_coef_1<float>(1, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_coef_1<float>(2, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_coef_1<float>(3, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
   if(!test_coef_2<double>(0, 0, 5, 1.0e-6)){
     exit(EXIT_FAILURE);
   }
@@ -286,6 +299,19 @@ int main(void){
     exit(EXIT_FAILURE);
   }
   if(!test_coef_2<double>(1, 3, 5, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
+  if(!test_coef_2<float>(0, 0, 5, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_coef_2<float>(0, 1, 5, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_coef_2<float>(2, 0, 5, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_coef_2<float>(1, 3, 5, 1.0e-6)){
     exit(EXIT_FAILURE);
   }
 
@@ -302,6 +328,19 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
+  if(!test_predict_1<float>(0, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_predict_1<float>(1, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_predict_1<float>(2, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_predict_1<float>(3, 10, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
   if(!test_predict_2<double>(0, 0, 4, 1.0e-6)){
     exit(EXIT_FAILURE);
   }
@@ -315,7 +354,24 @@ int main(void){
     exit(EXIT_FAILURE);
   }
 
+  if(!test_predict_2<float>(0, 0, 4, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_predict_2<float>(1, 0, 4, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_predict_2<float>(0, 2, 4, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_predict_2<float>(3, 2, 4, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
   if(!test_predict_3<double>(6, 1.0e-5)){
+    exit(EXIT_FAILURE);
+  }
+
+  if(!test_predict_3<float>(6, 1.0e-5)){
     exit(EXIT_FAILURE);
   }
 

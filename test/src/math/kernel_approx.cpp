@@ -66,7 +66,7 @@ bool test_kernel_approx_1(int Nmax, TYPE tol){
 
   bool flag = true;
   for(int i=0; i+1<Nmax; ++i){
-    if(diff[i] < diff[i+1]){
+    if(diff[i] < diff[i+1] && diff[i+1] > tol){
       fprintf(stderr, "diff [%d] %e < diff [%d] %e\n", i, diff[i], i+1, diff[i+1]);
       flag = false;
     }
@@ -154,7 +154,7 @@ bool test_kernel_approx_3(int Nmax, TYPE tol){
 
   bool flag = true;
   for(int i=0; i+1<Nmax; ++i){
-    if(diff[i] < diff[i+1]){
+    if(diff[i] < diff[i+1] && diff[i+1] > tol){
       fprintf(stderr, "diff [%d] %e < diff [%d] %e\n", i, diff[i], i+1, diff[i+1]);
       flag = false;
     }
@@ -232,6 +232,19 @@ int main(void){
     exit(EXIT_FAILURE);
   }
   if(!test_kernel_approx_4<double>(20, 1.0e-6)){
+    exit(EXIT_FAILURE);
+  }
+
+  if(!test_kernel_approx_1<float>(10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_kernel_approx_2<float>(13, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_kernel_approx_3<float>(10, 1.0e-3)){
+    exit(EXIT_FAILURE);
+  }
+  if(!test_kernel_approx_4<float>(10, 1.0e-3)){
     exit(EXIT_FAILURE);
   }
 

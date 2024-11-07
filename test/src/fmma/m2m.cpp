@@ -114,5 +114,31 @@ int main(void){
     }
   }
 
+  {
+    fmma::FMMA_TEST<float, 1> fmma_test;
+    if(!fmma_test.test_m2m(10, 10, 1.0e-6)){
+      exit(EXIT_FAILURE);
+    }
+    if(!fmma_test.test_m2m(10, 20, 1.0e-6)){
+      exit(EXIT_FAILURE);
+    }
+    if(!fmma_test.test_m2m(20, 10, 1.0e-6)){
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  {
+    fmma::FMMA_TEST<float, 2> fmma_test;
+    if(!fmma_test.test_m2m(10, 10, 1.0e-6)){
+      exit(EXIT_FAILURE);
+    }
+    if(!fmma_test.test_m2m(10, 20, 1.0e-6)){
+      exit(EXIT_FAILURE);
+    }
+    if(!fmma_test.test_m2m(20, 10, 1.0e-6)){
+      exit(EXIT_FAILURE);
+    }
+  }
+
   return 0;
 }

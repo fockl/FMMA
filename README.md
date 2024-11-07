@@ -22,10 +22,25 @@ c_i = \sum_{j} w_j f(x_i, y_j)
 
 を高速に計算するためのライブラリ
 
+# インストール
+
+cmakeを用いた場合、以下のようにしてインストール出来る
+```sh
+cmake -Bbuild
+cmake --build build
+cmake --install build
+```
+
+BLASを用いて高速化する場合は、build時に
+```sh
+cmake -Bbuild -DFMMA_USE_BLAS=ON
+```
+とする
+
 # 使い方
 
 ```c++
-FMMA<double, 3> fmma;
+fmma::FMMA<double, 3> fmma;
 fmma.fn = fn;
 fmma.solve_type = "exact";
 fmma.solve(target, source_weight, source, ans);
@@ -34,7 +49,7 @@ fmma.solve(target, source_weight, source, ans);
 fnは任意の関数を指定できる。C++だと
 
 ```c++
-auto fn = [](const std::array<double, 3>& y, const std::array<double, 3>& x){
+auto fn = [](const std::array<double, 3>& x, const std::array<double, 3>& y){
   return (y[0]-x[0])*(y[1]-x[1]);
 }
 ```
@@ -99,10 +114,24 @@ Benchmark results using github-actions are follows :
 
 ![ error ](benchmark/results/error_2.png)
 
+# Install(English)
+
+You can install this library as follows if cmake is used:
+```sh
+cmake -Bbuild
+cmake --build build
+cmake --install build
+```
+
+If BLAS is required,  define an argument like:
+```sh
+cmake -Bbuild -DFMMA_USE_BLAS=ON
+```
+
 # Usage(English)
 
 ```c++
-FMMA<double, 3> fmma;
+fmma::FMMA<double, 3> fmma;
 fmma.fn = fn;
 fmma.solve_type = solve_type;
 fmma.solve(target, source_weight, source, ans);
@@ -111,7 +140,7 @@ fmma.solve(target, source_weight, source, ans);
 arbitrary function can be set as fn. In C++, a definition of fn is like:
 
 ```c++
-auto fn = [](const std::array<double, 3>& y, const std::array<double, 3>& x){
+auto fn = [](const std::array<double, 3>& x, const std::array<double, 3>& y){
   return (y[0]-x[0])*(y[1]-x[1]);
 }
 ```
