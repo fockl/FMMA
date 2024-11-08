@@ -87,7 +87,7 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     for(int depth=0; depth<Depth; ++depth){
       if(depth>=2){
         // depth=0, 1のWmは使わない
-        M2L(depth, tmp_N, origin, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
+        M2L(tmp_N, origin, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
       }
       tmp_N *= 2;
     }

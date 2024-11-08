@@ -26,14 +26,14 @@ c_i = \sum_{j} w_j f(x_i, y_j)
 
 cmakeを用いた場合、以下のようにしてインストール出来る
 ```sh
-cmake -Bbuild
+cmake -B build
 cmake --build build
 cmake --install build
 ```
 
 BLASを用いて高速化する場合は、build時に
 ```sh
-cmake -Bbuild -DFMMA_USE_BLAS=ON
+cmake -B build -DFMMA_USE_BLAS=ON
 ```
 とする
 
@@ -118,14 +118,14 @@ Benchmark results using github-actions are follows :
 
 You can install this library as follows if cmake is used:
 ```sh
-cmake -Bbuild
+cmake -B build
 cmake --build build
 cmake --install build
 ```
 
 If BLAS is required,  define an argument like:
 ```sh
-cmake -Bbuild -DFMMA_USE_BLAS=ON
+cmake -B build -DFMMA_USE_BLAS=ON
 ```
 
 # Usage(English)
