@@ -142,18 +142,18 @@ template void FMMA<float, 3>::exact_matvec(const std::vector<std::array<float, 3
 
 template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
-  if(this->solve_type == "exact"){
+  if(this->solver_type == "exact"){
     exact(target, source, ans);
-  }else if(this->solve_type == "exact_matvec"){
+  }else if(this->solver_type == "exact_matvec"){
     exact_matvec(target, source, ans);
-  }else if(this->solve_type == "nrnmm"){
+  }else if(this->solver_type == "nrnmm"){
     nrnmm(target, source, ans);
-  }else if(this->solve_type == "tree"){
+  }else if(this->solver_type == "tree"){
     tree(target, source, ans);
-  }else if(this->solve_type == "fmm"){
+  }else if(this->solver_type == "fmm"){
     fmm(target, source, ans);
   }else{
-    fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solve_type.c_str());
+    fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solver_type.c_str());
     exit(EXIT_FAILURE);
   }
   return;
@@ -170,23 +170,23 @@ template<typename TYPE, std::size_t DIM>
 void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, std::vector<TYPE>& ans){
   std::chrono::system_clock::time_point start, end;
   start = std::chrono::system_clock::now();
-  if(this->solve_type == "exact"){
+  if(this->solver_type == "exact"){
     exact(target, source_weight, source, ans);
-  }else if(this->solve_type == "exact_matvec"){
+  }else if(this->solver_type == "exact_matvec"){
     exact_matvec(target, source_weight, source, ans);
-  }else if(this->solve_type == "nrnmm"){
+  }else if(this->solver_type == "nrnmm"){
     nrnmm(target, source_weight, source, ans);
-  }else if(this->solve_type == "tree"){
+  }else if(this->solver_type == "tree"){
     tree(target, source_weight, source, ans);
-  }else if(this->solve_type == "fmm"){
+  }else if(this->solver_type == "fmm"){
     fmm(target, source_weight, source, ans);
   }else{
-    fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solve_type.c_str());
+    fprintf(stderr, "%s:%d ERROR : solve type %s not undefined\n", __FILE__, __LINE__, this->solver_type.c_str());
     exit(EXIT_FAILURE);
   }
   end = std::chrono::system_clock::now();
 
-  time_log["total time(" + this->solve_type + ")"] = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
+  time_log["total time(" + this->solver_type + ")"] = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
 #if FMMA_TIME_LOG
   std::multimap<double, std::pair<std::string, double>, std::greater<double>> mmap;

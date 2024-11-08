@@ -417,6 +417,7 @@ void solve_gcr(const std::vector<TYPE>& A, std::vector<TYPE>& x, const std::vect
 
     TYPE resid = dot(r, r);
 #if FMMA_DEBUG_MODE
+    fprintf(stderr, "FMMA_DEBUG_MODE = %d\n", FMMA_DEBUG_MODE);
     fprintf(stderr, "resid = %lf   (alpha = %lf)\n", resid, alpha);
 #endif
     if(resid < 1.0e-6){

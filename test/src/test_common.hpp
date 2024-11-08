@@ -11,7 +11,7 @@ void pass(const char *filename, const char *funcname, const std::string &comment
   std::string str_file(filename), str_func(funcname);
   std::string out = str_file + "\t" + str_func;
   if(comment.size() > 0){
-    out + " : ";
+    out += " : ";
     out += comment;
   }
   out += " \t PASS\n";
@@ -35,7 +35,7 @@ void failed(const char *filename, const char *funcname, const std::string &comme
   std::string str_file(filename), str_func(funcname);
   std::string out = str_file + "\t" + str_func;
   if(comment.size() > 0){
-    out + " : ";
+    out += " : ";
     out += comment;
   }
   out += " \t FAILED\n";

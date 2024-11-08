@@ -1,0 +1,8 @@
+function(set_options FMMA_TARGET)
+  if(FMMA_TIME_LOG)
+    target_compile_definitions(${FMMA_TARGET} PRIVATE FMMA_TIME_LOG)
+  endif()
+  if(FMMA_DEBUG_MODE)
+    target_compile_definitions(${FMMA_TARGET} PRIVATE FMMA_DEBUG_MODE)
+  endif()
+endfunction()

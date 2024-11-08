@@ -18,7 +18,7 @@ int main(void){
   fmma.set_fn([](const std::array<double, 1>& x, const std::array<double, 1>& y){
       return 1.0/((x[0]-y[0])*(x[0]-y[0]));
       });
-  fmma.solve_type = "exact";
+  fmma.set_solver_type("exact");
   fmma.solve(target, source, ans);
 
   fprintf(stderr, "ans :\n");

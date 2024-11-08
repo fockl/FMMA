@@ -23,8 +23,8 @@ bool test_tree(int ssize, int tsize, TYPE tol){
 
   fmma::FMMA<TYPE, DIM> fmma;
   std::vector<TYPE> ans(tsize);
-  fmma.poly_ord=2;
-  fmma.Depth = 3;
+  fmma.set_poly_ord(2);
+  fmma.set_Depth(3);
   fmma.tree(target, source, ans);
 
   std::vector<TYPE> exact(tsize);
@@ -90,8 +90,8 @@ bool test_tree_1_r2(int ssize, int tsize, TYPE tol){
     return sum/len2;
   };
   fmma.set_fn(fn);
-  fmma.poly_ord=4;
-  fmma.Depth = 3;
+  fmma.set_poly_ord(4);
+  fmma.set_Depth(3);
   fmma.tree(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize, 0.0);
@@ -159,8 +159,8 @@ bool test_tree_sum2_r2(int ssize, int tsize, TYPE tol){
     return sum2/len2;
   };
   fmma.set_fn(fn);
-  fmma.poly_ord=5;
-  fmma.Depth = 3;
+  fmma.set_poly_ord(5);
+  fmma.set_Depth(3);
   fmma.tree(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize, 0.0);

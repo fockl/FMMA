@@ -380,7 +380,7 @@ void FMMA<TYPE, DIM>::M2L(const std::size_t N, const std::array<TYPE, DIM>& orig
     Wl[ind].resize(poly_ord_all);
   }
 
-  if(this->trans_sym_flag){
+  if(this->trans_sym_flag==1){
     std::size_t SIZE = 1;
     for(std::size_t dim=0; dim<DIM; ++dim){
       SIZE *= 7;
