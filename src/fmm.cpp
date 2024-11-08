@@ -35,10 +35,12 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     }
   }
 
+#if FMMA_DEBUG_MODE
   fprintf(stderr, "fmm poly order = %d\n", poly_ord);
   fprintf(stderr, "fmm Depth = %d\n", Depth);
 #if FMMA_USE_OPENMP
   fprintf(stderr, "omp parallel num = %d\n", omp_get_max_threads());
+#endif
 #endif
 
   std::array<TYPE, DIM> origin;

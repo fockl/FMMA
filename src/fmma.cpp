@@ -188,6 +188,7 @@ void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, co
 
   time_log["total time(" + this->solve_type + ")"] = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
 
+#if FMMA_TIME_LOG
   std::multimap<double, std::pair<std::string, double>, std::greater<double>> mmap;
   for(auto itr : time_log){
     mmap.insert(std::make_pair(itr.second, itr));
@@ -200,6 +201,7 @@ void FMMA<TYPE, DIM>::solve(const std::vector<std::array<TYPE, DIM>>& target, co
     fprintf(fp, "%s %lf\n", itr.second.first.c_str(), itr.second.second);
   }
   fclose(fp);
+#endif
 
   return;
 };
