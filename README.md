@@ -26,14 +26,14 @@ c_i = \sum_{j} w_j f(x_i, y_j)
 
 cmakeを用いた場合、以下のようにしてインストール出来る
 ```sh
-cmake -Bbuild
+cmake -B build
 cmake --build build
 cmake --install build
 ```
 
 BLASを用いて高速化する場合は、build時に
 ```sh
-cmake -Bbuild -DFMMA_USE_BLAS=ON
+cmake -B build -DFMMA_USE_BLAS=ON
 ```
 とする
 
@@ -41,23 +41,14 @@ cmake -Bbuild -DFMMA_USE_BLAS=ON
 
 ```c++
 fmma::FMMA<double, 3> fmma;
-fmma.fn = fn;
-fmma.solve_type = "exact";
+fmma.set_fn([](auto x, auto y){return 1.0/(x[0]-y[0]);}); 
+fmma.set_solver_type("fmm");
 fmma.solve(target, source_weight, source, ans);
 ```
 
-fnは任意の関数を指定できる。C++だと
+のようにして使用する。
 
-```c++
-auto fn = [](const std::array<double, 3>& x, const std::array<double, 3>& y){
-  return (y[0]-x[0])*(y[1]-x[1]);
-}
-```
-
-のように定義できる。
-
-solve_typeは計算方法。
-現在は`exact`, `nrnmm`, `tree`, `fmm`が実装済み
+現在はsolverとして`exact`, `nrnmm`, `tree`, `fmm`が実装済み
 
 $O(n(x)) = O(n(y)) = O(N)$の時の計算量は以下の通り：
 
@@ -118,35 +109,28 @@ Benchmark results using github-actions are follows :
 
 You can install this library as follows if cmake is used:
 ```sh
-cmake -Bbuild
+cmake -B build
 cmake --build build
 cmake --install build
 ```
 
 If BLAS is required,  define an argument like:
 ```sh
-cmake -Bbuild -DFMMA_USE_BLAS=ON
+cmake -B build -DFMMA_USE_BLAS=ON
 ```
 
 # Usage(English)
 
+You can use FMMA as
+
 ```c++
 fmma::FMMA<double, 3> fmma;
-fmma.fn = fn;
-fmma.solve_type = solve_type;
+fmma.set_fn([](auto x, auto y){return 1.0/(x[0]-y[0]);}); 
+fmma.set_solver_type("fmm");
 fmma.solve(target, source_weight, source, ans);
 ```
 
-arbitrary function can be set as fn. In C++, a definition of fn is like:
-
-```c++
-auto fn = [](const std::array<double, 3>& x, const std::array<double, 3>& y){
-  return (y[0]-x[0])*(y[1]-x[1]);
-}
-```
-
-solve_type is a computaion method.
-`exact`, `nrnmm`, `tree`, `fmm` are now implemented.
+`exact`, `nrnmm`, `tree`, `fmm` are now implemented as solver.
 
 when $O(n(x)) = O(n(y)) = O(N)$, the computational cost are as follows:
 

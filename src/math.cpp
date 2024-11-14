@@ -392,14 +392,18 @@ void solve_gcr(const std::vector<TYPE>& A, std::vector<TYPE>& x, const std::vect
 
   {
     TYPE resid = dot(r, r);
+#if FMMA_DEBUG_MODE
     fprintf(stderr, "resid = %lf\n", resid);
+#endif
     if(resid < 1.0e-6){
       return;
     }
   }
 
   for(std::size_t itr=0; itr<ITR; ++itr){
+#if FMMA_DEBUG_MODE
     fprintf(stderr, "itr : %zu\n", itr);
+#endif
     std::vector<TYPE> Ap_new;
     matvec(A, p_new, Ap_new);
     p.push_back(p_new);
@@ -412,7 +416,10 @@ void solve_gcr(const std::vector<TYPE>& A, std::vector<TYPE>& x, const std::vect
     axpy(-alpha, Ap_new, r);
 
     TYPE resid = dot(r, r);
+#if FMMA_DEBUG_MODE
+    fprintf(stderr, "FMMA_DEBUG_MODE = %d\n", FMMA_DEBUG_MODE);
     fprintf(stderr, "resid = %lf   (alpha = %lf)\n", resid, alpha);
+#endif
     if(resid < 1.0e-6){
       break;
     }

@@ -13,8 +13,11 @@ set(fmma_link "fmma")
 
 option(FMMA_CMAKE_DEBUG_FLAG "Cmake Debug flag" ON)
 option(FMMA_USE_BLAS "Use BLAS" OFF)
+option(FMMA_DEBUG_MODE "Debug mode" OFF)
+option(FMMA_TIME_LOG "Time log" OFF)
 
 include(cmake/set_name.cmake)
+include(cmake/options.cmake)
 include(cmake/common.cmake)
 include(cmake/blas.cmake)
 include(cmake/gpu.cmake)

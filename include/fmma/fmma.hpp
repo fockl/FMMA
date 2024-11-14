@@ -63,7 +63,8 @@ class FMMA{
       };
 
     void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target_source)>& fn){
-      //this->fn = fn;
+      // fn = f(x) と1変数関数で与えた場合、
+      // f(x, y) = f(x-y)と解釈する
       this->fn = [fn](const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source){
         return fn(target-source);
       };
@@ -71,26 +72,49 @@ class FMMA{
     }
 
     void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)>& fn){
-      /*
-      this->fn = [fn](const std::array<TYPE, DIM>& target_source){
-        std::array<TYPE, DIM> zero;
-        for(std::size_t dim=0; dim<DIM; ++dim){
-          zero[dim] = 0.0;
-        }
-        return fn(target_source, zero);
-      };
-      */
       this->fn = fn;
       return;
     }
 
-    std::string solve_type = "exact";
+  private:
+    std::string solver_type = "exact";
+  public:
+    void set_solver_type(const std::string new_type){
+      solver_type = new_type;
+      return;
+    }
 
+  private:
     int nrn_N = -1; // 1辺辺りの分割数 nrnで指定
-    int poly_ord = 1;
-    int Depth = -1; // 深さ、2^Depth = 最深部の一辺当たりの分割数
+  public:
+    void set_nrn_N(int new_nrn_N){
+      nrn_N = new_nrn_N;
+      return;
+    }
 
-    bool trans_sym_flag = 0; // 並進対称性flag, 0: 対称性なし、1: f(x, y) = f(x-y)
+  private:
+    int poly_ord = 1;
+  public:
+    void set_poly_ord(int new_poly_ord){
+      poly_ord = new_poly_ord;
+      return;
+    }
+
+  private:
+    int Depth = -1; // 深さ、2^Depth = 最深部の一辺当たりの分割数
+  public:
+    void set_Depth(int new_Depth){
+      Depth = new_Depth;
+      return;
+    }
+
+  private:
+    int trans_sym_flag = 0; // 並進対称性flag, 0: 対称性なし、1: f(x, y) = f(x-y)
+  public:
+    void set_trans_sym_flag(int new_flag){
+      trans_sym_flag = new_flag;
+      return;
+    }
 
   public:
     FMMA(void);
@@ -120,7 +144,7 @@ class FMMA{
     void P2M(const std::vector<TYPE>& source_weight, const std::vector<std::array<TYPE, DIM>>& source, int N, const std::array<TYPE, DIM>& min_pos, const TYPE len, std::vector<std::vector<std::size_t>>& source_ind_in_box, std::vector<std::vector<TYPE>>& Wm, std::vector<std::array<TYPE, DIM>>& chebyshev_node_all);
     void M2M(const std::size_t N, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm_in, std::vector<std::vector<TYPE>>& Wm_out);
     void M2P(const std::vector<std::array<TYPE, DIM>>& target, const std::size_t N, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm, std::vector<TYPE>& ans);
-    void M2L(const int depth, const std::size_t N, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm, std::vector<std::vector<TYPE>>& Wl);
+    void M2L(const std::size_t N, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wm, std::vector<std::vector<TYPE>>& Wl);
     void L2L(const std::size_t N, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wl_in, std::vector<std::vector<TYPE>>& Wl_out);
     void L2P(const std::vector<std::array<TYPE, DIM>>& target, const std::array<TYPE, DIM>& origin, const TYPE Len, const std::vector<std::array<TYPE, DIM>>& chebyshev_node_all, const std::vector<std::vector<TYPE>>& Wl, std::vector<TYPE>& ans);
   private:

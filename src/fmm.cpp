@@ -35,10 +35,12 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     }
   }
 
+#if FMMA_DEBUG_MODE
   fprintf(stderr, "fmm poly order = %d\n", poly_ord);
   fprintf(stderr, "fmm Depth = %d\n", Depth);
 #if FMMA_USE_OPENMP
   fprintf(stderr, "omp parallel num = %d\n", omp_get_max_threads());
+#endif
 #endif
 
   std::array<TYPE, DIM> origin;
@@ -87,7 +89,7 @@ void FMMA<TYPE, DIM>::fmm(const std::vector<std::array<TYPE, DIM>>& target, cons
     for(int depth=0; depth<Depth; ++depth){
       if(depth>=2){
         // depth=0, 1のWmは使わない
-        M2L(depth, tmp_N, origin, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
+        M2L(tmp_N, origin, Len, chebyshev_node_all, Wm[depth], Wl[depth]);
       }
       tmp_N *= 2;
     }

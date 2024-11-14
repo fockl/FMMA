@@ -23,8 +23,8 @@ bool test_nrnmm(int ssize, int tsize, TYPE tol){
 
   fmma::FMMA<TYPE, DIM> fmma;
   std::vector<TYPE> ans(tsize);
-  fmma.poly_ord=2;
-  fmma.nrn_N = 3;
+  fmma.set_poly_ord(2);
+  fmma.set_nrn_N(3);
   fmma.nrnmm(target, source, ans);
 
   std::vector<TYPE> exact(tsize);
@@ -90,8 +90,8 @@ bool test_nrnmm_1_r2(int ssize, int tsize, TYPE tol){
     return sum/len2;
   };
   fmma.set_fn(fn);
-  fmma.poly_ord=4;
-  fmma.nrn_N = 6;
+  fmma.set_poly_ord(4);
+  fmma.set_nrn_N(6);
   fmma.nrnmm(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize, 0.0);
@@ -159,8 +159,8 @@ bool test_nrnmm_sum2_r2(int ssize, int tsize, TYPE tol){
     return sum2/len2;
   };
   fmma.set_fn(fn);
-  fmma.poly_ord=5;
-  fmma.nrn_N = 6;
+  fmma.set_poly_ord(5);
+  fmma.set_nrn_N(6);
   fmma.nrnmm(target, source_weight, source, ans);
 
   std::vector<TYPE> exact(tsize, 0.0);

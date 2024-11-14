@@ -1,4 +1,4 @@
-name: test
+name: tutorials
 on:
   push:
   pull_request:
@@ -25,9 +25,9 @@ jobs:
           cmake --build build
           sudo cmake --install build
 
-      - name: test
+
+      - name: tutorials
         run: |
-          cd test
+          cd tutorials
           cmake -B build
           cmake --build build
-          bash run_test.sh 0
