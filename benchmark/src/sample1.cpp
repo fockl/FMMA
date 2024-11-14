@@ -62,7 +62,7 @@ int main(void){
     for(int order=1; order<=ORDER; ++order){
       std::vector<double> ans_nrnmm(N);
 
-      fmma.poly_ord = order;
+      fmma.set_poly_ord(order);
       start = std::chrono::system_clock::now();
       fmma.nrnmm(source, target, ans_nrnmm);
       end = std::chrono::system_clock::now();
@@ -82,7 +82,7 @@ int main(void){
     for(int order=1; order<=ORDER; ++order){
       std::vector<double> ans_tree(N);
 
-      fmma.poly_ord = order;
+      fmma.set_poly_ord(order);
       start = std::chrono::system_clock::now();
       fmma.tree(source, target, ans_tree);
       end = std::chrono::system_clock::now();
@@ -102,7 +102,7 @@ int main(void){
     for(int order=1; order<=ORDER; ++order){
       std::vector<double> ans_fmm(N);
 
-      fmma.poly_ord = order;
+      fmma.set_poly_ord(order);
       start = std::chrono::system_clock::now();
       fmma.fmm(source, target, ans_fmm);
       end = std::chrono::system_clock::now();
