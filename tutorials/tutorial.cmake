@@ -8,10 +8,21 @@ endfunction()
 function(find_fmma TEST_TARGET)
   find_library(FMMA_LIBRARIES
     NAMES fmma
+    HINTS
     /usr/local/lib
+    ${CMAKE_CURRENT_LIST_DIR}/../../build
     REQUIRED
     )
   target_link_libraries(${TEST_TARGET} PRIVATE ${FMMA_LIBRARIES})
+
+  find_path(FMMA_INCLUDE_PATH
+    NAMES fmma
+    HINTS
+    /usr/local/include
+    ${CMAKE_CURRENT_LIST_DIR}/../../include
+    REQUIRED
+    )
+  target_include_directories(${TEST_TARGET} PRIVATE ${FMMA_INCLUDE_PATH})
 endfunction()
 
 function(prepare TARGET_NAME test_source)

@@ -27,14 +27,14 @@ jobs:
 
       - name: build
         run: |
-          cmake -Bbuild
+          cmake -B build
           cmake --build build
           sudo cmake --install build
 
       - name: benchmark
         run: |
           cd benchmark
-          cmake -Bbuild
+          cmake -B build
           cmake --build build
           bash run_benchmark.sh
           cd ..

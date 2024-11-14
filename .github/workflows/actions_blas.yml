@@ -26,13 +26,13 @@ jobs:
 
       - name: build
         run: |
-          cmake -Bbuild -DFMMA_USE_BLAS=ON
+          cmake -B build -DFMMA_USE_BLAS=ON
           cmake --build build
           sudo cmake --install build
 
       - name: test
         run: |
           cd test
-          cmake -Bbuild
+          cmake -B build
           cmake --build build
           bash run_test.sh 1
