@@ -34,3 +34,7 @@
 build
 *~
 *.swp
+
+# Distribution / packaging
+*.egg-info/
+dist/
