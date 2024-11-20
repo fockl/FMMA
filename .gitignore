@@ -38,3 +38,4 @@ build
 # Distribution / packaging
 *.egg-info/
 dist/
+wheelhouse/
