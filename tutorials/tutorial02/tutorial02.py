@@ -1,12 +1,12 @@
 import pyfmma
 import numpy as np
 
-def fn(x_y):
-  d = np.linalg.norm(x_y)
+def fn(x, y):
+  d = np.fabs(x[0]-y[0])
   return 1.0/(d*d)
 
 fmma = pyfmma.fmmad1()
-fmma.set_fn(fn)
+fmma.set_fn2(fn)
 fmma.set_solver_type("tree")
 fmma.set_Depth(3)
 fmma.set_poly_ord(3)

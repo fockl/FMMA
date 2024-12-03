@@ -71,8 +71,18 @@ class FMMA{
       return;
     }
 
+    void set_fn1(const std::function<TYPE(const std::array<TYPE, DIM>& target_source)>& fn){
+      set_fn(fn);
+      return;
+    }
+
     void set_fn(const std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)>& fn){
       this->fn = fn;
+      return;
+    }
+    
+    void set_fn2(const std::function<TYPE(const std::array<TYPE, DIM>& target, const std::array<TYPE, DIM>& source)>& fn){
+      set_fn(fn);
       return;
     }
 
